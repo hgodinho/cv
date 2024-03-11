@@ -5,5 +5,8 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true
-    }
+    },
+    "cSpell.words": ["ENJF", "foaf", "jsonld", "mbti", "MBTI", "nquads"],
+    "files.autoSave": "onWindowChange",
+    "editor.formatOnSave": true
 }
