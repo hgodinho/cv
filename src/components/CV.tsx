@@ -1,16 +1,16 @@
 "use client";
 
 import React from "react";
-import { CVProvider, type CVContextType } from "@/provider";
-import { SVGView } from "./SVGView";
-import { JsonLdDocument } from "jsonld";
+import { CVProvider } from "@/provider";
+import { NetworkView } from "./NetworkView";
+import { JsonLDType } from "@/lib";
+import { ClassView } from "./ClassView";
 
-export type CVType = JsonLdDocument;
-
-export function CV({ data }: { data: CVContextType }) {
+export function CV({ data }: { data: JsonLDType }) {
     return (
         <CVProvider data={data}>
-            <SVGView w={1000} h={1000} />
+            <NetworkView w={1000} h={600} />
+            {/* <ClassView /> */}
         </CVProvider>
     )
 }

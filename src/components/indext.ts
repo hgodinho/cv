@@ -1,2 +1,3 @@
 export * from "./CV";
-export * from "./SVGView";
+export * from "./NetworkView";
+export * from "./ClassView";

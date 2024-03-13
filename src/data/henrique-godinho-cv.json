@@ -26,7 +26,7 @@
                 "schema:postalCode": "01446-020",
                 "schema:streetAddress": "Rua Portugal, 43"
             },
-            "schema:members": [
+            "schema:employee": [
                 {
                     "@type": "schema:EmployeeRole",
                     "schema:roleName": "Coordenação de comunicação",

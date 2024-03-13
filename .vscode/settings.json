@@ -6,7 +6,17 @@
         "**/CVS": true,
         "**/.DS_Store": true
     },
-    "cSpell.words": ["ENJF", "foaf", "jsonld", "mbti", "MBTI", "nquads"],
+    "cSpell.words": [
+        "ENJF",
+        "foaf",
+        "jsonld",
+        "mbti",
+        "MBTI",
+        "nquads",
+        "spritetext",
+        "xtext",
+        "ytext"
+    ],
     "files.autoSave": "onWindowChange",
     "editor.formatOnSave": true
 }

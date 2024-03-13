@@ -3,10 +3,10 @@ import { JsonLdArray } from "jsonld/jsonld-spec";
 
 export type JsonLDType = {
     raw: Record<string, any>;
-    expanded: JsonLdArray;
-    compacted: jsonld.NodeObject;
-    flattened: jsonld.NodeObject;
-    nquads: object;
+    expanded?: JsonLdArray;
+    compacted?: jsonld.NodeObject;
+    flattened?: jsonld.NodeObject;
+    nquads?: object;
 };
 
 export async function getJsonLD(
