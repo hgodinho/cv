@@ -1,0 +1,31 @@
+{
+    "targetDefaults": {
+        "test": {
+            "cache": true,
+            "dependsOn": []
+        },
+        "dev": {
+            "cache": true,
+            "dependsOn": []
+        },
+        "build": {
+            "cache": true,
+            "dependsOn": []
+        },
+        "start": {
+            "dependsOn": []
+        },
+        "lint": {
+            "dependsOn": []
+        },
+        "commit": {
+            "dependsOn": []
+        },
+        "commit:no-verify": {
+            "dependsOn": []
+        },
+        "test:cov": {
+            "dependsOn": ["^test:cov"]
+        }
+    }
+}
