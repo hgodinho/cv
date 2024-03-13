@@ -1,0 +1,15 @@
+{
+    "name": "@hgod-in-cv/apps-script",
+    "version": "0.1.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "open": "clasp open",
+        "pull": "clasp pull",
+        "push": "clasp push",
+        "dev": "clasp open && clasp push --watch"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
