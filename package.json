@@ -1,27 +1,26 @@
 {
     "name": "hgod-in-cv",
     "version": "0.1.0",
-    "description": "",
     "private": true,
+    "description": "",
+    "keywords": [],
+    "license": "ISC",
+    "author": "Henrique Godinho <ola@hgod.in>",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "commit": "cz",
         "commit:no-verify": "pnpm commit --no-verify"
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
+    "config": {
+        "commitizen": {
+            "path": "cz-conventional-changelog"
+        }
+    },
     "dependencies": {
         "lerna": "^8.1.2"
     },
     "devDependencies": {
         "commitizen": "^4.3.0",
         "conventional-changelog": "^5.1.0"
-    },
-    "config": {
-        "commitizen": {
-            "path": "cz-conventional-changelog"
-        }
     }
 }
