@@ -65,6 +65,22 @@ function test_Entity() {
         expect(entity.parseString("https://hgod.in/cv/?person=1")).toBe(
             "https://hgod.in/cv/?person=1"
         );
+
+        expect(
+            entity.parseString(
+                "certification=1 | certification=2 | certification=3"
+            )
+        ).toEqual([
+            "https://hgod.in/cv?certification=1",
+            "https://hgod.in/cv?certification=2",
+            "https://hgod.in/cv?certification=3",
+        ]);
+
+        expect(entity.parseString("Godinho | Lopes | Costa")).toEqual([
+            "Godinho",
+            "Lopes",
+            "Costa",
+        ]);
     });
 
     // test("Entity.toJsonLd", () => {

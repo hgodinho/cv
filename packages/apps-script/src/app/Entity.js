@@ -18,7 +18,7 @@ class Entity {
 
         header.forEach((key, index) => {
             const value = this.parseValue(values[index]);
-            if (value !== undefined) {
+            if (value !== undefined && key !== "number") {
                 this[key] = value;
             }
         });
@@ -28,12 +28,7 @@ class Entity {
         if (value === "" || value === null) return undefined;
         if (value === "TRUE") return true;
         if (value === "FALSE") return false;
-        // return early if the string is a date
-        if (isNaN(value) && value.match(/\d{4}-\d{2}-\d{2}/)) {
-            return parseDate(value);
-        }
         if (!isNaN(value)) return Number(value);
-
         return this.parseString(value);
     }
 
@@ -90,6 +85,18 @@ class Entity {
             !str.includes("|")
         ) {
             data = str.trim();
+        } else if (
+            str.includes("|") &&
+            str.includes("=") &&
+            !str.includes(";")
+        ) {
+            data = str.split("|").map((pair) => pair.trim());
+        } else if (
+            str.includes("|") &&
+            !str.includes("=") &&
+            !str.includes(";")
+        ) {
+            return str.split("|").map((pair) => pair.trim());
         }
 
         if (typeof data === "string") {
@@ -106,8 +113,8 @@ class Entity {
             return data;
         }
 
-        // if we reach this point, something went wrong
-        console.error("fuén", { str, data });
+        // if we get here, we return the string as is
+        return str;
     }
 
     toJsonLd() {
