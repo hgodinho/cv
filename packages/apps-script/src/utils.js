@@ -1,3 +1,10 @@
+/**
+ * Get the access token
+ */
+function getToken() {
+    console.log("access_token:", ScriptApp.getOAuthToken());
+}
+
 function parseDate(date) {
     return Utilities.formatDate(new Date(date), "GMT", "yyyy-MM-dd");
 }
