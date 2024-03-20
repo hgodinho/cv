@@ -1,3 +1,4 @@
+"use client";
 import { useContext } from "react";
 import { CVContext } from "@/provider";
 import React from "react";
@@ -23,21 +24,31 @@ export function NetworkView({ w, h }: NetworkViewProps) {
     } = useNetwork({ w, h, ld: data, setSelected });
 
     return (
-        // <div className="absolute -z-10">
-        <ForceGraph3d
-            ref={ref}
-            // @ts-ignore
-            graphData={{ nodes, links }}
-            width={w}
-            height={h}
-            nodeAutoColorBy={'group'}
-            backgroundColor="black"
-            onNodeClick={focusOnClick}
-            linkThreeObject={linkLabel}
-            nodeLabel={nodeLabel}
-            linkThreeObjectExtend={true}
-            linkPositionUpdate={linkLabelPosition}
-        />
-        // </div>
+        <div className="force-graph" style={{
+            gridColumnStart: 1,
+            gridColumnEnd: 4,
+            gridRowStart: 1,
+            gridRowEnd: 4,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        }}>
+            <ForceGraph3d
+                ref={ref}
+                graphData={{ nodes, links }}
+                width={w - 10}
+                height={h - 10}
+                nodeAutoColorBy={'group'}
+                backgroundColor="black"
+                showNavInfo={false}
+                onNodeClick={focusOnClick}
+                nodeLabel={nodeLabel}
+                linkThreeObject={linkLabel}
+                linkPositionUpdate={linkLabelPosition}
+                linkThreeObjectExtend={true}
+                linkCurvature={"curvature"}
+                linkCurveRotation={"rotation"}
+            />
+        </div>
     );
 }

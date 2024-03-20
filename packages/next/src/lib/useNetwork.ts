@@ -1,52 +1,65 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useMemo } from "react";
 import { JsonLDType } from "./getJsonLD";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
+import { useSearchParams } from "next/navigation";
 
 export type UseNetworkProps = {
-    w: number;
-    h: number;
     ld: JsonLDType | null;
     setSelected?: (node: NodeObject | null) => void;
+    w?: number;
+    h?: number;
 };
 
-export function useNetwork({ w, h, ld, setSelected }: UseNetworkProps) {
+export function useNetwork({ ld, setSelected }: UseNetworkProps) {
     const ref = useRef();
 
-    const nodes: NodeObject[] = !ld?.flattened
-        ? []
-        : (ld?.flattened as unknown as Array<any>).map((node) => {
-              return {
-                  id: node["@id"],
-                  group: [...node["@type"]]
-                      .pop()
-                      .replace("http://schema.org/", ""),
-                  ...node,
-              };
-          });
+    const params = useSearchParams();
 
-    const links: LinkObject[] =
-        ld?.nquads &&
-        (ld?.nquads as unknown as Array<any>).reduce((acc, node) => {
-            const foundSubject = nodes?.find(
-                (n) => n.id === node.subject.value
-            );
-            const foundObject = nodes?.find((n) => n.id === node.object.value);
-            if (foundObject && foundSubject) {
-                // return only relations between two classes, excluding properties
-                const link = {
-                    source: node.subject.value,
-                    target: node.object.value,
-                    predicate: node.predicate.value.replace(
-                        "http://schema.org/",
-                        ""
-                    ),
-                    value: 1,
-                };
-                acc.push(link);
-            }
-            return acc;
-        }, []);
+    console.log({ params });
+
+    const { nodes, links } = useMemo(() => {
+        const nodes: NodeObject[] = !ld?.flattened
+            ? []
+            : (ld?.flattened as unknown as Array<any>).map((node) => {
+                  return {
+                      id: node["@id"],
+                      group: [...node["@type"]]
+                          .pop()
+                          .replace("http://schema.org/", ""),
+                      ...node,
+                  };
+              });
+
+        const links: LinkObject[] =
+            ld?.nquads &&
+            (ld?.nquads as unknown as Array<any>).reduce((acc, node) => {
+                const foundSubject = nodes?.find(
+                    (n) => n.id === node.subject.value
+                );
+                const foundObject = nodes?.find(
+                    (n) => n.id === node.object.value
+                );
+                if (foundObject && foundSubject) {
+                    // return only relations between two classes, excluding properties
+                    const link = {
+                        source: node.subject.value,
+                        target: node.object.value,
+                        predicate: node.predicate.value.replace(
+                            "http://schema.org/",
+                            ""
+                        ),
+                        value: 1,
+                        curvature: Math.random(),
+                        rotation: Math.random(),
+                    };
+                    acc.push(link);
+                }
+                return acc;
+            }, []);
+
+        return { nodes, links };
+    }, [ld]);
 
     const focusOnClick = useCallback(
         (node: NodeObject) => {

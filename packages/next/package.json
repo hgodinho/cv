@@ -11,6 +11,8 @@
         "test:cov": "pnpm test -- --coverage --coverageDirectory=\"tests/coverage\""
     },
     "dependencies": {
+        "@radix-ui/react-collapsible": "^1.0.3",
+        "@react-hook/window-size": "^3.1.1",
         "@types/three": "^0.162.0",
         "d3": "^7.8.5",
         "jsonld": "^8.3.2",
