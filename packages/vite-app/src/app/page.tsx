@@ -6,6 +6,7 @@ export async function getData() {
     const deployId = process.env.DEPLOY_ID;
     const token = process.env.SCRIPT_TOKEN;
     console.log({ baseUrl, deployId, token, url: `${baseUrl}/${deployId}/exec` })
+
     const data = await fetch(`${baseUrl}/${deployId}/exec`, {
         headers: {
             Authorization: `Bearer ${token}`,
