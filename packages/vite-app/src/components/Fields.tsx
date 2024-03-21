@@ -1,7 +1,5 @@
 import React from "react";
 
-import Link from "next/link";
-
 export function Fields({ data }: { data: Record<string, any> }) {
     console.log("Fields", { data });
     const exclude = [
@@ -71,7 +69,7 @@ export function Field({
     return (
         <div className="field mb-4">
             <p className="text-sm text-gray-300">
-                {url ? <Link href={url}>{label}</Link> : label}
+                {url ? <a href={url}>{label}</a> : label}
             </p>
             {header ? <h2 className="text-lg">{value}</h2> : <p>{value}</p>}
         </div>

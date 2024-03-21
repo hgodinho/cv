@@ -1,8 +1,7 @@
 import { useCallback, useRef, useMemo } from "react";
-import { JsonLDType } from "./getJsonLD";
+import { JsonLDType } from "../../.bin/getJsonLD";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
-import { useSearchParams } from "next/navigation";
 
 export type UseNetworkProps = {
     ld: JsonLDType | null;
@@ -13,10 +12,6 @@ export type UseNetworkProps = {
 
 export function useNetwork({ ld, setSelected }: UseNetworkProps) {
     const ref = useRef();
-
-    const params = useSearchParams();
-
-    console.log({ params });
 
     const { nodes, links } = useMemo(() => {
         const nodes: NodeObject[] = !ld?.flattened
