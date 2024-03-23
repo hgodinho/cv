@@ -9,7 +9,7 @@ export async function getData() {
     const deployId = process.env.VITE_DEPLOY_ID;
     const token = process.env.VITE_SCRIPT_TOKEN;
 
-    const data = await fetch(`${baseUrl}/${deployId}/exec`, {
+    const json = await fetch(`${baseUrl}/${deployId}/exec`, {
         redirect: "follow",
         method: "GET",
         headers: {
@@ -20,8 +20,8 @@ export async function getData() {
         .then(async (res) => {
             switch (res.status) {
                 case 200:
-                    const data = JSON.parse(await res.text());
-                    return data;
+                    const response = JSON.parse(await res.text());
+                    return response;
                 case 401:
                     throw new Error("Unauthorized");
                 default:
@@ -32,9 +32,13 @@ export async function getData() {
             console.error(err);
         });
 
-    const jsonld = await getJsonLD(data, data["@context"]);
+    const newJson = {
+        properties: json.properties,
+        config: json.config,
+        data: await getJsonLD(json.data, json.data["@context"]),
+    };
 
-    fs.writeFileSync("dist/data.json", JSON.stringify(jsonld, null, 4));
+    fs.writeFileSync("dist/data.json", JSON.stringify(newJson, null, 4));
     console.log("data.json written");
 }
 

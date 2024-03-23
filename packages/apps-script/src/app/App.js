@@ -27,6 +27,26 @@ class App {
         this.config = Object.fromEntries(
             header.map((key, index) => [key, values[0][index]])
         );
+        const { header: propHeader, values: propValues } =
+            this.spreadsheet.findValuesFromSheet("config", "[properties]", 2);
+
+        const orderedProps = new Map();
+        for (const [name, order] of propValues) {
+            if (order) {
+                orderedProps.set(name, order);
+            }
+        }
+
+        propValues.sort((a, b) => {
+            const orderA = orderedProps.get(a[0]) || Infinity;
+            const orderB = orderedProps.get(b[0]) || Infinity;
+            return orderA - orderB;
+        });
+
+        this.properties = propValues.reduce((acc, [name, order]) => {
+            acc.push(name);
+            return acc;
+        }, []);
     }
 
     setupRawData() {
@@ -53,13 +73,17 @@ class App {
 
     getJsonLd(stringify = true) {
         const json = {
-            "@context": "https://schema.org",
-            "@graph": [],
+            properties: this.properties,
+            config: this.config,
+            data: {
+                "@context": "https://schema.org",
+                "@graph": [],
+            },
         };
 
         Object.entries(this.data).forEach(([name, entities]) => {
             entities.forEach((entity) => {
-                json["@graph"].push(entity.toJsonLd());
+                json.data["@graph"].push(entity.toJsonLd());
             });
         });
 
