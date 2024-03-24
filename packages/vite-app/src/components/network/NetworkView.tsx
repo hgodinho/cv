@@ -1,16 +1,17 @@
-"use client";
 import { useContext } from "react";
-import { CVContext } from "@/provider";
-import React from "react";
-import { useNetwork } from "@/lib/useNetwork";
 import ForceGraph3d from "react-force-graph-3d";
 
+import { CVContext } from "@/provider";
+import { useNetwork } from "@/lib";
+
+import { network } from '@/components/layout/grid.module.css'
+
 export type NetworkViewProps = {
-    w: number;
-    h: number;
+    width: number;
+    height: number;
 }
 
-export function NetworkView({ w, h }: NetworkViewProps) {
+export function NetworkView({ width, height }: NetworkViewProps) {
     const { data, setSelected } = useContext(CVContext);
 
     const {
@@ -21,24 +22,16 @@ export function NetworkView({ w, h }: NetworkViewProps) {
         nodeLabel,
         linkLabel,
         linkLabelPosition
-    } = useNetwork({ w, h, ld: data, setSelected });
+    } = useNetwork({ w: width, h: height, ld: data.data, setSelected });
 
     return (
-        <div className="force-graph" style={{
-            gridColumnStart: 1,
-            gridColumnEnd: 4,
-            gridRowStart: 1,
-            gridRowEnd: 4,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-        }}>
+        <div className={`${network} m-auto`}>
             <ForceGraph3d
                 ref={ref}
                 graphData={{ nodes, links }}
-                width={w - 10}
-                height={h - 10}
-                nodeAutoColorBy={'group'}
+                width={width - 10}
+                height={height - 10}
+                nodeAutoColorBy={'type'}
                 backgroundColor="black"
                 showNavInfo={false}
                 onNodeClick={focusOnClick}

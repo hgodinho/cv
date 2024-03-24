@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { CV } from "@/components";
+import { tw } from "@/lib";
 
 export function App() {
     const [state, setState] = useState(null);
@@ -14,5 +15,5 @@ export function App() {
         fetchData();
     }, []);
 
-    return <main>{state ? <CV data={state} /> : "Loading..."}</main>;
+    return <main className={tw("text-gray-50")}>{state ? <CV data={state} /> : "Loading..."}</main>;
 }
