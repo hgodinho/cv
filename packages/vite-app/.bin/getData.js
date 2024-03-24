@@ -38,8 +38,11 @@ export async function getData() {
         data: await getJsonLD(json.data, json.data["@context"]),
     };
 
-    fs.writeFileSync("dist/data.json", JSON.stringify(newJson, null, 4));
-    console.log("data.json written");
+    fs.writeFileSync(
+        "public/henrique-godinho.jsonld",
+        JSON.stringify(newJson, null, 4)
+    );
+    console.log("public/henrique-godinho.jsonld written");
 }
 
 await getData();
