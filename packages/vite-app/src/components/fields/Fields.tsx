@@ -8,10 +8,10 @@ import { tw } from "@/lib";
 
 export type FieldsProps = { data: Record<string, any>; properties: string[] };
 
-export type LabelProps = { url?: string; label: string };
+export type LabelProps = { url?: string; value: string };
 
 export type FieldProps = {
-    label: string;
+    label: LabelProps,
     value: string | string[];
     url?: string;
     header?: boolean;
@@ -39,14 +39,14 @@ export function Fields({ data, properties }: FieldsProps) {
             >
                 {data["type"] && (
                     <Field
-                        label="@type"
+                        label={{ value: "@type" }}
                         value={data["type"]}
                         url="https://www.w3.org/TR/json-ld11/#specifying-the-type"
                     />
                 )}
                 {data["id"] && (
                     <Field
-                        label="@id"
+                        label={{ value: "@id" }}
                         value={data["id"]}
                         url="https://www.w3.org/TR/json-ld11/#node-identifiers"
                     />
@@ -69,9 +69,11 @@ export function Fields({ data, properties }: FieldsProps) {
                                 return (
                                     <Field
                                         key={property}
-                                        label={property}
+                                        label={{
+                                            value: property,
+                                            url: `${data["@context"]}/${property}`
+                                        }}
                                         value={value}
-                                        url={`${data["@context"]}/${property}`}
                                         header={true}
                                     />
                                 );
@@ -79,9 +81,11 @@ export function Fields({ data, properties }: FieldsProps) {
                             return (
                                 <Field
                                     key={property}
-                                    label={property}
+                                    label={{
+                                        value: property,
+                                        url: `${data["@context"]}/${property}`
+                                    }}
                                     value={value}
-                                    url={`${data["@context"]}/${property}`}
                                 />
                             );
                         }
@@ -92,10 +96,10 @@ export function Fields({ data, properties }: FieldsProps) {
     );
 }
 
-export function Label({ url, label }: LabelProps) {
+export function Label({ url, value }: LabelProps) {
     return (
         <p className={tw("text-sm", "text-gray-300", "text-wrap")}>
-            {url ? <Link href={url}>{label}</Link> : label}
+            {url ? <Link href={url}>{value}</Link> : value}
         </p>
     );
 }
@@ -103,7 +107,7 @@ export function Label({ url, label }: LabelProps) {
 export function Field({ label, value, url, header }: FieldProps) {
     return (
         <div className={tw("field", "mb-4", "text-wrap")}>
-            <Label url={url} label={label} />
+            <Label {...label} />
             {Array.isArray(value) ? (
                 value.map((v) =>
                     header ? (
