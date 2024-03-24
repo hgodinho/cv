@@ -1,6 +1,6 @@
 import * as jsonld from "jsonld";
 import { JsonLdArray } from "jsonld/jsonld-spec";
-import { NodeObject } from "react-force-graph-3d";
+import { NodeObject, LinkObject } from "react-force-graph-3d";
 
 export type CVContextType = {
     data: {
@@ -14,6 +14,8 @@ export type CVContextType = {
         data: JsonLDType;
     };
     selected: NodeObject | null;
+    nodes: NodeObject[];
+    links: LinkObject[];
     setSelected: (node: NodeObject | null) => void;
 };
 
