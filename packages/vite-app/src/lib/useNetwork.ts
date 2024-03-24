@@ -1,58 +1,63 @@
 import { useCallback, useRef, useMemo } from "react";
-import { JsonLDType } from "../../.bin/getJsonLD";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
 
+import { JsonLDType } from "@/types";
+
 export type UseNetworkProps = {
     ld: JsonLDType | null;
-    setSelected?: (node: NodeObject | null) => void;
     w?: number;
     h?: number;
+    setSelected?: (node: NodeObject | null) => void;
 };
 
 export function useNetwork({ ld, setSelected }: UseNetworkProps) {
+    if (!ld) throw new Error("ld must be defined");
+
     const ref = useRef();
 
     const { nodes, links } = useMemo(() => {
-        const nodes: NodeObject[] = !ld?.flattened
-            ? []
-            : (ld?.flattened as unknown as Array<any>).map((node) => {
-                  return {
-                      id: node["@id"],
-                      group: [...node["@type"]]
-                          .pop()
-                          .replace("http://schema.org/", ""),
-                      ...node,
-                  };
-              });
-
-        const links: LinkObject[] =
-            ld?.nquads &&
-            (ld?.nquads as unknown as Array<any>).reduce((acc, node) => {
-                const foundSubject = nodes?.find(
-                    (n) => n.id === node.subject.value
-                );
-                const foundObject = nodes?.find(
-                    (n) => n.id === node.object.value
-                );
-                if (foundObject && foundSubject) {
-                    // return only relations between two classes, excluding properties
-                    const link = {
-                        source: node.subject.value,
-                        target: node.object.value,
-                        predicate: node.predicate.value.replace(
-                            "http://schema.org/",
-                            ""
-                        ),
-                        value: 1,
-                        curvature: Math.random(),
-                        rotation: Math.random(),
-                    };
-                    acc.push(link);
-                }
-                return acc;
-            }, []);
-
+        let nodes: NodeObject[] = [];
+        if (ld?.compacted) {
+            nodes = (ld?.compacted["@graph"] as NodeObject[]).map((node) => {
+                return {
+                    "@context": ld?.compacted
+                        ? ld?.compacted["@context"]
+                        : undefined,
+                    ...node,
+                };
+            });
+        }
+        let links: LinkObject[] = [];
+        if (ld?.nquads) {
+            links = (ld?.nquads as unknown as Array<any>).reduce(
+                (acc, node) => {
+                    const foundSubject = nodes?.find(
+                        (n) => n.id === node.subject.value
+                    );
+                    const foundObject = nodes?.find(
+                        (n) => n.id === node.object.value
+                    );
+                    if (foundObject && foundSubject) {
+                        // return only relations between two classes, excluding properties
+                        const link = {
+                            source: node.subject.value,
+                            target: node.object.value,
+                            predicate: node.predicate.value.replace(
+                                "http://schema.org/",
+                                ""
+                            ),
+                            value: 10,
+                            // curvature: Math.random(),
+                            // rotation: Math.random(),
+                        };
+                        acc.push(link);
+                    }
+                    return acc;
+                },
+                []
+            );
+        }
         return { nodes, links };
     }, [ld]);
 
@@ -86,9 +91,8 @@ export function useNetwork({ ld, setSelected }: UseNetworkProps) {
     );
 
     const nodeLabel = useCallback((node: NodeObject) => {
-        if (node.hasOwnProperty("http://schema.org/name")) {
-            // @ts-ignore
-            return node["http://schema.org/name"][0]["@value"];
+        if (node.hasOwnProperty("name")) {
+            return node["name"];
         }
         return node.id;
     }, []);

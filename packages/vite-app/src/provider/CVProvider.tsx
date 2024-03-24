@@ -1,24 +1,27 @@
-import { type JsonLDType } from "@/lib";
-import { createContext, PropsWithChildren, useState, useEffect } from "react";
+import { createContext, PropsWithChildren, useState } from "react";
 import { NodeObject } from "react-force-graph-3d";
 
-export type CVContextType = {
-    data: JsonLDType
-    selected: NodeObject | null;
-    setSelected: (node: NodeObject | null) => void;
-}
+import type { CVContextType } from "@/types";
 
 export const CVContext = createContext<CVContextType>({
     data: {
-        raw: {}
+        properties: [],
+        config: {
+            base: "",
+            namespace: "",
+            url: "",
+            query: "",
+        },
+        data: {
+            raw: { "@context": {}, "@graph": [] }
+        },
     },
     selected: null,
     setSelected: () => { },
 });
 
-export function CVProvider({ children, data }: PropsWithChildren<{ data: JsonLDType }>) {
+export function CVProvider({ children, data }: PropsWithChildren<{ data: CVContextType['data'] }>) {
     const [selected, setSelected] = useState<NodeObject | null>(null);
-
     return (
         <CVContext.Provider value={{ data, selected, setSelected }}>{children}</CVContext.Provider>
     );
