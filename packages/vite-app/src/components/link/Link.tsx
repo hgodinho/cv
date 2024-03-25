@@ -1,17 +1,16 @@
 import { tw } from "@/lib";
+import { Link as LinkRouter } from 'react-router-dom';
 
 export type LinkProps = {
     href: string;
-    target?: string;
 }
 
-export function Link({ href, target, children }: React.PropsWithChildren<LinkProps>) {
+export function Link({ href, children }: React.PropsWithChildren<LinkProps>) {
     return (
-        <a
-            href={href}
-            target={target || '_blank'}
+        <LinkRouter
+            to={href}
             className={tw("text-blue-200", "hover:text-blue-400", "text-wrap")}>
             {children}
-        </a>
+        </LinkRouter>
     )
 }
