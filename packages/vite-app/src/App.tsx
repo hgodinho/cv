@@ -7,10 +7,14 @@ export function App() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await fetch("../dist/data.json").then((res) =>
-                res.json()
-            );
-            setState(data);
+            try {
+                const data = await fetch("henrique-godinho.jsonld").then((res) =>
+                    res.json()
+                );
+                setState(data);
+            } catch (e) {
+                console.error(e);
+            }
         };
         fetchData();
     }, []);

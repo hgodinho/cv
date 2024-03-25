@@ -1,6 +1,9 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useEffect, useContext } from "react";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
+import { useLocation } from "react-router-dom";
+
+import { CVContext } from "@/provider";
 
 export type UseNetworkProps = {
     w?: number;
@@ -8,12 +11,16 @@ export type UseNetworkProps = {
     setSelected?: (node: NodeObject | null) => void;
 };
 
-export function useNetwork({ setSelected }: UseNetworkProps) {
+export function useNetwork() {
     const ref = useRef();
+
+    const { nodes, links, setSelected } = useContext(CVContext);
+
+    const location = useLocation();
 
     const focusOnClick = useCallback(
         (node: NodeObject) => {
-            const distance = 20;
+            const distance = 25;
             const distRatio =
                 1 +
                 distance /
@@ -33,7 +40,7 @@ export function useNetwork({ setSelected }: UseNetworkProps) {
                     z: node.z * distRatio,
                 },
                 node,
-                3000
+                2500
             );
             setSelected && setSelected(node);
         },
@@ -48,9 +55,7 @@ export function useNetwork({ setSelected }: UseNetworkProps) {
     }, []);
 
     const linkLabel = useCallback((link: LinkObject) => {
-        const sprite = new SpriteText(link.predicate);
-        sprite.color = "lightgrey";
-        sprite.textHeight = 1.5;
+        const sprite = new SpriteText(link.predicate, 1.5, "lightgrey");
         return sprite;
     }, []);
 
@@ -64,8 +69,27 @@ export function useNetwork({ setSelected }: UseNetworkProps) {
         Object.assign(sprite.position, middlePos);
     }, []);
 
+    useEffect(() => {
+        if (location.pathname === "/cv") {
+            const search = location.search;
+            if (search) {
+                const found = nodes.find((node) =>
+                    (node.id as string).includes(search)
+                );
+                if (
+                    typeof found !== "undefined" &&
+                    (found.id as string).includes(search)
+                ) {
+                    focusOnClick(found);
+                }
+            }
+        }
+    }, [location]);
+
     return {
         ref,
+        nodes,
+        links,
         focusOnClick,
         nodeLabel,
         linkLabel,

@@ -1,7 +1,35 @@
-import { createContext, PropsWithChildren, useState, useMemo } from "react";
+import { createContext, PropsWithChildren, useState, useMemo, useCallback, useEffect } from "react";
+import * as jsonld from "jsonld";
+import { JsonLdArray } from "jsonld/jsonld-spec";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
+import type { FilterValue } from "@/components";
+import { useSearchParams } from "react-router-dom";
 
-import type { CVContextType } from "@/types";
+export type CVContextType = {
+    data: {
+        properties: string[];
+        config: {
+            base: string;
+            namespace: string;
+            url: string;
+            query: string;
+        };
+        data: JsonLDType;
+    };
+    selected: NodeObject | null;
+    nodes: NodeObject[];
+    links: LinkObject[];
+    setSelected: (node: NodeObject | null) => void;
+    setSearchParams: (search: URLSearchParams) => void;
+} & FilterValue;
+
+export type JsonLDType = {
+    raw: Record<string, any>;
+    expanded?: JsonLdArray;
+    compacted?: jsonld.NodeObject;
+    flattened?: jsonld.NodeObject;
+    nquads?: object;
+};
 
 export const CVContext = createContext<CVContextType>({
     data: {
@@ -20,28 +48,24 @@ export const CVContext = createContext<CVContextType>({
     links: [],
     selected: null,
     setSelected: () => { },
+    setSearchParams: () => { },
 });
 
 export function CVProvider({ children, data }: PropsWithChildren<{ data: CVContextType['data'] }>) {
-    const [selected, setSelected] = useState<NodeObject | null>(null);
-
     const ld = data.data;
+
+    const [_, setSearchParams] = useSearchParams();
+    const [selected, setSelected] = useState<NodeObject | null>(null);
 
     const { nodes, links } = useMemo(() => {
         let nodes: NodeObject[] = [];
         if (ld?.compacted) {
             nodes = (ld?.compacted["@graph"] as NodeObject[]).map((node) => {
-                console.log({ node });
-
                 return {
                     "@context": ld?.compacted
                         ? ld?.compacted["@context"]
                         : undefined,
-                    ...Object.fromEntries(
-                        Object.entries(node).map(([k, v]) => {
-                            return [k, v];
-                        })
-                    ),
+                    ...node,
                 };
             });
         }
@@ -65,8 +89,8 @@ export function CVProvider({ children, data }: PropsWithChildren<{ data: CVConte
                                 ""
                             ),
                             value: 10,
-                            // curvature: Math.random(),
-                            // rotation: Math.random(),
+                            curvature: 0.5,
+                            rotation: Math.PI / Math.random() * 2,
                         };
                         acc.push(link);
                     }
@@ -78,7 +102,25 @@ export function CVProvider({ children, data }: PropsWithChildren<{ data: CVConte
         return { nodes, links };
     }, [ld]);
 
+    const filterValue = useCallback((value: string) => {
+        if (import.meta.env.DEV) {
+            if (value.includes(data.config.base)) {
+                return value.replace(data.config.base, '');
+            }
+        }
+        return value;
+    }, [])
+
+    useEffect(() => {
+        const params = (selected?.id as string)?.split("?").pop()?.split("=") || [];
+        if (params.length > 1) {
+            const searchParams = new URLSearchParams();
+            searchParams.set(params[0], params[1]);
+            setSearchParams(searchParams);
+        }
+    }, [selected])
+
     return (
-        <CVContext.Provider value={{ data, selected, nodes, links, setSelected }}>{children}</CVContext.Provider>
+        <CVContext.Provider value={{ data, selected, nodes, links, setSelected, setSearchParams, filterValue }}>{children}</CVContext.Provider>
     );
 };
