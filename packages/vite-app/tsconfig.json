@@ -17,6 +17,6 @@
             "@tests/*": ["./tests/*"]
         }
     },
-    "include": ["**/*.ts", "**/*.tsx", ".bin/getJsonLD.js"],
-    "exclude": ["node_modules"]
+    "include": ["**/*.ts", "**/*.tsx"],
+    "exclude": ["node_modules", ".bin"]
 }

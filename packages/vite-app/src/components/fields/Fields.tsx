@@ -6,18 +6,22 @@ import { Link } from "@/components";
 
 import { tw } from "@/lib";
 
-export type FieldsProps = { data: Record<string, any>; properties: string[] };
+export type FilterValue = {
+    filterValue?: (value: string) => string;
+}
 
-export type LabelProps = { url?: string; label: string };
+export type FieldsProps = { data: Record<string, any>; properties: string[] } & FilterValue;
+
+export type LabelProps = { url?: string; value: string };
 
 export type FieldProps = {
-    label: string;
+    label: LabelProps,
     value: string | string[];
     url?: string;
     header?: boolean;
-};
+} & FilterValue;
 
-export function Fields({ data, properties }: FieldsProps) {
+export function Fields({ data, properties, filterValue }: FieldsProps) {
     return (
         <>
             <div
@@ -39,14 +43,14 @@ export function Fields({ data, properties }: FieldsProps) {
             >
                 {data["type"] && (
                     <Field
-                        label="@type"
+                        label={{ value: "@type" }}
                         value={data["type"]}
                         url="https://www.w3.org/TR/json-ld11/#specifying-the-type"
                     />
                 )}
                 {data["id"] && (
                     <Field
-                        label="@id"
+                        label={{ value: "@id" }}
                         value={data["id"]}
                         url="https://www.w3.org/TR/json-ld11/#node-identifiers"
                     />
@@ -69,19 +73,25 @@ export function Fields({ data, properties }: FieldsProps) {
                                 return (
                                     <Field
                                         key={property}
-                                        label={property}
+                                        label={{
+                                            value: property,
+                                            url: `${data["@context"]}/${property}`
+                                        }}
                                         value={value}
-                                        url={`${data["@context"]}/${property}`}
                                         header={true}
+                                        filterValue={filterValue}
                                     />
                                 );
                             }
                             return (
                                 <Field
                                     key={property}
-                                    label={property}
+                                    label={{
+                                        value: property,
+                                        url: `${data["@context"]}/${property}`
+                                    }}
                                     value={value}
-                                    url={`${data["@context"]}/${property}`}
+                                    filterValue={filterValue}
                                 />
                             );
                         }
@@ -92,58 +102,50 @@ export function Fields({ data, properties }: FieldsProps) {
     );
 }
 
-export function Label({ url, label }: LabelProps) {
+export function Label({ url, value }: LabelProps) {
     return (
         <p className={tw("text-sm", "text-gray-300", "text-wrap")}>
-            {url ? <Link href={url}>{label}</Link> : label}
+            {url ? <Link href={url}>{value}</Link> : value}
         </p>
     );
 }
 
-export function Field({ label, value, url, header }: FieldProps) {
-    return (
-        <div className={tw("field", "mb-4", "text-wrap")}>
-            <Label url={url} label={label} />
-            {Array.isArray(value) ? (
-                value.map((v) =>
-                    header ? (
-                        <h2
-                            key={v}
-                            className={tw("text-2xl", "font-medium", "italic", "text-wrap")}
-                        >
-                            {v.toString().startsWith("http") ? (
-                                <Link href={v}>{v}</Link>
-                            ) : (
-                                v
-                            )}
-                        </h2>
-                    ) : (
-                        <p key={v} className={tw("text-lg", "text-wrap")}>
-                            {v.toString().startsWith("http") ? (
-                                <Link href={v}>{v}</Link>
-                            ) : (
-                                v
-                            )}
-                        </p>
-                    )
-                )
-            ) : header ? (
-                <h2 className={tw("text-2xl", "font-medium", "italic", "text-wrap")}>
+export function Field({ label, value, url, header, filterValue }: FieldProps) {
+    const Value = (header: boolean | undefined, value: string) => {
+
+        if (header) {
+            return (
+                <h2
+                    key={value}
+                    className={tw("text-2xl", "font-medium", "italic", "text-wrap")}
+                >
                     {value.toString().startsWith("http") ? (
-                        <Link href={value}>{value}</Link>
+                        <Link href={filterValue ? filterValue(value) : value}>{value}</Link>
                     ) : (
                         value
                     )}
                 </h2>
-            ) : (
-                <p className={tw("text-lg", "text-wrap")}>
-                    {value.toString().startsWith("http") ? (
-                        <Link href={value}>{value}</Link>
-                    ) : (
-                        value
-                    )}
-                </p>
-            )}
+            )
+        }
+        return (
+            <p key={value} className={tw("text-lg", "text-wrap")}>
+                {value.toString().startsWith("http") ? (
+                    <Link href={filterValue ? filterValue(value) : value}>{value}</Link>
+                ) : (
+                    value
+                )}
+            </p>
+        );
+    }
+
+    return (
+        <div className={tw("field", "mb-4", "text-wrap")}>
+            <Label {...label} />
+            {Array.isArray(value) ? (
+                value.map((v) =>
+                    Value(header, v)
+                )
+            ) : Value(header, value)}
         </div>
     );
 }

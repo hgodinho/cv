@@ -12,6 +12,7 @@ export function ClassView() {
     const {
         data: { properties },
         selected,
+        filterValue,
     } = useContext(CVContext);
 
     useEffect(() => {
@@ -74,7 +75,7 @@ export function ClassView() {
                     {!selected ? (
                         <div className="">Select a class to view more info</div>
                     ) : (
-                        <Fields data={selected} properties={properties} />
+                        <Fields data={selected} properties={properties} filterValue={filterValue} />
                     )}
                 </div>
             </CollapsiblePrimitive.Content>

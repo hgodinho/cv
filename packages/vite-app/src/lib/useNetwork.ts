@@ -1,69 +1,26 @@
-import { useCallback, useRef, useMemo } from "react";
+import { useCallback, useRef, useEffect, useContext } from "react";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
+import { useLocation } from "react-router-dom";
 
-import { JsonLDType } from "@/types";
+import { CVContext } from "@/provider";
 
 export type UseNetworkProps = {
-    ld: JsonLDType | null;
     w?: number;
     h?: number;
     setSelected?: (node: NodeObject | null) => void;
 };
 
-export function useNetwork({ ld, setSelected }: UseNetworkProps) {
-    if (!ld) throw new Error("ld must be defined");
-
+export function useNetwork() {
     const ref = useRef();
 
-    const { nodes, links } = useMemo(() => {
-        let nodes: NodeObject[] = [];
-        if (ld?.compacted) {
-            nodes = (ld?.compacted["@graph"] as NodeObject[]).map((node) => {
-                return {
-                    "@context": ld?.compacted
-                        ? ld?.compacted["@context"]
-                        : undefined,
-                    ...node,
-                };
-            });
-        }
-        let links: LinkObject[] = [];
-        if (ld?.nquads) {
-            links = (ld?.nquads as unknown as Array<any>).reduce(
-                (acc, node) => {
-                    const foundSubject = nodes?.find(
-                        (n) => n.id === node.subject.value
-                    );
-                    const foundObject = nodes?.find(
-                        (n) => n.id === node.object.value
-                    );
-                    if (foundObject && foundSubject) {
-                        // return only relations between two classes, excluding properties
-                        const link = {
-                            source: node.subject.value,
-                            target: node.object.value,
-                            predicate: node.predicate.value.replace(
-                                "http://schema.org/",
-                                ""
-                            ),
-                            value: 10,
-                            // curvature: Math.random(),
-                            // rotation: Math.random(),
-                        };
-                        acc.push(link);
-                    }
-                    return acc;
-                },
-                []
-            );
-        }
-        return { nodes, links };
-    }, [ld]);
+    const { nodes, links, setSelected } = useContext(CVContext);
+
+    const location = useLocation();
 
     const focusOnClick = useCallback(
         (node: NodeObject) => {
-            const distance = 20;
+            const distance = 25;
             const distRatio =
                 1 +
                 distance /
@@ -83,7 +40,7 @@ export function useNetwork({ ld, setSelected }: UseNetworkProps) {
                     z: node.z * distRatio,
                 },
                 node,
-                3000
+                2500
             );
             setSelected && setSelected(node);
         },
@@ -98,9 +55,7 @@ export function useNetwork({ ld, setSelected }: UseNetworkProps) {
     }, []);
 
     const linkLabel = useCallback((link: LinkObject) => {
-        const sprite = new SpriteText(link.predicate);
-        sprite.color = "lightgrey";
-        sprite.textHeight = 1.5;
+        const sprite = new SpriteText(link.predicate, 1.5, "lightgrey");
         return sprite;
     }, []);
 
@@ -113,6 +68,23 @@ export function useNetwork({ ld, setSelected }: UseNetworkProps) {
         };
         Object.assign(sprite.position, middlePos);
     }, []);
+
+    useEffect(() => {
+        if (location.pathname === "/cv") {
+            const search = location.search;
+            if (search) {
+                const found = nodes.find((node) =>
+                    (node.id as string).includes(search)
+                );
+                if (
+                    typeof found !== "undefined" &&
+                    (found.id as string).includes(search)
+                ) {
+                    focusOnClick(found);
+                }
+            }
+        }
+    }, [location]);
 
     return {
         ref,

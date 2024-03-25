@@ -12,7 +12,6 @@ export type NetworkViewProps = {
 }
 
 export function NetworkView({ width, height }: NetworkViewProps) {
-    const { data, setSelected } = useContext(CVContext);
 
     const {
         ref,
@@ -22,7 +21,7 @@ export function NetworkView({ width, height }: NetworkViewProps) {
         nodeLabel,
         linkLabel,
         linkLabelPosition
-    } = useNetwork({ w: width, h: height, ld: data.data, setSelected });
+    } = useNetwork();
 
     return (
         <div className={`${network} m-auto`}>
