@@ -4,7 +4,7 @@ import "./scrollbar.css";
 
 import { Link } from "@/components";
 
-import { tw } from "@/lib";
+import { tw, alphaHex } from "@/lib";
 
 export type FilterValue = {
     filterValue?: (value: string) => string;
@@ -29,17 +29,20 @@ export function Fields({ data, properties, filterValue }: FieldsProps) {
                     "flex",
                     "flex-row",
                     "gap-4",
-                    "border-b-4",
+                    "border-b-2",
                     "border-dashed",
-                    "border-gray-600",
                     "mb-4",
                     "justify-between",
                     "sticky",
                     "top-0",
                     "pt-4",
                     "px-4",
-                    "bg-black"
+                    "bg-black",
+                    "text-sm"
                 )}
+                style={{
+                    borderColor: alphaHex(data.color, 0.6)
+                }}
             >
                 {data["type"] && (
                     <Field
@@ -128,7 +131,7 @@ export function Field({ label, value, url, header, filterValue }: FieldProps) {
             )
         }
         return (
-            <p key={value} className={tw("text-lg", "text-wrap")}>
+            <p key={value} className={tw("text-wrap")}>
                 {value.toString().startsWith("http") ? (
                     <Link href={filterValue ? filterValue(value) : value}>{value}</Link>
                 ) : (

@@ -4,6 +4,7 @@ import { JsonLdArray } from "jsonld/jsonld-spec";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import type { FilterValue } from "@/components";
 import { useSearchParams } from "react-router-dom";
+import { FilterProvider } from ".";
 
 export type CVContextType = {
     data: {
@@ -15,6 +16,7 @@ export type CVContextType = {
             query: string;
         };
         data: JsonLDType;
+        colors: Record<string, string>
     };
     selected: NodeObject | null;
     nodes: NodeObject[];
@@ -31,7 +33,7 @@ export type JsonLDType = {
     nquads?: object;
 };
 
-export const CVContext = createContext<CVContextType>({
+export const defaultCVContext: CVContextType = {
     data: {
         properties: [],
         config: {
@@ -43,13 +45,17 @@ export const CVContext = createContext<CVContextType>({
         data: {
             raw: { "@context": {}, "@graph": [] }
         },
+        colors: {}
     },
     nodes: [],
     links: [],
     selected: null,
     setSelected: () => { },
     setSearchParams: () => { },
-});
+    filterValue: () => "",
+};
+
+export const CVContext = createContext<CVContextType>(defaultCVContext);
 
 export function CVProvider({ children, data }: PropsWithChildren<{ data: CVContextType['data'] }>) {
     const ld = data.data;
@@ -69,6 +75,7 @@ export function CVProvider({ children, data }: PropsWithChildren<{ data: CVConte
                 };
             });
         }
+
         let links: LinkObject[] = [];
         if (ld?.nquads) {
             links = (ld?.nquads as unknown as Array<any>).reduce(
@@ -89,8 +96,8 @@ export function CVProvider({ children, data }: PropsWithChildren<{ data: CVConte
                                 ""
                             ),
                             value: 10,
-                            curvature: 0.5,
-                            rotation: Math.PI / Math.random() * 2,
+                            // curvature: 0.5,
+                            // rotation: Math.PI / Math.random() * 2,
                         };
                         acc.push(link);
                     }
@@ -121,6 +128,10 @@ export function CVProvider({ children, data }: PropsWithChildren<{ data: CVConte
     }, [selected])
 
     return (
-        <CVContext.Provider value={{ data, selected, nodes, links, setSelected, setSearchParams, filterValue }}>{children}</CVContext.Provider>
+        <CVContext.Provider value={{ data, selected, nodes, links, setSelected, setSearchParams, filterValue }}>
+            <FilterProvider>
+                {children}
+            </FilterProvider>
+        </CVContext.Provider>
     );
 };

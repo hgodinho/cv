@@ -32,9 +32,10 @@ export async function getData() {
             console.error(err);
         });
 
+    console.log({ json });
+
     const newJson = {
-        properties: json.properties,
-        config: json.config,
+        ...json,
         data: await getJsonLD(json.data, json.data["@context"]),
     };
 

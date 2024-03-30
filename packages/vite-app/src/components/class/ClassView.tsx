@@ -1,19 +1,22 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
-import { CVContext } from "@/provider";
+import { Plus, Minus } from "react-feather";
+
+import { useCVContext } from "@/provider";
 import { Fields } from "@/components";
 import { tw } from "@/lib";
 
+// @ts-ignore
 import { classView } from "@/components/layout/grid.module.css";
 
 export function ClassView() {
     const [open, setOpen] = useState(false);
 
     const {
-        data: { properties },
+        data: { properties, colors },
         selected,
         filterValue,
-    } = useContext(CVContext);
+    } = useCVContext();
 
     useEffect(() => {
         if (selected) setOpen(true);
@@ -46,7 +49,7 @@ export function ClassView() {
                     "self-end"
                 )}
             >
-                {!open ? "+" : "-"}
+                {!open ? <Plus size={16} /> : <Minus size={16} />}
             </CollapsiblePrimitive.Trigger>
             <CollapsiblePrimitive.Content
                 className={tw(
@@ -54,12 +57,9 @@ export function ClassView() {
                     "h-full",
                     "overflow-y-auto",
                     "text-wrap",
-                    "bg-black/80"
                 )}
                 style={{
-                    borderColor: selected
-                        ? `${selected.color}`
-                        : "var(--gray-800/90)",
+                    borderColor: colors[selected?.type],
                 }}
             >
                 <div
