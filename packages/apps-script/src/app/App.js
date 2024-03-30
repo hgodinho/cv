@@ -8,6 +8,7 @@ class App {
             event: [15],
             certification: [34],
             creativeWork: [28],
+            role: [11],
         };
         this.setup();
     }
@@ -16,6 +17,20 @@ class App {
         this.setupConfig();
         this.setupRawData();
         this.setupData();
+        this.setupColors();
+    }
+
+    setupColors() {
+        const { values } = this.spreadsheet.findValuesFromSheet(
+            "config",
+            "[classes]",
+            2
+        );
+
+        this.colors = values.reduce((acc, [name, color]) => {
+            acc[name] = color;
+            return acc;
+        }, {});
     }
 
     setupConfig() {
@@ -75,6 +90,7 @@ class App {
         const json = {
             properties: this.properties,
             config: this.config,
+            colors: this.colors,
             data: {
                 "@context": "https://schema.org",
                 "@graph": [],
