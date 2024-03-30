@@ -1,9 +1,9 @@
-import { useCallback, useRef, useEffect, useContext } from "react";
+import { useCallback, useRef, useEffect } from "react";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
 import { useLocation } from "react-router-dom";
 
-import { CVContext } from "@/provider";
+import { useFilterContext } from "@/provider";
 
 export type UseNetworkProps = {
     w?: number;
@@ -14,13 +14,20 @@ export type UseNetworkProps = {
 export function useNetwork() {
     const ref = useRef();
 
-    const { nodes, links, setSelected } = useContext(CVContext);
+    const {
+        nodes,
+        filteredNodes,
+        links,
+        filteredLinks,
+        data: { colors },
+        setSelected,
+    } = useFilterContext();
 
     const location = useLocation();
 
     const focusOnClick = useCallback(
         (node: NodeObject) => {
-            const distance = 25;
+            const distance = 15;
             const distRatio =
                 1 +
                 distance /
@@ -69,11 +76,15 @@ export function useNetwork() {
         Object.assign(sprite.position, middlePos);
     }, []);
 
+    const color = useCallback((node: NodeObject) => {
+        return colors[node.type];
+    }, []);
+
     useEffect(() => {
         if (location.pathname === "/cv") {
             const search = location.search;
             if (search) {
-                const found = nodes.find((node) =>
+                const found = filteredNodes.find((node) =>
                     (node.id as string).includes(search)
                 );
                 if (
@@ -89,7 +100,11 @@ export function useNetwork() {
     return {
         ref,
         nodes,
+        filteredNodes,
+        filteredLinks,
         links,
+        colors,
+        color,
         focusOnClick,
         nodeLabel,
         linkLabel,

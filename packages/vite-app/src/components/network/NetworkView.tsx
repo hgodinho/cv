@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import ForceGraph3d from "react-force-graph-3d";
 
-import { CVContext } from "@/provider";
 import { useNetwork } from "@/lib";
 
+// @ts-ignore
 import { network } from '@/components/layout/grid.module.css'
 
 export type NetworkViewProps = {
@@ -12,29 +11,32 @@ export type NetworkViewProps = {
 }
 
 export function NetworkView({ width, height }: NetworkViewProps) {
-
     const {
         ref,
-        nodes,
-        links,
+        filteredNodes,
+        filteredLinks,
+        color,
         focusOnClick,
         nodeLabel,
         linkLabel,
         linkLabelPosition
     } = useNetwork();
 
+
     return (
         <div className={`${network} m-auto`}>
             <ForceGraph3d
                 ref={ref}
-                graphData={{ nodes, links }}
+                graphData={{ nodes: filteredNodes, links: filteredLinks }}
                 width={width - 10}
                 height={height - 10}
-                nodeAutoColorBy={'type'}
                 backgroundColor="black"
                 showNavInfo={false}
+                nodeOpacity={.95}
+                nodeResolution={48}
                 onNodeClick={focusOnClick}
                 nodeLabel={nodeLabel}
+                nodeColor={color}
                 linkThreeObject={linkLabel}
                 linkPositionUpdate={linkLabelPosition}
                 linkThreeObjectExtend={true}
