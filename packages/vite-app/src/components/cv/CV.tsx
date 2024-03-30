@@ -1,8 +1,7 @@
 import React from "react";
 
-import { CVContextType } from "@/types";
 import { useViewPortSize } from "@/lib";
-import { CVProvider } from "@/provider";
+import { CVProvider, type CVContextType } from "@/provider";
 import { Layout, ClassView, TreeView, NetworkView } from "@/components";
 
 export function CV({ data }: { data: CVContextType['data'] }) {
