@@ -1,16 +1,22 @@
-import { useState } from "react";
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
+import * as RATree from "react-accessible-treeview";
+import { IFlatMetadata } from "react-accessible-treeview/dist/TreeView/utils";
+import { ChevronRight, Plus, Minus } from "react-feather";
+import { CustomScroll } from "react-custom-scroll";
+import { motion } from "framer-motion";
 
+import { Checkbox } from ".";
+import { tw, useTree } from "@/lib";
+// @ts-ignore
 import { tree } from "@/components/layout/grid.module.css";
 
-import { tw } from "@/lib";
-
 export function TreeView() {
-    const [open, setOpen] = useState(false);
+    const { open, treeData, initialSelectedIds, colors, setOpen, onCheck } =
+        useTree();
 
     return (
         <CollapsiblePrimitive.Root
-            className={tw(tree, "z-10", "h-full", "flex", "flex-col")}
+            className={tw(tree, "z-10", "flex", "flex-col")}
             open={open}
             onOpenChange={() => setOpen(!open)}
         >
@@ -27,31 +33,143 @@ export function TreeView() {
                     "self-start"
                 )}
             >
-                {!open ? "+" : "-"}
+                {!open ? <Plus size={16} /> : <Minus size={16} />}
             </CollapsiblePrimitive.Trigger>
-            <CollapsiblePrimitive.Content
-                className={tw(
-                    "class-view-content",
-                    "border",
-                    "border-dashed",
-                    "h-full",
-                    "overflow-y-auto",
-                    "text-wrap",
-                    "bg-black/80"
-                )}
+            <motion.div
+                animate={{
+                    height: open ? "100%" : 0,
+                    opacity: open ? 1 : 0,
+                }}
+                transition={{
+                    duration: 0.3,
+                }}
+                className={tw("overflow-y-auto", "cv")}
             >
-                <div
-                    className={tw(
-                        "h-full",
-                        "flex",
-                        "flex-col",
-                        "text-wrap",
-                        "bg-black/80"
-                    )}
+                <CustomScroll
+                    heightRelativeToParent={"100%"}
                 >
-
-                </div>
-            </CollapsiblePrimitive.Content>
+                    <CollapsiblePrimitive.Content
+                        forceMount={true}
+                        className={tw(
+                            "class-view-content",
+                            "border-t-2",
+                            "text-wrap",
+                            "bg-black/80",
+                            "text-gray-300"
+                        )}
+                    >
+                        <Tree
+                            treeData={treeData}
+                            initialSelectedIds={initialSelectedIds}
+                            onCheck={onCheck}
+                        />
+                    </CollapsiblePrimitive.Content>
+                </CustomScroll>
+            </motion.div>
         </CollapsiblePrimitive.Root>
+    );
+}
+
+export function Tree({ treeData, initialSelectedIds, onCheck }: {
+    treeData: RATree.INode<IFlatMetadata>[],
+    initialSelectedIds: RATree.NodeId[],
+    onCheck: (props: RATree.ITreeViewOnSelectProps) => void
+}) {
+    return (
+        <div
+            className={tw(
+                "cv",
+                "h-full",
+                "flex",
+                "flex-col",
+                "text-wrap"
+            )}
+        >
+            <RATree.default
+                data={treeData}
+                aria-label="Tree View"
+                multiSelect
+                propagateSelect
+                propagateSelectUpwards
+                togglableSelect
+                defaultSelectedIds={initialSelectedIds}
+                onSelect={onCheck}
+                nodeRenderer={({
+                    element,
+                    isBranch,
+                    isExpanded,
+                    isSelected,
+                    isHalfSelected,
+                    getNodeProps,
+                    level,
+                    handleSelect,
+                    handleExpand,
+                }) => {
+                    return (
+                        <div
+                            {...getNodeProps({
+                                onClick: handleExpand,
+                            })}
+                            className={tw(
+                                "flex",
+                                "flex-row",
+                                "items-center",
+                                "border-b-2",
+                                "hover:text-gray-50",
+                                "gap-1",
+                                "py-2"
+                            )}
+                            style={{
+                                marginLeft: 32 * (level - 1),
+                                borderColor:
+                                    typeof element.metadata
+                                        ?.color !== "undefined"
+                                        ? (element.metadata
+                                            .color as string)
+                                        : undefined,
+                            }}
+                        >
+                            {isBranch && (
+                                <ChevronRight
+                                    size={16}
+                                    className={tw(
+                                        isExpanded
+                                            ? "rotate-90"
+                                            : ""
+                                    )}
+                                />
+                            )}
+                            <Checkbox
+                                id={element.id as string}
+                                className={tw("mr-2")}
+                                variant={
+                                    isHalfSelected
+                                        ? "some"
+                                        : isSelected
+                                            ? "all"
+                                            : "none"
+                                }
+                                defaultChecked={
+                                    isHalfSelected
+                                        ? "indeterminate"
+                                        : isSelected
+                                            ? true
+                                            : false
+                                }
+                                onClick={(checked) => {
+                                    handleSelect(checked);
+                                    checked.stopPropagation();
+                                }}
+                            />
+                            <label
+                                htmlFor={element.id as string}
+                            >
+                                {element.name}
+                            </label>
+                        </div>
+                    );
+                }}
+            />
+        </div>
     )
 }
