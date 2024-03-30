@@ -1,97 +1,47 @@
-import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import * as RATree from "react-accessible-treeview";
 import { IFlatMetadata } from "react-accessible-treeview/dist/TreeView/utils";
-import { ChevronRight, Plus, Minus } from "react-feather";
+import { ChevronRight } from "react-feather";
 import { CustomScroll } from "react-custom-scroll";
-import { motion } from "framer-motion";
 
 import { Checkbox } from ".";
 import { tw, useTree } from "@/lib";
-// @ts-ignore
-import { tree } from "@/components/layout/grid.module.css";
+import { useTheme } from "@/provider";
 
 export function TreeView() {
-    const { open, treeData, initialSelectedIds, colors, setOpen, onCheck } =
-        useTree();
+    const { treeData, initialSelectedIds, onCheck } = useTree();
 
     return (
-        <CollapsiblePrimitive.Root
-            className={tw(tree, "z-10", "flex", "flex-col")}
-            open={open}
-            onOpenChange={() => setOpen(!open)}
-        >
-            <CollapsiblePrimitive.Trigger
-                className={tw(
-                    "class-view-trigger",
-                    "bg-gray-50",
-                    "text-gray-900",
-                    "hover:bg-gray-300",
-                    "active:text-gray-600",
-                    "p-1",
-                    "font-bold",
-                    "w-6",
-                    "self-start"
-                )}
-            >
-                {!open ? <Plus size={16} /> : <Minus size={16} />}
-            </CollapsiblePrimitive.Trigger>
-            <motion.div
-                animate={{
-                    height: open ? "100%" : 0,
-                    opacity: open ? 1 : 0,
-                }}
-                transition={{
-                    duration: 0.3,
-                }}
-                className={tw("overflow-y-auto", "cv")}
-            >
-                <CustomScroll
-                    heightRelativeToParent={"100%"}
-                >
-                    <CollapsiblePrimitive.Content
-                        forceMount={true}
-                        className={tw(
-                            "class-view-content",
-                            "border-t-2",
-                            "text-wrap",
-                            "bg-black/80",
-                            "text-gray-300"
-                        )}
-                    >
-                        <Tree
-                            treeData={treeData}
-                            initialSelectedIds={initialSelectedIds}
-                            onCheck={onCheck}
-                        />
-                    </CollapsiblePrimitive.Content>
-                </CustomScroll>
-            </motion.div>
-        </CollapsiblePrimitive.Root>
+        <CustomScroll heightRelativeToParent={"100%"}>
+            <Tree
+                treeData={treeData}
+                initialSelectedIds={initialSelectedIds}
+                onCheck={onCheck}
+            />
+        </CustomScroll>
     );
 }
 
-export function Tree({ treeData, initialSelectedIds, onCheck }: {
-    treeData: RATree.INode<IFlatMetadata>[],
-    initialSelectedIds: RATree.NodeId[],
-    onCheck: (props: RATree.ITreeViewOnSelectProps) => void
+export function Tree({
+    treeData,
+    initialSelectedIds,
+    onCheck,
+}: {
+    treeData: RATree.INode<IFlatMetadata>[];
+    initialSelectedIds: RATree.NodeId[];
+    onCheck: (props: RATree.ITreeViewOnSelectProps) => void;
 }) {
+    const {
+        sizes: { icon },
+    } = useTheme();
     return (
-        <div
-            className={tw(
-                "cv",
-                "h-full",
-                "flex",
-                "flex-col",
-                "text-wrap"
-            )}
-        >
+        <div className={tw("cv", "h-full", "flex", "flex-col", "text-wrap")}>
             <RATree.default
                 data={treeData}
                 aria-label="Tree View"
-                multiSelect
-                propagateSelect
-                propagateSelectUpwards
-                togglableSelect
+                // multiSelect
+                // propagateSelect
+                // propagateSelectUpwards
+                // togglableSelect
                 defaultSelectedIds={initialSelectedIds}
                 onSelect={onCheck}
                 nodeRenderer={({
@@ -122,20 +72,17 @@ export function Tree({ treeData, initialSelectedIds, onCheck }: {
                             style={{
                                 marginLeft: 32 * (level - 1),
                                 borderColor:
-                                    typeof element.metadata
-                                        ?.color !== "undefined"
-                                        ? (element.metadata
-                                            .color as string)
+                                    typeof element.metadata?.color !==
+                                        "undefined"
+                                        ? (element.metadata.color as string)
                                         : undefined,
                             }}
                         >
                             {isBranch && (
                                 <ChevronRight
-                                    size={16}
+                                    size={icon}
                                     className={tw(
-                                        isExpanded
-                                            ? "rotate-90"
-                                            : ""
+                                        isExpanded ? "rotate-90" : ""
                                     )}
                                 />
                             )}
@@ -161,9 +108,7 @@ export function Tree({ treeData, initialSelectedIds, onCheck }: {
                                     checked.stopPropagation();
                                 }}
                             />
-                            <label
-                                htmlFor={element.id as string}
-                            >
+                            <label htmlFor={element.id as string}>
                                 {element.name}
                             </label>
                         </div>
@@ -171,5 +116,5 @@ export function Tree({ treeData, initialSelectedIds, onCheck }: {
                 }}
             />
         </div>
-    )
+    );
 }
