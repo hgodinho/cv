@@ -3,7 +3,7 @@ import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
 import { useLocation } from "react-router-dom";
 
-import { useFilterContext } from "@/provider";
+import { useFilterContext, useNetworkSettings } from "@/provider";
 
 export type UseNetworkProps = {
     w?: number;
@@ -24,6 +24,8 @@ export function useNetwork() {
     } = useFilterContext();
 
     const location = useLocation();
+
+    const settings = useNetworkSettings();
 
     const focusOnClick = useCallback(
         (node: NodeObject) => {
@@ -104,6 +106,7 @@ export function useNetwork() {
         filteredLinks,
         links,
         colors,
+        ...settings,
         color,
         focusOnClick,
         nodeLabel,

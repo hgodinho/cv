@@ -8,7 +8,7 @@ import { tw } from "@/lib";
 import { options } from "@/components/layout/grid.module.css";
 // @ts-ignore
 import { button } from "@/components/button/button.module.scss";
-import { Collapsible, TreeView } from "@/components";
+import { Collapsible, TreeView, Settings } from "@/components";
 import { useTheme } from "@/provider";
 
 export type OptionsEnum = "filter" | "settings";
@@ -29,6 +29,7 @@ export function OptionsView() {
                     setSelected(value);
                 }}
             />
+            <Settings hidden={!selected.includes("settings")} />
             <TreeView mode={selected.includes("filter") ? "filter" : "link"} />
         </Collapsible>
     );
