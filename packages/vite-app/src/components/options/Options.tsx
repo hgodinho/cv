@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Filter, Sliders } from "react-feather";
 
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
@@ -11,12 +11,10 @@ import { button } from "@/components/button/button.module.scss";
 import { Collapsible, TreeView } from "@/components";
 import { useTheme } from "@/provider";
 
-export function OptionsView() {
-    const [selected, setSelected] = useState("filter");
+export type OptionsEnum = "filter" | "settings";
 
-    useEffect(() => {
-        console.log({ selected });
-    }, [selected]);
+export function OptionsView() {
+    const [selected, setSelected] = useState<Array<OptionsEnum>>([]);
 
     return (
         <Collapsible
@@ -28,18 +26,17 @@ export function OptionsView() {
             <Options
                 value={selected}
                 onValueChange={(value) => {
-                    console.log(value);
                     setSelected(value);
                 }}
             />
-            <TreeView />
+            <TreeView mode={selected.includes("filter") ? "filter" : "link"} />
         </Collapsible>
     );
 }
 
 export type OptionsProps = {
-    value: string;
-    onValueChange: (value: string) => void;
+    value: string[];
+    onValueChange: (value: Array<OptionsEnum>) => void;
 };
 
 export function Options(props: OptionsProps) {
@@ -49,7 +46,7 @@ export function Options(props: OptionsProps) {
 
     return (
         <ToggleGroup.Root
-            type="single"
+            type="multiple"
             className={tw(
                 "flex",
                 "items-center",
