@@ -1,10 +1,20 @@
-import { createContext, PropsWithChildren, useState, useMemo, useCallback, useEffect } from "react";
+import {
+    createContext,
+    PropsWithChildren,
+    useState,
+    useMemo,
+    useCallback,
+    useEffect,
+} from "react";
 import * as jsonld from "jsonld";
 import { JsonLdArray } from "jsonld/jsonld-spec";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
-import type { FilterValue } from "@/components";
 import { useSearchParams } from "react-router-dom";
 import { FilterProvider } from ".";
+
+export type FilterValue = {
+    filterValue: (value: string) => string;
+};
 
 export type CVContextType = {
     data: {
@@ -16,7 +26,7 @@ export type CVContextType = {
             query: string;
         };
         data: JsonLDType;
-        colors: Record<string, string>
+        colors: Record<string, string>;
     };
     selected: NodeObject | null;
     nodes: NodeObject[];
@@ -43,21 +53,24 @@ export const defaultCVContext: CVContextType = {
             query: "",
         },
         data: {
-            raw: { "@context": {}, "@graph": [] }
+            raw: { "@context": {}, "@graph": [] },
         },
-        colors: {}
+        colors: {},
     },
     nodes: [],
     links: [],
     selected: null,
-    setSelected: () => { },
-    setSearchParams: () => { },
+    setSelected: () => {},
+    setSearchParams: () => {},
     filterValue: () => "",
 };
 
 export const CVContext = createContext<CVContextType>(defaultCVContext);
 
-export function CVProvider({ children, data }: PropsWithChildren<{ data: CVContextType['data'] }>) {
+export function CVProvider({
+    children,
+    data,
+}: PropsWithChildren<{ data: CVContextType["data"] }>) {
     const ld = data.data;
 
     const [_, setSearchParams] = useSearchParams();
@@ -112,26 +125,35 @@ export function CVProvider({ children, data }: PropsWithChildren<{ data: CVConte
     const filterValue = useCallback((value: string) => {
         if (import.meta.env.DEV) {
             if (value.includes(data.config.base)) {
-                return value.replace(data.config.base, '');
+                return value.replace(data.config.base, "");
             }
         }
         return value;
-    }, [])
+    }, []);
 
     useEffect(() => {
-        const params = (selected?.id as string)?.split("?").pop()?.split("=") || [];
+        const params =
+            (selected?.id as string)?.split("?").pop()?.split("=") || [];
         if (params.length > 1) {
             const searchParams = new URLSearchParams();
             searchParams.set(params[0], params[1]);
             setSearchParams(searchParams);
         }
-    }, [selected])
+    }, [selected]);
 
     return (
-        <CVContext.Provider value={{ data, selected, nodes, links, setSelected, setSearchParams, filterValue }}>
-            <FilterProvider>
-                {children}
-            </FilterProvider>
+        <CVContext.Provider
+            value={{
+                data,
+                selected,
+                nodes,
+                links,
+                setSelected,
+                setSearchParams,
+                filterValue,
+            }}
+        >
+            <FilterProvider>{children}</FilterProvider>
         </CVContext.Provider>
     );
-};
+}

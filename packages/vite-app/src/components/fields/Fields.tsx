@@ -1,25 +1,26 @@
 import { CustomScroll } from "react-custom-scroll";
 
-import "./scrollbar.css";
-
 import { Link } from "@/components";
-
+import { type FilterValue } from "@/provider";
 import { tw, alphaHex } from "@/lib";
 
-export type FilterValue = {
-    filterValue?: (value: string) => string;
-}
+import "./scrollbar.css";
 
-export type FieldsProps = { data: Record<string, any>; properties: string[] } & FilterValue;
+export type FieldsProps = {
+    data: Record<string, any>;
+    properties: string[];
+    filterValue?: FilterValue["filterValue"];
+};
 
 export type LabelProps = { url?: string; value: string };
 
 export type FieldProps = {
-    label: LabelProps,
+    label: LabelProps;
     value: string | string[];
     url?: string;
     header?: boolean;
-} & FilterValue;
+    filterValue?: FilterValue["filterValue"];
+};
 
 export function Fields({ data, properties, filterValue }: FieldsProps) {
     return (
@@ -41,7 +42,7 @@ export function Fields({ data, properties, filterValue }: FieldsProps) {
                     "text-sm"
                 )}
                 style={{
-                    borderColor: alphaHex(data.color, 0.6)
+                    borderColor: alphaHex(data.color, 0.6),
                 }}
             >
                 {data["type"] && (
@@ -59,9 +60,7 @@ export function Fields({ data, properties, filterValue }: FieldsProps) {
                     />
                 )}
             </div>
-            <div
-                className={tw("cv", "min-h-0", "min-w-0")}
-            >
+            <div className={tw("cv", "min-h-0", "min-w-0")}>
                 <CustomScroll
                     heightRelativeToParent={"100%"}
                     className={tw("mx-4", "pb-4")}
@@ -78,7 +77,7 @@ export function Fields({ data, properties, filterValue }: FieldsProps) {
                                         key={property}
                                         label={{
                                             value: property,
-                                            url: `${data["@context"]}/${property}`
+                                            url: `${data["@context"]}/${property}`,
                                         }}
                                         value={value}
                                         header={true}
@@ -91,7 +90,7 @@ export function Fields({ data, properties, filterValue }: FieldsProps) {
                                     key={property}
                                     label={{
                                         value: property,
-                                        url: `${data["@context"]}/${property}`
+                                        url: `${data["@context"]}/${property}`,
                                     }}
                                     value={value}
                                     filterValue={filterValue}
@@ -115,40 +114,46 @@ export function Label({ url, value }: LabelProps) {
 
 export function Field({ label, value, url, header, filterValue }: FieldProps) {
     const Value = (header: boolean | undefined, value: string) => {
-
         if (header) {
             return (
                 <h2
                     key={value}
-                    className={tw("text-2xl", "font-medium", "italic", "text-wrap")}
+                    className={tw(
+                        "text-2xl",
+                        "font-medium",
+                        "italic",
+                        "text-wrap"
+                    )}
                 >
                     {value.toString().startsWith("http") ? (
-                        <Link href={filterValue ? filterValue(value) : value}>{value}</Link>
+                        <Link href={filterValue ? filterValue(value) : value}>
+                            {value}
+                        </Link>
                     ) : (
                         value
                     )}
                 </h2>
-            )
+            );
         }
         return (
             <p key={value} className={tw("text-wrap")}>
                 {value.toString().startsWith("http") ? (
-                    <Link href={filterValue ? filterValue(value) : value}>{value}</Link>
+                    <Link href={filterValue ? filterValue(value) : value}>
+                        {value}
+                    </Link>
                 ) : (
                     value
                 )}
             </p>
         );
-    }
+    };
 
     return (
         <div className={tw("field", "mb-4", "text-wrap")}>
             <Label {...label} />
-            {Array.isArray(value) ? (
-                value.map((v) =>
-                    Value(header, v)
-                )
-            ) : Value(header, value)}
+            {Array.isArray(value)
+                ? value.map((v) => Value(header, v))
+                : Value(header, value)}
         </div>
     );
 }
