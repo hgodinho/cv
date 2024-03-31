@@ -1,6 +1,6 @@
 import { CustomScroll } from "react-custom-scroll";
 
-import { Link } from "@/components";
+import { Link, Label } from "@/components";
 import { type FilterValue } from "@/provider";
 import { tw, alphaHex } from "@/lib";
 
@@ -104,11 +104,11 @@ export function Fields({ data, properties, filterValue }: FieldsProps) {
     );
 }
 
-export function Label({ url, value }: LabelProps) {
+export function FieldLabel({ url, value }: LabelProps) {
     return (
-        <p className={tw("text-sm", "text-gray-300", "text-wrap")}>
+        <Label className={tw()}>
             {url ? <Link href={url}>{value}</Link> : value}
-        </p>
+        </Label>
     );
 }
 
@@ -150,7 +150,7 @@ export function Field({ label, value, url, header, filterValue }: FieldProps) {
 
     return (
         <div className={tw("field", "mb-4", "text-wrap")}>
-            <Label {...label} />
+            <FieldLabel {...label} />
             {Array.isArray(value)
                 ? value.map((v) => Value(header, v))
                 : Value(header, value)}
