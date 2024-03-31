@@ -2,8 +2,15 @@ import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Square, MinusSquare, XSquare } from "react-feather";
 import { useTheme } from "@/provider";
 
-export function Checkbox(props: CheckboxPrimitive.CheckboxProps & { variant: "all" | "none" | "some" }) {
-    const { sizes: { icon } } = useTheme();
+export function Checkbox(
+    props: CheckboxPrimitive.CheckboxProps & {
+        variant: "all" | "none" | "some";
+        label?: string;
+    }
+) {
+    const {
+        sizes: { icon },
+    } = useTheme();
 
     const CheckType = () => {
         switch (props.variant) {
@@ -15,12 +22,16 @@ export function Checkbox(props: CheckboxPrimitive.CheckboxProps & { variant: "al
             default:
                 return <MinusSquare size={icon} />;
         }
-    }
+    };
     return (
-        <CheckboxPrimitive.Root {...props} >
-            <CheckboxPrimitive.Indicator >
-            </CheckboxPrimitive.Indicator >
-            <CheckType />
-        </CheckboxPrimitive.Root>
-    )
+        <>
+            <CheckboxPrimitive.Root {...props}>
+                <CheckboxPrimitive.Indicator></CheckboxPrimitive.Indicator>
+                <CheckType />
+            </CheckboxPrimitive.Root>
+            {props.label ? (
+                <label htmlFor={props.id}>{props.label}</label>
+            ) : null}
+        </>
+    );
 }
