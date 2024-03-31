@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo, useEffect } from "react";
+import { useCallback, useMemo, useEffect } from "react";
 import {
     ITreeViewOnNodeSelectProps,
     flattenTree,
@@ -115,14 +115,10 @@ export function useTree() {
         });
     }, []);
 
-    const [open, setOpen] = useState(true);
-
     return {
-        open,
         treeData,
         initialSelectedIds,
         colors,
         onCheck,
-        setOpen,
     };
 }

@@ -1,3 +1,3 @@
-export function tw(...classes: string[]) {
-    return classes.join(" ");
+export function tw(...classes: Array<string | undefined>) {
+    return classes.filter(Boolean).join(" ");
 }

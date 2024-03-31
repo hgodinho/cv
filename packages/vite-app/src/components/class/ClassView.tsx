@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
-import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
-import { Plus, Minus } from "react-feather";
 
 import { useCVContext } from "@/provider";
-import { Fields } from "@/components";
+import { Fields, Collapsible } from "@/components";
 import { tw } from "@/lib";
 
 // @ts-ignore
 import { classView } from "@/components/layout/grid.module.css";
 
 export function ClassView() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState<boolean>(false);
 
     const {
         data: { properties, colors },
@@ -23,62 +21,45 @@ export function ClassView() {
     }, [selected]);
 
     return (
-        <CollapsiblePrimitive.Root
-            className={tw(
-                classView,
-                "z-10",
-                "h-full",
-                "flex",
-                "flex-col",
-                open ? "md:w-4/6" : "",
-                open ? "xl:w-full" : ""
-            )}
-            open={open}
-            onOpenChange={() => setOpen(!open)}
-        >
-            <CollapsiblePrimitive.Trigger
-                className={tw(
-                    "class-view-trigger",
-                    "bg-gray-50",
-                    "text-gray-900",
-                    "hover:bg-gray-300",
-                    "active:text-gray-600",
-                    "p-1",
-                    "font-bold",
-                    "w-6",
-                    "self-end"
-                )}
-            >
-                {!open ? <Plus size={16} /> : <Minus size={16} />}
-            </CollapsiblePrimitive.Trigger>
-            <CollapsiblePrimitive.Content
-                className={tw(
-                    "border-4",
+        <Collapsible
+            className={{
+                root: tw(
+                    classView,
                     "h-full",
-                    "overflow-y-auto",
                     "text-wrap",
+                    open ? "md:w-4/6" : "",
+                    open ? "xl:w-full" : ""
+                ),
+                trigger: tw("self-end"),
+                content: tw("h-full", "overflow-y-auto", "text-wrap"),
+            }}
+            isOpen={open}
+            onOpenChange={setOpen}
+        >
+            <div
+                className={tw(
+                    "content",
+                    "h-full",
+                    "flex",
+                    "flex-col",
+                    "text-wrap",
+                    "bg-black/80",
+                    "border-4"
                 )}
                 style={{
                     borderColor: colors[selected?.type],
                 }}
             >
-                <div
-                    className={tw(
-                        "content",
-                        "h-full",
-                        "flex",
-                        "flex-col",
-                        "text-wrap",
-                        "bg-black/80"
-                    )}
-                >
-                    {!selected ? (
-                        <div className="">Select a class to view more info</div>
-                    ) : (
-                        <Fields data={selected} properties={properties} filterValue={filterValue} />
-                    )}
-                </div>
-            </CollapsiblePrimitive.Content>
-        </CollapsiblePrimitive.Root>
+                {!selected ? (
+                    <div className="">Select a class to view more info</div>
+                ) : (
+                    <Fields
+                        data={selected}
+                        properties={properties}
+                        filterValue={filterValue}
+                    />
+                )}
+            </div>
+        </Collapsible>
     );
 }

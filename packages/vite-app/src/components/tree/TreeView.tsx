@@ -1,175 +1,166 @@
-import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
-import * as RATree from "react-accessible-treeview";
+import { useMemo } from "react";
 import { IFlatMetadata } from "react-accessible-treeview/dist/TreeView/utils";
-import { ChevronRight, Plus, Minus } from "react-feather";
+import { ChevronRight } from "react-feather";
 import { CustomScroll } from "react-custom-scroll";
-import { motion } from "framer-motion";
+import * as RATree from "react-accessible-treeview";
 
 import { Checkbox } from ".";
 import { tw, useTree } from "@/lib";
-// @ts-ignore
-import { tree } from "@/components/layout/grid.module.css";
+import { useTheme, useFilterContext } from "@/provider";
+import { Link as LinkPrimitive } from "@/components";
 
-export function TreeView() {
-    const { open, treeData, initialSelectedIds, colors, setOpen, onCheck } =
-        useTree();
+export type TreeTypeEnum = "filter" | "link";
 
+export type TreeViewProps = {
+    mode: TreeTypeEnum;
+};
+
+export function TreeView({ mode }: TreeViewProps) {
+    const { treeData, initialSelectedIds, onCheck } = useTree();
     return (
-        <CollapsiblePrimitive.Root
-            className={tw(tree, "z-10", "flex", "flex-col")}
-            open={open}
-            onOpenChange={() => setOpen(!open)}
-        >
-            <CollapsiblePrimitive.Trigger
-                className={tw(
-                    "class-view-trigger",
-                    "bg-gray-50",
-                    "text-gray-900",
-                    "hover:bg-gray-300",
-                    "active:text-gray-600",
-                    "p-1",
-                    "font-bold",
-                    "w-6",
-                    "self-start"
-                )}
-            >
-                {!open ? <Plus size={16} /> : <Minus size={16} />}
-            </CollapsiblePrimitive.Trigger>
-            <motion.div
-                animate={{
-                    height: open ? "100%" : 0,
-                    opacity: open ? 1 : 0,
-                }}
-                transition={{
-                    duration: 0.3,
-                }}
-                className={tw("overflow-y-auto", "cv")}
-            >
-                <CustomScroll
-                    heightRelativeToParent={"100%"}
-                >
-                    <CollapsiblePrimitive.Content
-                        forceMount={true}
-                        className={tw(
-                            "class-view-content",
-                            "border-t-2",
-                            "text-wrap",
-                            "bg-black/80",
-                            "text-gray-300"
-                        )}
-                    >
-                        <Tree
-                            treeData={treeData}
-                            initialSelectedIds={initialSelectedIds}
-                            onCheck={onCheck}
-                        />
-                    </CollapsiblePrimitive.Content>
-                </CustomScroll>
-            </motion.div>
-        </CollapsiblePrimitive.Root>
+        <CustomScroll heightRelativeToParent={"100%"}>
+            <Tree
+                treeData={treeData}
+                initialSelectedIds={initialSelectedIds}
+                onCheck={onCheck}
+                mode={mode}
+            />
+        </CustomScroll>
     );
 }
 
-export function Tree({ treeData, initialSelectedIds, onCheck }: {
-    treeData: RATree.INode<IFlatMetadata>[],
-    initialSelectedIds: RATree.NodeId[],
-    onCheck: (props: RATree.ITreeViewOnSelectProps) => void
-}) {
+export type TreeProps = {
+    treeData: RATree.INode<IFlatMetadata>[];
+    initialSelectedIds: RATree.NodeId[];
+    mode: TreeViewProps["mode"];
+    onCheck: (props: RATree.ITreeViewOnSelectProps) => void;
+};
+
+export function Tree({
+    treeData,
+    initialSelectedIds,
+    onCheck,
+    mode = "link",
+}: TreeProps) {
+    const { filterProps } = useMemo(() => {
+        let filterProps = {};
+        if (mode === "filter") {
+            filterProps = {
+                multiSelect: true,
+                propagateSelect: true,
+                propagateSelectUpwards: true,
+                togglableSelect: true,
+                onSelect: onCheck,
+            };
+        }
+
+        return {
+            filterProps,
+        };
+    }, [mode, treeData]);
+
     return (
-        <div
-            className={tw(
-                "cv",
-                "h-full",
-                "flex",
-                "flex-col",
-                "text-wrap"
-            )}
-        >
+        <div className={tw("cv", "h-full", "flex", "flex-col", "text-wrap")}>
             <RATree.default
                 data={treeData}
                 aria-label="Tree View"
-                multiSelect
-                propagateSelect
-                propagateSelectUpwards
-                togglableSelect
                 defaultSelectedIds={initialSelectedIds}
-                onSelect={onCheck}
-                nodeRenderer={({
-                    element,
-                    isBranch,
-                    isExpanded,
-                    isSelected,
-                    isHalfSelected,
-                    getNodeProps,
-                    level,
-                    handleSelect,
-                    handleExpand,
-                }) => {
-                    return (
-                        <div
-                            {...getNodeProps({
-                                onClick: handleExpand,
-                            })}
-                            className={tw(
-                                "flex",
-                                "flex-row",
-                                "items-center",
-                                "border-b-2",
-                                "hover:text-gray-50",
-                                "gap-1",
-                                "py-2"
-                            )}
-                            style={{
-                                marginLeft: 32 * (level - 1),
-                                borderColor:
-                                    typeof element.metadata
-                                        ?.color !== "undefined"
-                                        ? (element.metadata
-                                            .color as string)
-                                        : undefined,
-                            }}
-                        >
-                            {isBranch && (
-                                <ChevronRight
-                                    size={16}
-                                    className={tw(
-                                        isExpanded
-                                            ? "rotate-90"
-                                            : ""
-                                    )}
-                                />
-                            )}
-                            <Checkbox
-                                id={element.id as string}
-                                className={tw("mr-2")}
-                                variant={
-                                    isHalfSelected
-                                        ? "some"
-                                        : isSelected
-                                            ? "all"
-                                            : "none"
-                                }
-                                defaultChecked={
-                                    isHalfSelected
-                                        ? "indeterminate"
-                                        : isSelected
-                                            ? true
-                                            : false
-                                }
-                                onClick={(checked) => {
-                                    handleSelect(checked);
-                                    checked.stopPropagation();
-                                }}
-                            />
-                            <label
-                                htmlFor={element.id as string}
-                            >
-                                {element.name}
-                            </label>
-                        </div>
-                    );
+                {...filterProps}
+                nodeRenderer={(props) => {
+                    return <Branch mode={mode} {...props} />;
                 }}
             />
         </div>
-    )
+    );
+}
+
+export function Branch({
+    mode,
+    level,
+    element,
+    isBranch,
+    isExpanded,
+    isSelected,
+    isHalfSelected,
+    getNodeProps,
+    handleExpand,
+    handleSelect,
+}: RATree.INodeRendererProps & {
+    mode: TreeViewProps["mode"];
+}) {
+    const {
+        sizes: { icon },
+    } = useTheme();
+
+    return (
+        <div
+            {...getNodeProps({
+                onClick: handleExpand,
+            })}
+            className={tw(
+                "flex",
+                "flex-row",
+                "items-center",
+                "border-b-2",
+                "hover:text-gray-50",
+                "gap-1",
+                "py-2"
+            )}
+            style={{
+                marginLeft: 32 * (level - 1),
+                borderColor:
+                    typeof element.metadata?.color !== "undefined"
+                        ? (element.metadata.color as string)
+                        : undefined,
+            }}
+        >
+            {isBranch && (
+                <ChevronRight
+                    size={icon}
+                    className={tw(isExpanded ? "rotate-90" : "")}
+                />
+            )}
+            {mode === "filter" ? (
+                <Checkbox
+                    id={element.id as string}
+                    className={tw("mr-2")}
+                    variant={
+                        isHalfSelected ? "some" : isSelected ? "all" : "none"
+                    }
+                    defaultChecked={
+                        isHalfSelected
+                            ? "indeterminate"
+                            : isSelected
+                            ? true
+                            : false
+                    }
+                    onClick={(checked) => {
+                        handleSelect(checked);
+                        checked.stopPropagation();
+                    }}
+                    label={element.name}
+                />
+            ) : (
+                <BranchLabel element={element} />
+            )}
+        </div>
+    );
+}
+
+export function BranchLabel({ element }: { element: RATree.INode }) {
+    const { filterValue } = useFilterContext();
+    const isLink = typeof element.metadata?.id !== "undefined";
+    return (
+        <div className={tw("mr-2")}>
+            {isLink ? (
+                <LinkPrimitive
+                    href={filterValue(element.metadata?.id as string)}
+                >
+                    {element.name}
+                </LinkPrimitive>
+            ) : (
+                <span>{element.name}</span>
+            )}
+        </div>
+    );
 }

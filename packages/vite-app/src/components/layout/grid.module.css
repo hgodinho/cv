@@ -7,7 +7,7 @@
     grid-template-rows: 10% 80% 10%;
     grid-template-areas:
         "top top top"
-        "tree center class"
+        "options center class"
         "bottom bottom bottom";
 }
 
@@ -15,8 +15,8 @@
     position: absolute;
 }
 
-.tree {
-    grid-area: tree;
+.options {
+    grid-area: options;
 }
 
 .class-view {
