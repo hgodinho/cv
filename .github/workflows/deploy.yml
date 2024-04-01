@@ -33,7 +33,7 @@ jobs:
         run: pnpm install
 
       - name: Build for production
-        run: nx build @hgod-in-cv/vite-app
+        run: pnpm build:app
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.3.1
