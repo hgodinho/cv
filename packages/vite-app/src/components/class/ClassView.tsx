@@ -4,8 +4,7 @@ import { useCVContext } from "@/provider";
 import { Fields, Collapsible } from "@/components";
 import { tw } from "@/lib";
 
-// @ts-ignore
-import { classView } from "@/components/layout/grid.module.css";
+import styles from "@/components/layout/grid.module.css";
 
 export function ClassView() {
     const [open, setOpen] = useState<boolean>(false);
@@ -24,7 +23,7 @@ export function ClassView() {
         <Collapsible
             className={{
                 root: tw(
-                    classView,
+                    styles.classView,
                     "h-full",
                     "text-wrap",
                     open ? "md:w-4/6" : "",

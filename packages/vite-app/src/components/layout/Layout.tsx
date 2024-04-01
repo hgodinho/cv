@@ -1,11 +1,7 @@
 import { PropsWithChildren } from "react";
 
-import { layout } from "./grid.module.css";
+import styles from "./grid.module.css";
 
 export function Layout({ children }: PropsWithChildren<{}>) {
-    return (
-        <div className={layout} >
-            {children}
-        </div>
-    )
+    return <div className={styles.layout}>{children}</div>;
 }
