@@ -32,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Create dist directory
+        run: mkdir dist
+
       - name: Build for production
         run: pnpm build:app
 
@@ -41,10 +44,6 @@ jobs:
           branch: gh-pages
           token: ${{ secrets.GITHUB_TOKEN }}
           folder: dist
-
-          # Configure custom domain using CNAME file (optional)
-          # artifacts: 'dist/**/*'  # Optional if you want to upload everything in dist folder
-          # CNAME_FILE: 'dist/CNAME'  # Optional, path to your CNAME file (if it's not in the root)
 
 env:
   # Required to deploy to GitHub Pages
