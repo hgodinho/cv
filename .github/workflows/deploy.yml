@@ -43,7 +43,7 @@ jobs:
         with:
           branch: gh-pages
           token: ${{ secrets.GITHUB_TOKEN }}
-          folder: dist
+          folder: dist/apps/vite-app
 
 env:
   # Required to deploy to GitHub Pages
