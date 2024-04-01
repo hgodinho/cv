@@ -17,10 +17,20 @@
         }
     },
     "dependencies": {
-        "lerna": "^8.1.2"
+        "lerna": "^8.1.2",
+        "nx": "^18.2.1"
     },
     "devDependencies": {
+        "@nx/eslint": "18.2.1",
+        "@nx/jest": "18.2.1",
+        "@nx/vite": "18.2.1",
+        "@nx/web": "18.2.1",
+        "@vitest/ui": "^1.4.0",
         "commitizen": "^4.3.0",
-        "conventional-changelog": "^5.1.0"
+        "conventional-changelog": "^5.1.0",
+        "eslint": "~8.57.0",
+        "nx": "18.2.1",
+        "vite": "~5.0.13",
+        "vitest": "^1.4.0"
     }
 }
