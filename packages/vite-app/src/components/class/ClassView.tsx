@@ -35,6 +35,9 @@ export function ClassView() {
             }}
             isOpen={open}
             onOpenChange={setOpen}
+            rootProps={{
+                disabled: !selected,
+            }}
         >
             <div
                 className={tw(

@@ -12,6 +12,7 @@ export type CollapsibleProps = {
         trigger?: string;
         content?: string;
     };
+    initialOpen?: boolean;
     isOpen?: boolean;
     onOpenChange?: CollapsiblePrimitive.CollapsibleProps["onOpenChange"];
     rootProps?: React.ComponentProps<typeof CollapsiblePrimitive.Root>;
@@ -24,9 +25,12 @@ export function Collapsible({
     rootProps,
     triggerProps,
     isOpen,
+    initialOpen,
     onOpenChange,
 }: React.PropsWithChildren<CollapsibleProps>) {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(
+        typeof initialOpen === "boolean" ? initialOpen : false
+    );
 
     const {
         sizes: { icon },
@@ -44,34 +48,42 @@ export function Collapsible({
         [onOpenChange]
     );
 
+    const isCollapsibleOpen = typeof isOpen === "boolean" ? isOpen : open;
+
     return (
         <CollapsiblePrimitive.Root
             className={tw("z-10", "flex", "flex-col", className?.root)}
-            open={typeof isOpen === "boolean" ? isOpen : open}
+            open={isCollapsibleOpen}
             onOpenChange={onChange}
             {...rootProps}
         >
             <CollapsiblePrimitive.Trigger
                 className={tw(
                     "options",
-                    "bg-gray-50",
-                    "text-gray-900",
-                    "hover:bg-gray-300",
-                    "active:text-gray-600",
                     "w-8",
                     "h-8",
                     "flex",
                     "justify-center",
                     "items-center",
+                    "bg-gray-50",
+                    "text-gray-900",
+                    "hover:bg-gray-300",
+                    "active:text-gray-600",
+                    "disabled:bg-gray-300/40",
+                    "disabled:cursor-not-allowed",
                     className?.trigger
                 )}
                 {...triggerProps}
             >
-                {!open ? <Plus size={icon} /> : <Minus size={icon} />}
+                {!isCollapsibleOpen ? (
+                    <Plus size={icon} />
+                ) : (
+                    <Minus size={icon} />
+                )}
             </CollapsiblePrimitive.Trigger>
             <motion.div
                 animate={{
-                    opacity: open ? 1 : 0,
+                    opacity: isCollapsibleOpen ? 1 : 0,
                 }}
                 transition={{
                     duration: 0.3,

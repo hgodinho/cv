@@ -18,6 +18,7 @@ export function OptionsView() {
 
     return (
         <Collapsible
+            initialOpen={true}
             className={{
                 root: tw(options),
                 content: tw("flex", "flex-col", "h-full"),
