@@ -2,8 +2,7 @@ import ForceGraph3d from "react-force-graph-3d";
 
 import { useNetwork } from "@/lib";
 
-// @ts-ignore
-import { network } from "@/components/layout/grid.module.css";
+import styles from "@/components/layout/grid.module.css";
 
 export type NetworkViewProps = {
     width: number;
@@ -26,7 +25,7 @@ export function NetworkView({ width, height }: NetworkViewProps) {
     } = useNetwork();
 
     return (
-        <div className={`${network} m-auto`}>
+        <div className={`${styles.network} m-auto`}>
             <ForceGraph3d
                 ref={ref}
                 graphData={{ nodes: filteredNodes, links: filteredLinks }}
