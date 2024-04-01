@@ -9,7 +9,8 @@
     "main": "index.js",
     "scripts": {
         "commit": "cz",
-        "commit:no-verify": "pnpm commit --no-verify"
+        "commit:no-verify": "pnpm commit --no-verify",
+        "build:app": "nx build @hgod-in-cv/vite-app"
     },
     "config": {
         "commitizen": {
