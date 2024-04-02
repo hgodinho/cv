@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { FileMinus, FilePlus } from "react-feather";
 
-import { useCVContext } from "@/provider";
+import { useCVContext, useTheme } from "@/provider";
 import { Fields, Collapsible } from "@/components";
 import { tw } from "@/lib";
 
@@ -14,6 +15,10 @@ export function ClassView() {
         selected,
         filterValue,
     } = useCVContext();
+
+    const {
+        sizes: { icon },
+    } = useTheme();
 
     useEffect(() => {
         if (selected) setOpen(true);
@@ -36,6 +41,10 @@ export function ClassView() {
             onOpenChange={setOpen}
             rootProps={{
                 disabled: !selected,
+            }}
+            triggerProps={{
+                openIcon: <FilePlus size={icon} />,
+                closeIcon: <FileMinus size={icon} />,
             }}
         >
             <div

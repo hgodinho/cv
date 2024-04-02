@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Filter, Sliders } from "react-feather";
-
+import { Filter, Sliders, Menu, X } from "react-feather";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
 
 import { tw } from "@/lib";
@@ -14,12 +13,20 @@ export type OptionsEnum = "filter" | "settings";
 export function OptionsView() {
     const [selected, setSelected] = useState<Array<OptionsEnum>>([]);
 
+    const {
+        sizes: { icon },
+    } = useTheme();
+
     return (
         <Collapsible
             initialOpen={true}
             className={{
                 root: tw(optionsStyles.options),
                 content: tw("flex", "flex-col", "h-full"),
+            }}
+            triggerProps={{
+                openIcon: <Menu size={icon} />,
+                closeIcon: <X size={icon} />,
             }}
         >
             <Options

@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import { motion } from "framer-motion";
-import { Plus, Minus } from "react-feather";
+import { Plus, Minus, EyeOff } from "react-feather";
 
 import { tw } from "@/lib";
 import { useTheme } from "@/provider";
@@ -16,7 +16,11 @@ export type CollapsibleProps = {
     isOpen?: boolean;
     onOpenChange?: CollapsiblePrimitive.CollapsibleProps["onOpenChange"];
     rootProps?: React.ComponentProps<typeof CollapsiblePrimitive.Root>;
-    triggerProps?: React.ComponentProps<typeof CollapsiblePrimitive.Trigger>;
+    triggerProps?: React.ComponentProps<typeof CollapsiblePrimitive.Trigger> & {
+        openIcon?: React.ReactNode;
+        closeIcon?: React.ReactNode;
+        disabledIcon?: React.ReactNode;
+    };
 };
 
 export function Collapsible({
@@ -75,11 +79,11 @@ export function Collapsible({
                 )}
                 {...triggerProps}
             >
-                {!isCollapsibleOpen ? (
-                    <Plus size={icon} />
-                ) : (
-                    <Minus size={icon} />
-                )}
+                {rootProps?.disabled
+                    ? triggerProps?.disabledIcon || <EyeOff size={icon} />
+                    : !isCollapsibleOpen
+                    ? triggerProps?.openIcon || <Plus size={icon} />
+                    : triggerProps?.closeIcon || <Minus size={icon} />}
             </CollapsiblePrimitive.Trigger>
             <motion.div
                 animate={{
