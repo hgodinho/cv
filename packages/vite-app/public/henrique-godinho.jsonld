@@ -21,12 +21,12 @@
         "seeks",
         "sameAs",
         "containsPlace",
-        "endDate",
+        "numberedPosition",
         "startDate",
-        "roleName",
+        "endDate",
         "additionalType",
         "alternateName",
-        "disambiguatingDescription",
+        "member",
         "auditDate",
         "certificationIdentification",
         "certificationStatus",
@@ -68,7 +68,6 @@
         "organizer",
         "address",
         "contactPoint",
-        "member",
         "members",
         "employee",
         "employees",
@@ -82,6 +81,23 @@
         "url": "https://hgod.in/cv",
         "query": "https://hgod.in/cv?"
     },
+    "colors": {
+        "Person": "#A2E8F4",
+        "Country": "#9CA6C9",
+        "City": "#D4B8D1",
+        "Place": "#4F4A8C",
+        "OrganizationRole": "#6E102A",
+        "Role": "#FCFDFF",
+        "Certification": "#AB66D9",
+        "CreativeWork": "#9578A4",
+        "Project": "#F1BCFF",
+        "Article": "#52AAF2",
+        "ScholarlyArticle": "#D3D3D3",
+        "Chapter": "#145A8E",
+        "ExhibitionEvent": "#778899",
+        "Event": "#B96481",
+        "Organization": "#F2CFE5"
+    },
     "data": {
         "raw": {
             "@context": "https://schema.org",
@@ -89,7 +105,7 @@
                 {
                     "@context": "https://schema.org/",
                     "@type": "Person",
-                    "@id": "https://hgod.in/cv?person=1",
+                    "@id": "https://hgod.in/cv?person=me",
                     "name": "Henrique Godinho",
                     "givenName": "Henrique",
                     "familyName": [
@@ -100,7 +116,6 @@
                     "jobTitle": "Coordenador de comunicação",
                     "email": "ola@hgod.in",
                     "birthDate": "1989-12-21",
-                    "birthPlace": "https://hgod.in/cv?place=2",
                     "honorificPrefix": "Mestre",
                     "description": "Bacharel em Artes Visuais - Pintura, Gravura e Escultura pelo Centro Universitário Belas Artes de São Paulo (2015); possui pós-graduação em Comunicação e Design Digital pela Escola Superior de Propaganda e Marketing (2018); mestrando profissional em Ciências da Informação: Gestão da Informação, área de concentração: Organização, Mediação e Circulação da Informação pelo PPGCI-ECA/USP. Coordena o núcleo de comunicação da Casa Museu Ema Klabin desde 2016. Desenvolve a plataforma Elucidário.art, em uso pela Casa Museu Ema Klabin com o nome \"Explore a Coleção!\" sob o endereço https://emaklabin.org.br/explore.",
                     "nationality": "https://hgod.in/cv?place=1",
@@ -117,7 +132,10 @@
                     "@id": "https://hgod.in/cv?place=1",
                     "name": "Brasil",
                     "sameAs": "http://www.wikidata.org/entity/Q155",
-                    "containsPlace": "https://hgod.in/cv?place=2"
+                    "containsPlace": [
+                        "https://hgod.in/cv?place=2",
+                        "https://hgod.in/cv?place=3"
+                    ]
                 },
                 {
                     "@context": "https://schema.org/",
@@ -128,12 +146,53 @@
                 },
                 {
                     "@context": "https://schema.org/",
+                    "@type": "City",
+                    "@id": "https://hgod.in/cv?place=3",
+                    "name": "Porto Alegre",
+                    "sameAs": "https://www.wikidata.org/wiki/Q40269"
+                },
+                {
+                    "@context": "https://schema.org/",
+                    "@type": "City",
+                    "@id": "https://hgod.in/cv?place=4",
+                    "name": "Porto",
+                    "sameAs": "https://www.wikidata.org/wiki/Q36433"
+                },
+                {
+                    "@context": "https://schema.org/",
+                    "@type": "City",
+                    "@id": "https://hgod.in/cv?place=5",
+                    "name": "Cidade do México",
+                    "sameAs": "https://www.wikidata.org/wiki/Q1489"
+                },
+                {
+                    "@context": "https://schema.org/",
+                    "@type": "Country",
+                    "@id": "https://hgod.in/cv?place=6",
+                    "name": "Portugal",
+                    "sameAs": "https://www.wikidata.org/wiki/Q45",
+                    "containsPlace": "https://hgod.in/cv?place=4"
+                },
+                {
+                    "@context": "https://schema.org/",
+                    "@type": "Country",
+                    "@id": "https://hgod.in/cv?place=7",
+                    "name": "México",
+                    "sameAs": "https://www.wikidata.org/wiki/Q45",
+                    "containsPlace": "https://hgod.in/cv?place=5"
+                },
+                {
+                    "@context": "https://schema.org/",
                     "@type": "Organization",
                     "@id": "https://hgod.in/cv?organization=1",
                     "name": "Casa Museu Ema Klabin",
                     "address": "Rua Portugal, 43. Jd. Europa, São Paulo - SP - Brasil. 01446-020",
                     "location": "https://hgod.in/cv?place=2",
-                    "employees": "https://hgod.in/cv?person=1",
+                    "members": [
+                        "https://hgod.in/cv?role=1",
+                        "https://hgod.in/cv?role=2",
+                        "https://hgod.in/cv?role=3"
+                    ],
                     "sameAs": "http://www.wikidata.org/entity/Q5368756"
                 },
                 {
@@ -152,7 +211,6 @@
                     "@id": "https://hgod.in/cv?organization=3",
                     "name": "Escola de Comunicações e Artes",
                     "address": "Av. Prof. Lúcio Martins Rodrigues, 443 - Butantã, São Paulo - SP, 05508-020",
-                    "location": "https://hgod.in/cv?place=2",
                     "department": "https://hgod.in/cv?organization=4",
                     "sameAs": "http://www.wikidata.org/entity/Q10274592"
                 },
@@ -162,7 +220,6 @@
                     "@id": "https://hgod.in/cv?organization=4",
                     "name": "Programa de Pós-Graduação em Ciência da Informação",
                     "address": "Av. Prof. Lúcio Martins Rodrigues, 443 - Butantã, São Paulo - SP, 05508-020",
-                    "location": "https://hgod.in/cv?place=2",
                     "sameAs": "http://www.wikidata.org/entity/Q106660948"
                 },
                 {
@@ -182,6 +239,30 @@
                     "address": "Rua Dr. Álvaro Alvim, 90. Vila Maria, São Paulo - SP - Brasil.",
                     "location": "https://hgod.in/cv?place=2",
                     "sameAs": "http://www.wikidata.org/entity/Q9726404"
+                },
+                {
+                    "@context": "https://schema.org/",
+                    "@type": "Event",
+                    "@id": "https://hgod.in/cv?event=1",
+                    "name": "XXIII Encontro Nacional de Pesquisa e Pós-graduação em Ciência da Informação",
+                    "attendee": "https://hgod.in/cv?person=me",
+                    "location": "https://hgod.in/cv?place=3"
+                },
+                {
+                    "@context": "https://schema.org/",
+                    "@type": "Event",
+                    "@id": "https://hgod.in/cv?event=2",
+                    "name": "II ABM - Encontro Internacional de Arquivos, Biibliotecas e Museus",
+                    "attendee": "https://hgod.in/cv?person=me",
+                    "location": "https://hgod.in/cv?place=4"
+                },
+                {
+                    "@context": "https://schema.org/",
+                    "@type": "Event",
+                    "@id": "https://hgod.in/cv?event=3",
+                    "name": "CIDOC 23 - Frontiers of Knowledge, Museums, Documentation and Linked Data",
+                    "attendee": "https://hgod.in/cv?person=me",
+                    "location": "https://hgod.in/cv?place=5"
                 },
                 {
                     "@context": "https://schema.org/",
@@ -209,12 +290,38 @@
                     "name": "Bacharelado em Artes Visuais: Pintura, Gravura e Escultura",
                     "datePublished": 2015,
                     "sameAs": "http://www.wikidata.org/entity/Q163727"
+                },
+                {
+                    "@context": "https://schema.org/",
+                    "@type": "OrganizationRole",
+                    "@id": "https://hgod.in/cv?role=1",
+                    "startDate": 2012,
+                    "endDate": 2014,
+                    "name": "Auxiliar de museu",
+                    "member": "https://hgod.in/cv?person=me"
+                },
+                {
+                    "@context": "https://schema.org/",
+                    "@type": "OrganizationRole",
+                    "@id": "https://hgod.in/cv?role=2",
+                    "startDate": 2014,
+                    "endDate": 2016,
+                    "name": "Produtor cultural",
+                    "member": "https://hgod.in/cv?person=me"
+                },
+                {
+                    "@context": "https://schema.org/",
+                    "@type": "OrganizationRole",
+                    "@id": "https://hgod.in/cv?role=3",
+                    "startDate": 2016,
+                    "name": "Coordenador de comunicação",
+                    "member": "https://hgod.in/cv?person=me"
                 }
             ]
         },
         "expanded": [
             {
-                "@id": "https://hgod.in/cv?person=1",
+                "@id": "https://hgod.in/cv?person=me",
                 "@type": [
                     "http://schema.org/Person"
                 ],
@@ -222,11 +329,6 @@
                     {
                         "@type": "http://schema.org/Date",
                         "@value": "1989-12-21"
-                    }
-                ],
-                "http://schema.org/birthPlace": [
-                    {
-                        "@value": "https://hgod.in/cv?place=2"
                     }
                 ],
                 "http://schema.org/description": [
@@ -300,6 +402,9 @@
                 "http://schema.org/containsPlace": [
                     {
                         "@value": "https://hgod.in/cv?place=2"
+                    },
+                    {
+                        "@value": "https://hgod.in/cv?place=3"
                     }
                 ],
                 "http://schema.org/name": [
@@ -330,6 +435,96 @@
                 ]
             },
             {
+                "@id": "https://hgod.in/cv?place=3",
+                "@type": [
+                    "http://schema.org/City"
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Porto Alegre"
+                    }
+                ],
+                "http://schema.org/sameAs": [
+                    {
+                        "@id": "https://www.wikidata.org/wiki/Q40269"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?place=4",
+                "@type": [
+                    "http://schema.org/City"
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Porto"
+                    }
+                ],
+                "http://schema.org/sameAs": [
+                    {
+                        "@id": "https://www.wikidata.org/wiki/Q36433"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?place=5",
+                "@type": [
+                    "http://schema.org/City"
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Cidade do México"
+                    }
+                ],
+                "http://schema.org/sameAs": [
+                    {
+                        "@id": "https://www.wikidata.org/wiki/Q1489"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?place=6",
+                "@type": [
+                    "http://schema.org/Country"
+                ],
+                "http://schema.org/containsPlace": [
+                    {
+                        "@value": "https://hgod.in/cv?place=4"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Portugal"
+                    }
+                ],
+                "http://schema.org/sameAs": [
+                    {
+                        "@id": "https://www.wikidata.org/wiki/Q45"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?place=7",
+                "@type": [
+                    "http://schema.org/Country"
+                ],
+                "http://schema.org/containsPlace": [
+                    {
+                        "@value": "https://hgod.in/cv?place=5"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "México"
+                    }
+                ],
+                "http://schema.org/sameAs": [
+                    {
+                        "@id": "https://www.wikidata.org/wiki/Q45"
+                    }
+                ]
+            },
+            {
                 "@id": "https://hgod.in/cv?organization=1",
                 "@type": [
                     "http://schema.org/Organization"
@@ -339,14 +534,20 @@
                         "@value": "Rua Portugal, 43. Jd. Europa, São Paulo - SP - Brasil. 01446-020"
                     }
                 ],
-                "http://schema.org/employees": [
-                    {
-                        "@value": "https://hgod.in/cv?person=1"
-                    }
-                ],
                 "http://schema.org/location": [
                     {
                         "@value": "https://hgod.in/cv?place=2"
+                    }
+                ],
+                "http://schema.org/members": [
+                    {
+                        "@value": "https://hgod.in/cv?role=1"
+                    },
+                    {
+                        "@value": "https://hgod.in/cv?role=2"
+                    },
+                    {
+                        "@value": "https://hgod.in/cv?role=3"
                     }
                 ],
                 "http://schema.org/name": [
@@ -406,11 +607,6 @@
                         "@value": "https://hgod.in/cv?organization=4"
                     }
                 ],
-                "http://schema.org/location": [
-                    {
-                        "@value": "https://hgod.in/cv?place=2"
-                    }
-                ],
                 "http://schema.org/name": [
                     {
                         "@value": "Escola de Comunicações e Artes"
@@ -430,11 +626,6 @@
                 "http://schema.org/address": [
                     {
                         "@value": "Av. Prof. Lúcio Martins Rodrigues, 443 - Butantã, São Paulo - SP, 05508-020"
-                    }
-                ],
-                "http://schema.org/location": [
-                    {
-                        "@value": "https://hgod.in/cv?place=2"
                     }
                 ],
                 "http://schema.org/name": [
@@ -497,6 +688,69 @@
                 "http://schema.org/sameAs": [
                     {
                         "@id": "http://www.wikidata.org/entity/Q9726404"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?event=1",
+                "@type": [
+                    "http://schema.org/Event"
+                ],
+                "http://schema.org/attendee": [
+                    {
+                        "@value": "https://hgod.in/cv?person=me"
+                    }
+                ],
+                "http://schema.org/location": [
+                    {
+                        "@value": "https://hgod.in/cv?place=3"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "XXIII Encontro Nacional de Pesquisa e Pós-graduação em Ciência da Informação"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?event=2",
+                "@type": [
+                    "http://schema.org/Event"
+                ],
+                "http://schema.org/attendee": [
+                    {
+                        "@value": "https://hgod.in/cv?person=me"
+                    }
+                ],
+                "http://schema.org/location": [
+                    {
+                        "@value": "https://hgod.in/cv?place=4"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "II ABM - Encontro Internacional de Arquivos, Biibliotecas e Museus"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?event=3",
+                "@type": [
+                    "http://schema.org/Event"
+                ],
+                "http://schema.org/attendee": [
+                    {
+                        "@value": "https://hgod.in/cv?person=me"
+                    }
+                ],
+                "http://schema.org/location": [
+                    {
+                        "@value": "https://hgod.in/cv?place=5"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "CIDOC 23 - Frontiers of Knowledge, Museums, Documentation and Linked Data"
                     }
                 ]
             },
@@ -580,16 +834,93 @@
                         "@id": "http://www.wikidata.org/entity/Q163727"
                     }
                 ]
+            },
+            {
+                "@id": "https://hgod.in/cv?role=1",
+                "@type": [
+                    "http://schema.org/OrganizationRole"
+                ],
+                "http://schema.org/endDate": [
+                    {
+                        "@type": "http://schema.org/Date",
+                        "@value": 2014
+                    }
+                ],
+                "http://schema.org/member": [
+                    {
+                        "@value": "https://hgod.in/cv?person=me"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Auxiliar de museu"
+                    }
+                ],
+                "http://schema.org/startDate": [
+                    {
+                        "@type": "http://schema.org/Date",
+                        "@value": 2012
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?role=2",
+                "@type": [
+                    "http://schema.org/OrganizationRole"
+                ],
+                "http://schema.org/endDate": [
+                    {
+                        "@type": "http://schema.org/Date",
+                        "@value": 2016
+                    }
+                ],
+                "http://schema.org/member": [
+                    {
+                        "@value": "https://hgod.in/cv?person=me"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Produtor cultural"
+                    }
+                ],
+                "http://schema.org/startDate": [
+                    {
+                        "@type": "http://schema.org/Date",
+                        "@value": 2014
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?role=3",
+                "@type": [
+                    "http://schema.org/OrganizationRole"
+                ],
+                "http://schema.org/member": [
+                    {
+                        "@value": "https://hgod.in/cv?person=me"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Coordenador de comunicação"
+                    }
+                ],
+                "http://schema.org/startDate": [
+                    {
+                        "@type": "http://schema.org/Date",
+                        "@value": 2016
+                    }
+                ]
             }
         ],
         "compacted": {
             "@context": "https://schema.org",
             "@graph": [
                 {
-                    "id": "https://hgod.in/cv?person=1",
+                    "id": "https://hgod.in/cv?person=me",
                     "type": "Person",
                     "birthDate": "1989-12-21",
-                    "birthPlace": "https://hgod.in/cv?place=2",
                     "description": "Bacharel em Artes Visuais - Pintura, Gravura e Escultura pelo Centro Universitário Belas Artes de São Paulo (2015); possui pós-graduação em Comunicação e Design Digital pela Escola Superior de Propaganda e Marketing (2018); mestrando profissional em Ciências da Informação: Gestão da Informação, área de concentração: Organização, Mediação e Circulação da Informação pelo PPGCI-ECA/USP. Coordena o núcleo de comunicação da Casa Museu Ema Klabin desde 2016. Desenvolve a plataforma Elucidário.art, em uso pela Casa Museu Ema Klabin com o nome \"Explore a Coleção!\" sob o endereço https://emaklabin.org.br/explore.",
                     "email": "ola@hgod.in",
                     "familyName": [
@@ -612,7 +943,10 @@
                 {
                     "id": "https://hgod.in/cv?place=1",
                     "type": "Country",
-                    "containsPlace": "https://hgod.in/cv?place=2",
+                    "containsPlace": [
+                        "https://hgod.in/cv?place=2",
+                        "https://hgod.in/cv?place=3"
+                    ],
                     "name": "Brasil",
                     "sameAs": "http://www.wikidata.org/entity/Q155"
                 },
@@ -623,11 +957,47 @@
                     "sameAs": "http://www.wikidata.org/entity/Q174"
                 },
                 {
+                    "id": "https://hgod.in/cv?place=3",
+                    "type": "City",
+                    "name": "Porto Alegre",
+                    "sameAs": "https://www.wikidata.org/wiki/Q40269"
+                },
+                {
+                    "id": "https://hgod.in/cv?place=4",
+                    "type": "City",
+                    "name": "Porto",
+                    "sameAs": "https://www.wikidata.org/wiki/Q36433"
+                },
+                {
+                    "id": "https://hgod.in/cv?place=5",
+                    "type": "City",
+                    "name": "Cidade do México",
+                    "sameAs": "https://www.wikidata.org/wiki/Q1489"
+                },
+                {
+                    "id": "https://hgod.in/cv?place=6",
+                    "type": "Country",
+                    "containsPlace": "https://hgod.in/cv?place=4",
+                    "name": "Portugal",
+                    "sameAs": "https://www.wikidata.org/wiki/Q45"
+                },
+                {
+                    "id": "https://hgod.in/cv?place=7",
+                    "type": "Country",
+                    "containsPlace": "https://hgod.in/cv?place=5",
+                    "name": "México",
+                    "sameAs": "https://www.wikidata.org/wiki/Q45"
+                },
+                {
                     "id": "https://hgod.in/cv?organization=1",
                     "type": "Organization",
                     "address": "Rua Portugal, 43. Jd. Europa, São Paulo - SP - Brasil. 01446-020",
-                    "employees": "https://hgod.in/cv?person=1",
                     "location": "https://hgod.in/cv?place=2",
+                    "members": [
+                        "https://hgod.in/cv?role=1",
+                        "https://hgod.in/cv?role=2",
+                        "https://hgod.in/cv?role=3"
+                    ],
                     "name": "Casa Museu Ema Klabin",
                     "sameAs": "http://www.wikidata.org/entity/Q5368756"
                 },
@@ -645,7 +1015,6 @@
                     "type": "Organization",
                     "address": "Av. Prof. Lúcio Martins Rodrigues, 443 - Butantã, São Paulo - SP, 05508-020",
                     "department": "https://hgod.in/cv?organization=4",
-                    "location": "https://hgod.in/cv?place=2",
                     "name": "Escola de Comunicações e Artes",
                     "sameAs": "http://www.wikidata.org/entity/Q10274592"
                 },
@@ -653,7 +1022,6 @@
                     "id": "https://hgod.in/cv?organization=4",
                     "type": "Organization",
                     "address": "Av. Prof. Lúcio Martins Rodrigues, 443 - Butantã, São Paulo - SP, 05508-020",
-                    "location": "https://hgod.in/cv?place=2",
                     "name": "Programa de Pós-Graduação em Ciência da Informação",
                     "sameAs": "http://www.wikidata.org/entity/Q106660948"
                 },
@@ -672,6 +1040,27 @@
                     "location": "https://hgod.in/cv?place=2",
                     "name": "Centro Universitário Belas Artes de São Paulo",
                     "sameAs": "http://www.wikidata.org/entity/Q9726404"
+                },
+                {
+                    "id": "https://hgod.in/cv?event=1",
+                    "type": "Event",
+                    "attendee": "https://hgod.in/cv?person=me",
+                    "location": "https://hgod.in/cv?place=3",
+                    "name": "XXIII Encontro Nacional de Pesquisa e Pós-graduação em Ciência da Informação"
+                },
+                {
+                    "id": "https://hgod.in/cv?event=2",
+                    "type": "Event",
+                    "attendee": "https://hgod.in/cv?person=me",
+                    "location": "https://hgod.in/cv?place=4",
+                    "name": "II ABM - Encontro Internacional de Arquivos, Biibliotecas e Museus"
+                },
+                {
+                    "id": "https://hgod.in/cv?event=3",
+                    "type": "Event",
+                    "attendee": "https://hgod.in/cv?person=me",
+                    "location": "https://hgod.in/cv?place=5",
+                    "name": "CIDOC 23 - Frontiers of Knowledge, Museums, Documentation and Linked Data"
                 },
                 {
                     "id": "https://hgod.in/cv?certification=1",
@@ -696,6 +1085,29 @@
                     "issuedBy": "https://hgod.in/cv?organization=6",
                     "name": "Bacharelado em Artes Visuais: Pintura, Gravura e Escultura",
                     "sameAs": "http://www.wikidata.org/entity/Q163727"
+                },
+                {
+                    "id": "https://hgod.in/cv?role=1",
+                    "type": "OrganizationRole",
+                    "endDate": 2014,
+                    "member": "https://hgod.in/cv?person=me",
+                    "name": "Auxiliar de museu",
+                    "startDate": 2012
+                },
+                {
+                    "id": "https://hgod.in/cv?role=2",
+                    "type": "OrganizationRole",
+                    "endDate": 2016,
+                    "member": "https://hgod.in/cv?person=me",
+                    "name": "Produtor cultural",
+                    "startDate": 2014
+                },
+                {
+                    "id": "https://hgod.in/cv?role=3",
+                    "type": "OrganizationRole",
+                    "member": "https://hgod.in/cv?person=me",
+                    "name": "Coordenador de comunicação",
+                    "startDate": 2016
                 }
             ]
         },
@@ -782,6 +1194,69 @@
                 ]
             },
             {
+                "@id": "https://hgod.in/cv?event=1",
+                "@type": [
+                    "http://schema.org/Event"
+                ],
+                "http://schema.org/attendee": [
+                    {
+                        "@value": "https://hgod.in/cv?person=me"
+                    }
+                ],
+                "http://schema.org/location": [
+                    {
+                        "@value": "https://hgod.in/cv?place=3"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "XXIII Encontro Nacional de Pesquisa e Pós-graduação em Ciência da Informação"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?event=2",
+                "@type": [
+                    "http://schema.org/Event"
+                ],
+                "http://schema.org/attendee": [
+                    {
+                        "@value": "https://hgod.in/cv?person=me"
+                    }
+                ],
+                "http://schema.org/location": [
+                    {
+                        "@value": "https://hgod.in/cv?place=4"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "II ABM - Encontro Internacional de Arquivos, Biibliotecas e Museus"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?event=3",
+                "@type": [
+                    "http://schema.org/Event"
+                ],
+                "http://schema.org/attendee": [
+                    {
+                        "@value": "https://hgod.in/cv?person=me"
+                    }
+                ],
+                "http://schema.org/location": [
+                    {
+                        "@value": "https://hgod.in/cv?place=5"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "CIDOC 23 - Frontiers of Knowledge, Museums, Documentation and Linked Data"
+                    }
+                ]
+            },
+            {
                 "@id": "https://hgod.in/cv?organization=1",
                 "@type": [
                     "http://schema.org/Organization"
@@ -791,14 +1266,20 @@
                         "@value": "Rua Portugal, 43. Jd. Europa, São Paulo - SP - Brasil. 01446-020"
                     }
                 ],
-                "http://schema.org/employees": [
-                    {
-                        "@value": "https://hgod.in/cv?person=1"
-                    }
-                ],
                 "http://schema.org/location": [
                     {
                         "@value": "https://hgod.in/cv?place=2"
+                    }
+                ],
+                "http://schema.org/members": [
+                    {
+                        "@value": "https://hgod.in/cv?role=1"
+                    },
+                    {
+                        "@value": "https://hgod.in/cv?role=2"
+                    },
+                    {
+                        "@value": "https://hgod.in/cv?role=3"
                     }
                 ],
                 "http://schema.org/name": [
@@ -858,11 +1339,6 @@
                         "@value": "https://hgod.in/cv?organization=4"
                     }
                 ],
-                "http://schema.org/location": [
-                    {
-                        "@value": "https://hgod.in/cv?place=2"
-                    }
-                ],
                 "http://schema.org/name": [
                     {
                         "@value": "Escola de Comunicações e Artes"
@@ -882,11 +1358,6 @@
                 "http://schema.org/address": [
                     {
                         "@value": "Av. Prof. Lúcio Martins Rodrigues, 443 - Butantã, São Paulo - SP, 05508-020"
-                    }
-                ],
-                "http://schema.org/location": [
-                    {
-                        "@value": "https://hgod.in/cv?place=2"
                     }
                 ],
                 "http://schema.org/name": [
@@ -953,7 +1424,7 @@
                 ]
             },
             {
-                "@id": "https://hgod.in/cv?person=1",
+                "@id": "https://hgod.in/cv?person=me",
                 "@type": [
                     "http://schema.org/Person"
                 ],
@@ -961,11 +1432,6 @@
                     {
                         "@type": "http://schema.org/Date",
                         "@value": "1989-12-21"
-                    }
-                ],
-                "http://schema.org/birthPlace": [
-                    {
-                        "@value": "https://hgod.in/cv?place=2"
                     }
                 ],
                 "http://schema.org/description": [
@@ -1039,6 +1505,9 @@
                 "http://schema.org/containsPlace": [
                     {
                         "@value": "https://hgod.in/cv?place=2"
+                    },
+                    {
+                        "@value": "https://hgod.in/cv?place=3"
                     }
                 ],
                 "http://schema.org/name": [
@@ -1065,6 +1534,174 @@
                 "http://schema.org/sameAs": [
                     {
                         "@id": "http://www.wikidata.org/entity/Q174"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?place=3",
+                "@type": [
+                    "http://schema.org/City"
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Porto Alegre"
+                    }
+                ],
+                "http://schema.org/sameAs": [
+                    {
+                        "@id": "https://www.wikidata.org/wiki/Q40269"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?place=4",
+                "@type": [
+                    "http://schema.org/City"
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Porto"
+                    }
+                ],
+                "http://schema.org/sameAs": [
+                    {
+                        "@id": "https://www.wikidata.org/wiki/Q36433"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?place=5",
+                "@type": [
+                    "http://schema.org/City"
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Cidade do México"
+                    }
+                ],
+                "http://schema.org/sameAs": [
+                    {
+                        "@id": "https://www.wikidata.org/wiki/Q1489"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?place=6",
+                "@type": [
+                    "http://schema.org/Country"
+                ],
+                "http://schema.org/containsPlace": [
+                    {
+                        "@value": "https://hgod.in/cv?place=4"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Portugal"
+                    }
+                ],
+                "http://schema.org/sameAs": [
+                    {
+                        "@id": "https://www.wikidata.org/wiki/Q45"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?place=7",
+                "@type": [
+                    "http://schema.org/Country"
+                ],
+                "http://schema.org/containsPlace": [
+                    {
+                        "@value": "https://hgod.in/cv?place=5"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "México"
+                    }
+                ],
+                "http://schema.org/sameAs": [
+                    {
+                        "@id": "https://www.wikidata.org/wiki/Q45"
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?role=1",
+                "@type": [
+                    "http://schema.org/OrganizationRole"
+                ],
+                "http://schema.org/endDate": [
+                    {
+                        "@type": "http://schema.org/Date",
+                        "@value": 2014
+                    }
+                ],
+                "http://schema.org/member": [
+                    {
+                        "@value": "https://hgod.in/cv?person=me"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Auxiliar de museu"
+                    }
+                ],
+                "http://schema.org/startDate": [
+                    {
+                        "@type": "http://schema.org/Date",
+                        "@value": 2012
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?role=2",
+                "@type": [
+                    "http://schema.org/OrganizationRole"
+                ],
+                "http://schema.org/endDate": [
+                    {
+                        "@type": "http://schema.org/Date",
+                        "@value": 2016
+                    }
+                ],
+                "http://schema.org/member": [
+                    {
+                        "@value": "https://hgod.in/cv?person=me"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Produtor cultural"
+                    }
+                ],
+                "http://schema.org/startDate": [
+                    {
+                        "@type": "http://schema.org/Date",
+                        "@value": 2014
+                    }
+                ]
+            },
+            {
+                "@id": "https://hgod.in/cv?role=3",
+                "@type": [
+                    "http://schema.org/OrganizationRole"
+                ],
+                "http://schema.org/member": [
+                    {
+                        "@value": "https://hgod.in/cv?person=me"
+                    }
+                ],
+                "http://schema.org/name": [
+                    {
+                        "@value": "Coordenador de comunicação"
+                    }
+                ],
+                "http://schema.org/startDate": [
+                    {
+                        "@type": "http://schema.org/Date",
+                        "@value": 2016
                     }
                 ]
             }
@@ -1379,6 +2016,258 @@
             {
                 "subject": {
                     "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?event=1"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/Event"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?event=1"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/attendee"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?person=me",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?event=1"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/location"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?place=3",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?event=1"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/name"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "XXIII Encontro Nacional de Pesquisa e Pós-graduação em Ciência da Informação",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?event=2"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/Event"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?event=2"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/attendee"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?person=me",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?event=2"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/location"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?place=4",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?event=2"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/name"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "II ABM - Encontro Internacional de Arquivos, Biibliotecas e Museus",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?event=3"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/Event"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?event=3"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/attendee"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?person=me",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?event=3"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/location"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?place=5",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?event=3"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/name"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "CIDOC 23 - Frontiers of Knowledge, Museums, Documentation and Linked Data",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
                     "value": "https://hgod.in/cv?organization=1"
                 },
                 "predicate": {
@@ -1423,11 +2312,11 @@
                 },
                 "predicate": {
                     "termType": "NamedNode",
-                    "value": "http://schema.org/employees"
+                    "value": "http://schema.org/location"
                 },
                 "object": {
                     "termType": "Literal",
-                    "value": "https://hgod.in/cv?person=1",
+                    "value": "https://hgod.in/cv?place=2",
                     "datatype": {
                         "termType": "NamedNode",
                         "value": "http://www.w3.org/2001/XMLSchema#string"
@@ -1445,11 +2334,55 @@
                 },
                 "predicate": {
                     "termType": "NamedNode",
-                    "value": "http://schema.org/location"
+                    "value": "http://schema.org/members"
                 },
                 "object": {
                     "termType": "Literal",
-                    "value": "https://hgod.in/cv?place=2",
+                    "value": "https://hgod.in/cv?role=1",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?organization=1"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/members"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?role=2",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?organization=1"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/members"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?role=3",
                     "datatype": {
                         "termType": "NamedNode",
                         "value": "http://www.w3.org/2001/XMLSchema#string"
@@ -1693,28 +2626,6 @@
                 },
                 "predicate": {
                     "termType": "NamedNode",
-                    "value": "http://schema.org/location"
-                },
-                "object": {
-                    "termType": "Literal",
-                    "value": "https://hgod.in/cv?place=2",
-                    "datatype": {
-                        "termType": "NamedNode",
-                        "value": "http://www.w3.org/2001/XMLSchema#string"
-                    }
-                },
-                "graph": {
-                    "termType": "DefaultGraph",
-                    "value": ""
-                }
-            },
-            {
-                "subject": {
-                    "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?organization=3"
-                },
-                "predicate": {
-                    "termType": "NamedNode",
                     "value": "http://schema.org/name"
                 },
                 "object": {
@@ -1778,28 +2689,6 @@
                 "object": {
                     "termType": "Literal",
                     "value": "Av. Prof. Lúcio Martins Rodrigues, 443 - Butantã, São Paulo - SP, 05508-020",
-                    "datatype": {
-                        "termType": "NamedNode",
-                        "value": "http://www.w3.org/2001/XMLSchema#string"
-                    }
-                },
-                "graph": {
-                    "termType": "DefaultGraph",
-                    "value": ""
-                }
-            },
-            {
-                "subject": {
-                    "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?organization=4"
-                },
-                "predicate": {
-                    "termType": "NamedNode",
-                    "value": "http://schema.org/location"
-                },
-                "object": {
-                    "termType": "Literal",
-                    "value": "https://hgod.in/cv?place=2",
                     "datatype": {
                         "termType": "NamedNode",
                         "value": "http://www.w3.org/2001/XMLSchema#string"
@@ -2057,7 +2946,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2075,7 +2964,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2097,29 +2986,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
-                },
-                "predicate": {
-                    "termType": "NamedNode",
-                    "value": "http://schema.org/birthPlace"
-                },
-                "object": {
-                    "termType": "Literal",
-                    "value": "https://hgod.in/cv?place=2",
-                    "datatype": {
-                        "termType": "NamedNode",
-                        "value": "http://www.w3.org/2001/XMLSchema#string"
-                    }
-                },
-                "graph": {
-                    "termType": "DefaultGraph",
-                    "value": ""
-                }
-            },
-            {
-                "subject": {
-                    "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2141,7 +3008,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2163,7 +3030,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2185,7 +3052,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2207,7 +3074,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2229,7 +3096,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2251,7 +3118,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2273,7 +3140,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2295,7 +3162,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2317,7 +3184,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2339,7 +3206,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2361,7 +3228,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2383,7 +3250,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2405,7 +3272,7 @@
             {
                 "subject": {
                     "termType": "NamedNode",
-                    "value": "https://hgod.in/cv?person=1"
+                    "value": "https://hgod.in/cv?person=me"
                 },
                 "predicate": {
                     "termType": "NamedNode",
@@ -2454,6 +3321,28 @@
                 "object": {
                     "termType": "Literal",
                     "value": "https://hgod.in/cv?place=2",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=1"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/containsPlace"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?place=3",
                     "datatype": {
                         "termType": "NamedNode",
                         "value": "http://www.w3.org/2001/XMLSchema#string"
@@ -2556,6 +3445,636 @@
                 "object": {
                     "termType": "NamedNode",
                     "value": "http://www.wikidata.org/entity/Q174"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=3"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/City"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=3"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/name"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "Porto Alegre",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=3"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/sameAs"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "https://www.wikidata.org/wiki/Q40269"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=4"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/City"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=4"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/name"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "Porto",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=4"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/sameAs"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "https://www.wikidata.org/wiki/Q36433"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=5"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/City"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=5"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/name"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "Cidade do México",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=5"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/sameAs"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "https://www.wikidata.org/wiki/Q1489"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=6"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/Country"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=6"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/containsPlace"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?place=4",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=6"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/name"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "Portugal",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=6"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/sameAs"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "https://www.wikidata.org/wiki/Q45"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=7"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/Country"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=7"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/containsPlace"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?place=5",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=7"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/name"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "México",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?place=7"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/sameAs"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "https://www.wikidata.org/wiki/Q45"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=1"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/OrganizationRole"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=1"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/endDate"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "2014",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://schema.org/Date"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=1"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/member"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?person=me",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=1"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/name"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "Auxiliar de museu",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=1"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/startDate"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "2012",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://schema.org/Date"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=2"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/OrganizationRole"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=2"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/endDate"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "2016",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://schema.org/Date"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=2"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/member"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?person=me",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=2"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/name"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "Produtor cultural",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=2"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/startDate"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "2014",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://schema.org/Date"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=3"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "object": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/OrganizationRole"
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=3"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/member"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "https://hgod.in/cv?person=me",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=3"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/name"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "Coordenador de comunicação",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                },
+                "graph": {
+                    "termType": "DefaultGraph",
+                    "value": ""
+                }
+            },
+            {
+                "subject": {
+                    "termType": "NamedNode",
+                    "value": "https://hgod.in/cv?role=3"
+                },
+                "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://schema.org/startDate"
+                },
+                "object": {
+                    "termType": "Literal",
+                    "value": "2016",
+                    "datatype": {
+                        "termType": "NamedNode",
+                        "value": "http://schema.org/Date"
+                    }
                 },
                 "graph": {
                     "termType": "DefaultGraph",
