@@ -12,6 +12,7 @@ export default defineConfig({
     base: "/",
     build: {
         outDir: "../../dist/apps/vite-app",
+        sourcemap: true,
     },
     css: {
         modules: {
