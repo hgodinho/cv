@@ -16,11 +16,10 @@ export type CollapsibleProps = {
     isOpen?: boolean;
     onOpenChange?: CollapsiblePrimitive.CollapsibleProps["onOpenChange"];
     rootProps?: React.ComponentProps<typeof CollapsiblePrimitive.Root>;
-    triggerProps?: React.ComponentProps<typeof CollapsiblePrimitive.Trigger> & {
-        openIcon?: React.ReactNode;
-        closeIcon?: React.ReactNode;
-        disabledIcon?: React.ReactNode;
-    };
+    triggerProps?: React.ComponentProps<typeof CollapsiblePrimitive.Trigger>;
+    openIcon?: React.ReactNode;
+    closeIcon?: React.ReactNode;
+    disabledIcon?: React.ReactNode;
 };
 
 export function Collapsible({
@@ -30,6 +29,9 @@ export function Collapsible({
     triggerProps,
     isOpen,
     initialOpen,
+    openIcon,
+    closeIcon,
+    disabledIcon,
     onOpenChange,
 }: React.PropsWithChildren<CollapsibleProps>) {
     const [open, setOpen] = useState(
@@ -59,6 +61,7 @@ export function Collapsible({
             className={tw("z-10", "flex", "flex-col", className?.root)}
             open={isCollapsibleOpen}
             onOpenChange={onChange}
+            defaultOpen={initialOpen || false}
             {...rootProps}
         >
             <CollapsiblePrimitive.Trigger
@@ -80,10 +83,10 @@ export function Collapsible({
                 {...triggerProps}
             >
                 {rootProps?.disabled
-                    ? triggerProps?.disabledIcon || <EyeOff size={icon} />
+                    ? disabledIcon || <EyeOff size={icon} />
                     : !isCollapsibleOpen
-                    ? triggerProps?.openIcon || <Plus size={icon} />
-                    : triggerProps?.closeIcon || <Minus size={icon} />}
+                    ? openIcon || <Plus size={icon} />
+                    : closeIcon || <Minus size={icon} />}
             </CollapsiblePrimitive.Trigger>
             <motion.div
                 animate={{
