@@ -3,7 +3,7 @@ import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
 import { useLocation } from "react-router-dom";
 
-import { useFilterContext, useNetworkSettings } from "@/provider";
+import { useFilterContext, useNetworkSettings, useTheme } from "@/provider";
 
 export type UseNetworkProps = {
     w?: number;
@@ -27,9 +27,13 @@ export function useNetwork() {
 
     const settings = useNetworkSettings();
 
+    const {
+        viewPort: { isTablet, isMobile, width, height },
+    } = useTheme();
+
     const focusOnClick = useCallback(
         (node: NodeObject) => {
-            const distance = 15;
+            const distance = isMobile ? 45 : isTablet ? 30 : 20;
             const distRatio =
                 1 +
                 distance /
@@ -106,6 +110,8 @@ export function useNetwork() {
         filteredLinks,
         links,
         colors,
+        width,
+        height,
         ...settings,
         color,
         focusOnClick,

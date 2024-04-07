@@ -1,15 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { FileMinus, FilePlus } from "react-feather";
 
 import { useCVContext, useTheme } from "@/provider";
 import { Fields, Collapsible } from "@/components";
 import { tw } from "@/lib";
 
-import styles from "@/components/layout/grid.module.css";
-
 export function ClassView() {
-    const [open, setOpen] = useState<boolean>(false);
-
     const {
         data: { properties, colors },
         selected,
@@ -18,49 +14,65 @@ export function ClassView() {
 
     const {
         sizes: { icon },
+        collapsibles: { class: open },
+        viewPort: { height, isMobile },
+        toggleCollapsible,
+        collapsibleOn,
     } = useTheme();
 
     useEffect(() => {
-        if (selected) setOpen(true);
+        if (selected) collapsibleOn("class");
     }, [selected]);
 
     return (
         <Collapsible
             className={{
                 root: tw(
-                    styles.classView,
-                    "h-full",
-                    "text-wrap",
-                    open ? "md:w-4/6" : "",
-                    open ? "xl:w-full" : ""
+                    "grid",
+                    "grid-cols-subgrid",
+                    "grid-rows-subgrid",
+
+                    "col-start-2",
+                    "col-span-2",
+                    "row-start-1",
+                    "row-span-2",
+
+                    "data-[state=closed]:col-start-3",
+                    "data-[state=closed]:w-min"
                 ),
-                trigger: tw("self-end"),
-                content: tw("h-full", "overflow-y-auto", "text-wrap"),
+                trigger: tw("col-class-trigger", "row-class-trigger"),
+                motion: tw(
+                    "overflow-auto",
+                    "col-class",
+                    "row-class",
+                    "flex",
+                    "flex-col"
+                ),
+                content: tw(
+                    "bg-black/95",
+                    "h-full",
+                    "self-end",
+                    isMobile && !open ? "w-0" : "w-4/5",
+                    "border-2"
+                ),
             }}
             isOpen={open}
-            onOpenChange={setOpen}
+            onOpenChange={() => toggleCollapsible("class")}
             rootProps={{
                 disabled: !selected,
+                style: {
+                    height: height - 32,
+                },
             }}
-            triggerProps={{
-                openIcon: <FilePlus size={icon} />,
-                closeIcon: <FileMinus size={icon} />,
-            }}
-        >
-            <div
-                className={tw(
-                    "content",
-                    "h-full",
-                    "flex",
-                    "flex-col",
-                    "text-wrap",
-                    "bg-black/80",
-                    "border-4"
-                )}
-                style={{
+            contentProps={{
+                style: {
                     borderColor: colors[selected?.type],
-                }}
-            >
+                },
+            }}
+            openIcon={<FilePlus size={icon} />}
+            closeIcon={<FileMinus size={icon} />}
+        >
+            <div className={tw("flex", "flex-col", "h-full", "w-full")}>
                 {!selected ? (
                     <div className="">Select a class to view more info</div>
                 ) : (
@@ -68,6 +80,7 @@ export function ClassView() {
                         data={selected}
                         properties={properties}
                         filterValue={filterValue}
+                        colors={colors}
                     />
                 )}
             </div>

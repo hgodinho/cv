@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import { motion } from "framer-motion";
 import { Plus, Minus, EyeOff } from "react-feather";
@@ -11,12 +11,14 @@ export type CollapsibleProps = {
         root?: string;
         trigger?: string;
         content?: string;
+        motion?: string;
     };
     initialOpen?: boolean;
     isOpen?: boolean;
     onOpenChange?: CollapsiblePrimitive.CollapsibleProps["onOpenChange"];
     rootProps?: React.ComponentProps<typeof CollapsiblePrimitive.Root>;
     triggerProps?: React.ComponentProps<typeof CollapsiblePrimitive.Trigger>;
+    contentProps?: React.ComponentProps<typeof CollapsiblePrimitive.Content>;
     openIcon?: React.ReactNode;
     closeIcon?: React.ReactNode;
     disabledIcon?: React.ReactNode;
@@ -27,6 +29,7 @@ export function Collapsible({
     className,
     rootProps,
     triggerProps,
+    contentProps,
     isOpen,
     initialOpen,
     openIcon,
@@ -58,7 +61,13 @@ export function Collapsible({
 
     return (
         <CollapsiblePrimitive.Root
-            className={tw("z-10", "flex", "flex-col", className?.root)}
+            className={tw(
+                "collapsible",
+                "z-10",
+                // "flex",
+                // "flex-col",
+                className?.root
+            )}
             open={isCollapsibleOpen}
             onOpenChange={onChange}
             defaultOpen={initialOpen || false}
@@ -66,9 +75,10 @@ export function Collapsible({
         >
             <CollapsiblePrimitive.Trigger
                 className={tw(
-                    "options",
+                    "trigger",
                     "w-8",
                     "h-8",
+                    "p-2",
                     "flex",
                     "justify-center",
                     "items-center",
@@ -91,20 +101,17 @@ export function Collapsible({
             <motion.div
                 animate={{
                     opacity: isCollapsibleOpen ? 1 : 0,
+                    // width: isCollapsibleOpen ? "100%" : 0,
                 }}
                 transition={{
                     duration: 0.3,
                 }}
-                className={tw("cv", "h-full", "overflow-y-auto")}
+                className={tw("motion", "overflow-auto", className?.motion)}
             >
                 <CollapsiblePrimitive.Content
-                    forceMount={true}
-                    className={tw(
-                        "text-wrap",
-                        "bg-black/80",
-                        "text-gray-300",
-                        className?.content
-                    )}
+                    className={tw("content", "text-wrap", className?.content)}
+                    {...contentProps}
+                    forceMount={contentProps?.forceMount || true}
                 >
                     {children}
                 </CollapsiblePrimitive.Content>

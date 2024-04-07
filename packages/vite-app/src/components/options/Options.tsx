@@ -5,7 +5,6 @@ import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import { tw } from "@/lib";
 import { Collapsible, TreeView, Settings } from "@/components";
 import { useTheme } from "@/provider";
-import optionsStyles from "@/components/layout/grid.module.css";
 import buttonStyles from "@/components/button/button.module.scss";
 
 export type OptionsEnum = "filter" | "settings";
@@ -15,19 +14,49 @@ export function OptionsView() {
 
     const {
         sizes: { icon },
+        viewPort: { height, isTablet, isDesktop, isMobile },
+        collapsibles: { options },
+        toggleCollapsible,
     } = useTheme();
 
     return (
         <Collapsible
-            initialOpen={true}
+            initialOpen={isTablet ? isTablet : isDesktop}
             className={{
-                root: tw(optionsStyles.options),
-                content: tw("flex", "flex-col", "h-full"),
+                root: tw(
+                    "grid",
+                    "grid-cols-subgrid",
+                    "grid-rows-subgrid",
+
+                    "col-start-1",
+                    "col-span-2",
+                    "row-start-1",
+                    "row-span-2",
+
+                    "data-[state=closed]:col-span-1",
+                    "data-[state=closed]:w-min"
+                ),
+                trigger: tw("col-options-trigger", "row-options-trigger"),
+                motion: tw(
+                    "overflow-auto",
+                    "col-options",
+                    "row-options",
+                    "w-4/5"
+                ),
+                content: tw(
+                    "bg-black/95",
+                    isMobile && !options ? "w-0" : "w-full"
+                ),
             }}
-            triggerProps={{
-                openIcon: <Menu size={icon} />,
-                closeIcon: <X size={icon} />,
+            rootProps={{
+                style: {
+                    height: height - 32,
+                },
             }}
+            openIcon={<Menu size={icon} />}
+            closeIcon={<X size={icon} />}
+            isOpen={options}
+            onOpenChange={() => toggleCollapsible("options")}
         >
             <Options
                 value={selected}
@@ -59,7 +88,6 @@ export function Options(props: OptionsProps) {
                 "items-center",
                 "sticky",
                 "top-0",
-                "z-10",
                 "bg-black",
                 "border-b",
                 "border-t-2"

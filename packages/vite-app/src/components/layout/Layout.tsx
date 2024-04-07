@@ -1,7 +1,21 @@
-import { PropsWithChildren } from "react";
+import { tw } from "@/lib";
 
-import styles from "./grid.module.css";
-
-export function Layout({ children }: PropsWithChildren<{}>) {
-    return <div className={styles.layout}>{children}</div>;
+export function Layout({
+    children,
+    ...props
+}: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) {
+    return (
+        <div
+            {...props}
+            className={tw(
+                "grid",
+                "grid-cols-layout",
+                "grid-rows-layout",
+                "relative",
+                "p-4"
+            )}
+        >
+            {children}
+        </div>
+    );
 }
