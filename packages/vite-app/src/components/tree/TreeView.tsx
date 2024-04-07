@@ -1,13 +1,12 @@
 import { useMemo } from "react";
 import { IFlatMetadata } from "react-accessible-treeview/dist/TreeView/utils";
 import { ChevronRight } from "react-feather";
-import { CustomScroll } from "react-custom-scroll";
 import * as RATree from "react-accessible-treeview";
 
 import { Checkbox } from ".";
 import { tw, useTree } from "@/lib";
 import { useTheme, useFilterContext } from "@/provider";
-import { Link as LinkPrimitive } from "@/components";
+import { Link as LinkPrimitive, Scroll } from "@/components";
 
 export type TreeTypeEnum = "filter" | "link";
 
@@ -18,14 +17,14 @@ export type TreeViewProps = {
 export function TreeView({ mode }: TreeViewProps) {
     const { treeData, initialSelectedIds, onCheck } = useTree();
     return (
-        <CustomScroll heightRelativeToParent={"100%"}>
+        <Scroll>
             <Tree
                 treeData={treeData}
                 initialSelectedIds={initialSelectedIds}
                 onCheck={onCheck}
                 mode={mode}
             />
-        </CustomScroll>
+        </Scroll>
     );
 }
 
