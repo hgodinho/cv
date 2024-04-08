@@ -13,10 +13,12 @@ const config: Config = {
             gridTemplateColumns: {
                 layout: "32px 1fr 32px",
                 "layout-md": "32px 256px 32px 1fr 32px",
+                "layout-lg": "32px 296px 1fr 504px 32px",
             },
             gridTemplateRows: {
                 layout: "32px 600px 128px",
                 "layout-md": "32px 800px 128px",
+                "layout-lg": "32px 700px 128px",
             },
             gridColumn: {
                 "options-trigger": "1",

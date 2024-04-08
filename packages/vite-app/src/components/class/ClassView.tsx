@@ -28,6 +28,8 @@ export function ClassView() {
         <Collapsible
             className={{
                 root: tw(
+                    "class",
+
                     "grid",
                     "grid-cols-subgrid",
                     "grid-rows-subgrid",
@@ -37,10 +39,21 @@ export function ClassView() {
                     "row-start-1",
                     "row-span-2",
 
+                    "data-[state=closed]:col-span-1",
                     "data-[state=closed]:col-start-3",
-                    "data-[state=closed]:w-min"
+                    "data-[state=closed]:w-min",
+
+                    // tablet
+                    "md:col-start-4",
+                    "md:data-[state=closed]:col-start-5"
                 ),
-                trigger: tw("col-class-trigger", "row-class-trigger"),
+                trigger: tw(
+                    "col-class-trigger",
+                    "row-class-trigger",
+
+                    // tablet
+                    "md:col-class-trigger-md"
+                ),
                 motion: tw(
                     "overflow-auto",
                     "col-class",
@@ -49,11 +62,13 @@ export function ClassView() {
                     "flex-col"
                 ),
                 content: tw(
-                    "bg-black/95",
                     "h-full",
+                    "bg-black/85",
                     "self-end",
-                    isMobile && !open ? "w-0" : "w-4/5",
-                    "border-2"
+                    "border-2",
+
+                    // responsive
+                    !open ? "w-0" : tw("w-4/5", "md:w-full")
                 ),
             }}
             isOpen={open}

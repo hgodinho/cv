@@ -24,6 +24,8 @@ export function OptionsView() {
             initialOpen={isTablet ? isTablet : isDesktop}
             className={{
                 root: tw(
+                    "options",
+
                     "grid",
                     "grid-cols-subgrid",
                     "grid-rows-subgrid",
@@ -41,12 +43,11 @@ export function OptionsView() {
                     "overflow-auto",
                     "col-options",
                     "row-options",
-                    "w-4/5"
+
+                    // responsive
+                    !options ? "w-0" : tw("w-4/5", "md:w-full")
                 ),
-                content: tw(
-                    "bg-black/95",
-                    isMobile && !options ? "w-0" : "w-full"
-                ),
+                content: tw("bg-black/85"),
             }}
             rootProps={{
                 style: {
@@ -90,7 +91,8 @@ export function Options(props: OptionsProps) {
                 "top-0",
                 "bg-black",
                 "border-b",
-                "border-t-2"
+                "border-t-2",
+                "z-10"
             )}
             {...props}
         >
