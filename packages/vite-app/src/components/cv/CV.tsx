@@ -6,7 +6,13 @@ import {
     NetworkSettingsProvider,
     ThemeProvider,
 } from "@/provider";
-import { Layout, ClassView, OptionsView, NetworkView } from "@/components";
+import {
+    Layout,
+    ClassView,
+    OptionsView,
+    NetworkView,
+    Debug,
+} from "@/components";
 
 export function CV({ data }: { data: CVContextType["data"] }) {
     return (
@@ -17,6 +23,7 @@ export function CV({ data }: { data: CVContextType["data"] }) {
                     <Layout>
                         <OptionsView />
                         <ClassView />
+                        <Debug />
                     </Layout>
                 </NetworkSettingsProvider>
             </CVProvider>
