@@ -1,20 +1,14 @@
 import ForceGraph3d from "react-force-graph-3d";
 
-import { useNetwork } from "@/lib";
+import { tw, useNetwork } from "@/lib";
 
-import styles from "@/components/layout/grid.module.css";
-
-export type NetworkViewProps = {
-    width: number;
-    height: number;
-};
-
-export function NetworkView({ width, height }: NetworkViewProps) {
+export function NetworkView() {
     const {
         ref,
         filteredNodes,
         filteredLinks,
-
+        width,
+        height,
         settings,
 
         color,
@@ -25,13 +19,13 @@ export function NetworkView({ width, height }: NetworkViewProps) {
     } = useNetwork();
 
     return (
-        <div className={`${styles.network} m-auto`}>
+        <div className={tw("absolute", "z-10")}>
             <ForceGraph3d
                 ref={ref}
                 graphData={{ nodes: filteredNodes, links: filteredLinks }}
                 showNavInfo={false}
-                width={width - 10}
-                height={height - 10}
+                width={width - 2}
+                height={height - 2}
                 backgroundColor="black"
                 nodeLabel={nodeLabel}
                 nodeColor={color}

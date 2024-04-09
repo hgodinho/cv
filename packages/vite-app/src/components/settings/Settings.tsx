@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { CustomScroll } from "react-custom-scroll";
 
-import { Label, Slider, Switch } from "@/components";
+import { Label, Slider, Switch, Scroll } from "@/components";
 import { tw } from "@/lib";
 import { useNetworkSettings } from "@/provider";
 
@@ -24,19 +23,19 @@ export function Settings({ hidden = false }: SettingsProps) {
     return (
         <div
             className={tw(
+                "sticky",
+                "top-8",
                 "flex",
                 "flex-col",
-                "py-2",
+                "p-2",
                 "border-b-2",
-                "max-h-72",
-                "overflow-y-auto",
+                "h-72",
+                "bg-black/45",
+                "z-10",
                 hidden ? "hidden" : undefined
             )}
         >
-            <CustomScroll
-                heightRelativeToParent={"100%"}
-                className={tw("pb-4")}
-            >
+            <Scroll>
                 <fieldset>
                     <Label as="legend" className={tw()}>
                         Nós
@@ -196,7 +195,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                         />
                     </div>
                 </fieldset>
-            </CustomScroll>
+            </Scroll>
         </div>
     );
 }

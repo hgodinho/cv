@@ -47,5 +47,10 @@
                 "serveStaticTargetName": "serve-static"
             }
         }
-    ]
+    ],
+    "namedInputs": {
+        "default": ["{projectRoot}/**/*", "sharedGlobals"],
+        "sharedGlobals": [],
+        "production": ["default"]
+    }
 }

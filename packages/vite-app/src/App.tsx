@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { CV } from "@/components";
-import { tw } from "@/lib";
 
 export function App() {
     const [state, setState] = useState(null);
@@ -8,8 +7,8 @@ export function App() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetch("henrique-godinho.jsonld").then((res) =>
-                    res.json()
+                const data = await fetch("henrique-godinho.jsonld").then(
+                    (res) => res.json()
                 );
                 setState(data);
             } catch (e) {
@@ -19,5 +18,5 @@ export function App() {
         fetchData();
     }, []);
 
-    return <main className={tw("text-gray-50")}>{state ? <CV data={state} /> : "Loading..."}</main>;
+    return <main>{state ? <CV data={state} /> : "Loading..."}</main>;
 }

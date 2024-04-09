@@ -1,14 +1,11 @@
-import { CustomScroll } from "react-custom-scroll";
-
-import { Link, Label } from "@/components";
+import { Link, Label, Scroll } from "@/components";
 import { type FilterValue } from "@/provider";
 import { tw, alphaHex } from "@/lib";
-
-import "./scrollbar.css";
 
 export type FieldsProps = {
     data: Record<string, any>;
     properties: string[];
+    colors: Record<string, string>;
     filterValue?: FilterValue["filterValue"];
 };
 
@@ -22,27 +19,28 @@ export type FieldProps = {
     filterValue?: FilterValue["filterValue"];
 };
 
-export function Fields({ data, properties, filterValue }: FieldsProps) {
+export function Fields({ data, properties, colors, filterValue }: FieldsProps) {
     return (
-        <>
+        <div className={tw("overflow-auto", "flex", "flex-col")}>
             <div
                 className={tw(
+                    "header",
                     "flex",
                     "flex-row",
                     "gap-4",
                     "border-b-2",
                     "border-dashed",
-                    "mb-4",
                     "justify-between",
                     "sticky",
                     "top-0",
+                    "z-10",
                     "pt-4",
                     "px-4",
-                    "bg-black",
+                    "bg-black/90",
                     "text-sm"
                 )}
                 style={{
-                    borderColor: alphaHex(data.color, 0.6),
+                    borderColor: alphaHex(colors[data.type], 0.6),
                 }}
             >
                 {data["type"] && (
@@ -50,6 +48,7 @@ export function Fields({ data, properties, filterValue }: FieldsProps) {
                         label={{ value: "@type" }}
                         value={data["type"]}
                         url="https://www.w3.org/TR/json-ld11/#specifying-the-type"
+                        filterValue={filterValue}
                     />
                 )}
                 {data["id"] && (
@@ -57,14 +56,12 @@ export function Fields({ data, properties, filterValue }: FieldsProps) {
                         label={{ value: "@id" }}
                         value={data["id"]}
                         url="https://www.w3.org/TR/json-ld11/#node-identifiers"
+                        filterValue={filterValue}
                     />
                 )}
             </div>
-            <div className={tw("cv", "min-h-0", "min-w-0")}>
-                <CustomScroll
-                    heightRelativeToParent={"100%"}
-                    className={tw("mx-4", "pb-4")}
-                >
+            <Scroll root={{ className: tw("mr-2", "mt-2", "mb-2") }}>
+                <div className={tw("px-4", "pt-2")}>
                     {properties.map((property) => {
                         const value = data[property];
                         if (
@@ -98,9 +95,9 @@ export function Fields({ data, properties, filterValue }: FieldsProps) {
                             );
                         }
                     })}
-                </CustomScroll>
-            </div>
-        </>
+                </div>
+            </Scroll>
+        </div>
     );
 }
 
@@ -149,7 +146,7 @@ export function Field({ label, value, url, header, filterValue }: FieldProps) {
     };
 
     return (
-        <div className={tw("field", "mb-4", "text-wrap")}>
+        <div className={tw("field", "mb-4")}>
             <FieldLabel {...label} />
             {Array.isArray(value)
                 ? value.map((v) => Value(header, v))
