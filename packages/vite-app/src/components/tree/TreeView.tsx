@@ -23,7 +23,7 @@ export function TreeView({ mode, settings }: TreeViewProps) {
                 "flex",
                 "flex-col",
                 "p-2",
-                settings ? tw("max-h-60", "md:max-h-80") : "max-h-[500px]"
+                settings ? tw("max-h-52") : "max-h-[500px]"
             )}
         >
             <Scroll>
