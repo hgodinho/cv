@@ -123,10 +123,8 @@ export function CVProvider({
     }, [ld]);
 
     const filterValue = useCallback((value: string) => {
-        if (import.meta.env.DEV) {
-            if (value.includes(data.config.base)) {
-                return value.replace(data.config.base, "");
-            }
+        if (value.includes(data.config.base)) {
+            return value.replace(data.config.base, "");
         }
         return value;
     }, []);

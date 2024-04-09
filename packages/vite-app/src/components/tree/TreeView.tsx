@@ -1,31 +1,40 @@
 import { useMemo } from "react";
 import { IFlatMetadata } from "react-accessible-treeview/dist/TreeView/utils";
 import { ChevronRight } from "react-feather";
-import { CustomScroll } from "react-custom-scroll";
 import * as RATree from "react-accessible-treeview";
 
 import { Checkbox } from ".";
 import { tw, useTree } from "@/lib";
 import { useTheme, useFilterContext } from "@/provider";
-import { Link as LinkPrimitive } from "@/components";
+import { Link as LinkPrimitive, Scroll } from "@/components";
 
 export type TreeTypeEnum = "filter" | "link";
 
 export type TreeViewProps = {
     mode: TreeTypeEnum;
+    settings: boolean;
 };
 
-export function TreeView({ mode }: TreeViewProps) {
+export function TreeView({ mode, settings }: TreeViewProps) {
     const { treeData, initialSelectedIds, onCheck } = useTree();
     return (
-        <CustomScroll heightRelativeToParent={"100%"}>
-            <Tree
-                treeData={treeData}
-                initialSelectedIds={initialSelectedIds}
-                onCheck={onCheck}
-                mode={mode}
-            />
-        </CustomScroll>
+        <div
+            className={tw(
+                "flex",
+                "flex-col",
+                "p-2",
+                settings ? tw("max-h-60", "md:max-h-80") : "max-h-[500px]"
+            )}
+        >
+            <Scroll>
+                <Tree
+                    treeData={treeData}
+                    initialSelectedIds={initialSelectedIds}
+                    onCheck={onCheck}
+                    mode={mode}
+                />
+            </Scroll>
+        </div>
     );
 }
 
@@ -60,7 +69,7 @@ export function Tree({
     }, [mode, treeData]);
 
     return (
-        <div className={tw("cv", "h-full", "flex", "flex-col", "text-wrap")}>
+        <div className={tw("cv", "mr-4", "mt-2", "flex", "flex-col")}>
             <RATree.default
                 data={treeData}
                 aria-label="Tree View"
