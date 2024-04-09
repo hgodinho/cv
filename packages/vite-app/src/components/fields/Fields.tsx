@@ -21,7 +21,7 @@ export type FieldProps = {
 
 export function Fields({ data, properties, colors, filterValue }: FieldsProps) {
     return (
-        <>
+        <div className={tw("overflow-auto", "flex", "flex-col")}>
             <div
                 className={tw(
                     "header",
@@ -30,7 +30,6 @@ export function Fields({ data, properties, colors, filterValue }: FieldsProps) {
                     "gap-4",
                     "border-b-2",
                     "border-dashed",
-                    "mb-4",
                     "justify-between",
                     "sticky",
                     "top-0",
@@ -61,12 +60,8 @@ export function Fields({ data, properties, colors, filterValue }: FieldsProps) {
                     />
                 )}
             </div>
-            <Scroll
-                viewport={{
-                    className: tw("!block"),
-                }}
-            >
-                <div className={tw("px-4")}>
+            <Scroll root={{ className: tw("mr-2", "mt-2", "mb-2") }}>
+                <div className={tw("px-4", "pt-2")}>
                     {properties.map((property) => {
                         const value = data[property];
                         if (
@@ -102,7 +97,7 @@ export function Fields({ data, properties, colors, filterValue }: FieldsProps) {
                     })}
                 </div>
             </Scroll>
-        </>
+        </div>
     );
 }
 

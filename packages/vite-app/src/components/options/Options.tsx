@@ -25,7 +25,6 @@ export function OptionsView() {
             className={{
                 root: tw(
                     "options",
-
                     "grid",
                     "grid-cols-subgrid",
                     "grid-rows-subgrid",
@@ -43,11 +42,13 @@ export function OptionsView() {
                     "overflow-auto",
                     "col-options",
                     "row-options",
+                    "flex",
+                    "flex-col",
 
                     // responsive
                     !options ? "w-0" : tw("w-4/5", "md:w-full")
                 ),
-                content: tw("bg-black/85"),
+                content: tw("bg-black/90"),
             }}
             rootProps={{
                 style: {
@@ -59,14 +60,19 @@ export function OptionsView() {
             isOpen={options}
             onOpenChange={() => toggleCollapsible("options")}
         >
-            <Options
-                value={selected}
-                onValueChange={(value) => {
-                    setSelected(value);
-                }}
-            />
-            <Settings hidden={!selected.includes("settings")} />
-            <TreeView mode={selected.includes("filter") ? "filter" : "link"} />
+            <div className={tw("flex", "flex-col")}>
+                <Options
+                    value={selected}
+                    onValueChange={(value) => {
+                        setSelected(value);
+                    }}
+                />
+                <Settings hidden={!selected.includes("settings")} />
+                <TreeView
+                    mode={selected.includes("filter") ? "filter" : "link"}
+                    settings={selected.includes("settings")}
+                />
+            </div>
         </Collapsible>
     );
 }

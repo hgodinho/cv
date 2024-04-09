@@ -5,10 +5,8 @@ import React from "react";
 export type ScrollProps = {
     root?: React.ComponentProps<typeof ScrollPrimitive.Root>;
     viewport?: React.ComponentProps<typeof ScrollPrimitive.Viewport>;
-    scrollbar?: React.ComponentProps<
-        typeof ScrollPrimitive.ScrollAreaScrollbar
-    >;
-    thumb?: React.ComponentProps<typeof ScrollPrimitive.ScrollAreaThumb>;
+    scrollbar?: React.ComponentProps<typeof ScrollPrimitive.Scrollbar>;
+    thumb?: React.ComponentProps<typeof ScrollPrimitive.Thumb>;
 };
 
 export function Scroll({
@@ -21,45 +19,70 @@ export function Scroll({
     return (
         <ScrollPrimitive.Root
             {...root}
-            className={tw("overflow-auto", root?.className)}
+            className={tw("flex", "overflow-auto", root?.className)}
         >
             <ScrollPrimitive.Viewport
                 {...viewport}
                 asChild
-                className={tw("viewport", viewport?.className)}
+                className={tw("!block", "viewport", viewport?.className)}
             >
                 {children}
             </ScrollPrimitive.Viewport>
 
-            <ScrollPrimitive.ScrollAreaScrollbar
-                {...scrollbar}
+            <Scrollbar
+                scrollbar={scrollbar}
+                thumb={thumb}
                 orientation="vertical"
-                className={tw(
-                    "scrollbar",
-                    "flex",
-                    "touch-none",
-                    "select-none",
-                    "transition-colors",
-                    "h-full",
-                    "w-2.5",
-                    "border-l",
-                    "border-t-transparent",
-                    scrollbar?.className
-                )}
-            >
-                <ScrollPrimitive.ScrollAreaThumb
-                    {...thumb}
-                    className={tw(
-                        "relative",
-                        "flex-1",
-                        "rounded-full",
-                        "bg-gray-300",
-                        thumb?.className
-                    )}
-                />
-            </ScrollPrimitive.ScrollAreaScrollbar>
+            />
+            <Scrollbar
+                scrollbar={scrollbar}
+                thumb={thumb}
+                orientation="horizontal"
+            />
 
             <ScrollPrimitive.Corner />
         </ScrollPrimitive.Root>
+    );
+}
+
+export function Scrollbar({
+    scrollbar,
+    thumb,
+    orientation,
+}: {
+    scrollbar?: React.ComponentProps<typeof ScrollPrimitive.Scrollbar>;
+    thumb?: React.ComponentProps<typeof ScrollPrimitive.Thumb>;
+    orientation?: "horizontal" | "vertical";
+}) {
+    return (
+        <ScrollPrimitive.Scrollbar
+            {...scrollbar}
+            orientation={orientation}
+            className={tw(
+                "scrollbar",
+                "flex",
+                "touch-none",
+                "select-none",
+                "transition-colors",
+                "h-full",
+                "w-2.5",
+                "border-l",
+                "border-r",
+                "border-gray-500",
+                "border-t-transparent",
+                scrollbar?.className
+            )}
+        >
+            <ScrollPrimitive.Thumb
+                {...thumb}
+                className={tw(
+                    "relative",
+                    "flex-1",
+                    "rounded-none",
+                    "bg-gray-600",
+                    thumb?.className
+                )}
+            />
+        </ScrollPrimitive.Scrollbar>
     );
 }

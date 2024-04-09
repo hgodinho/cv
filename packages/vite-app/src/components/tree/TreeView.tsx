@@ -12,19 +12,29 @@ export type TreeTypeEnum = "filter" | "link";
 
 export type TreeViewProps = {
     mode: TreeTypeEnum;
+    settings: boolean;
 };
 
-export function TreeView({ mode }: TreeViewProps) {
+export function TreeView({ mode, settings }: TreeViewProps) {
     const { treeData, initialSelectedIds, onCheck } = useTree();
     return (
-        <Scroll>
-            <Tree
-                treeData={treeData}
-                initialSelectedIds={initialSelectedIds}
-                onCheck={onCheck}
-                mode={mode}
-            />
-        </Scroll>
+        <div
+            className={tw(
+                "flex",
+                "flex-col",
+                "p-2",
+                settings ? tw("max-h-60", "md:max-h-80") : "max-h-[500px]"
+            )}
+        >
+            <Scroll>
+                <Tree
+                    treeData={treeData}
+                    initialSelectedIds={initialSelectedIds}
+                    onCheck={onCheck}
+                    mode={mode}
+                />
+            </Scroll>
+        </div>
     );
 }
 
@@ -59,7 +69,7 @@ export function Tree({
     }, [mode, treeData]);
 
     return (
-        <div className={tw("cv", "h-full", "flex", "flex-col", "text-wrap")}>
+        <div className={tw("cv", "mr-4", "mt-2", "flex", "flex-col")}>
             <RATree.default
                 data={treeData}
                 aria-label="Tree View"
