@@ -113,7 +113,8 @@ export function Branch({
                 "border-b-2",
                 "hover:text-gray-50",
                 "gap-1",
-                "py-2"
+                "py-2",
+                "cursor-pointer"
             )}
             style={{
                 marginLeft: 32 * (level - 1),
