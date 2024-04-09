@@ -18,7 +18,7 @@ const config: Config = {
             gridTemplateRows: {
                 layout: "32px 600px 128px",
                 "layout-md": "32px 800px 128px",
-                "layout-lg": "32px 700px 128px",
+                "layout-lg": "32px 536px 120px",
             },
             gridColumn: {
                 "options-trigger": "1",
