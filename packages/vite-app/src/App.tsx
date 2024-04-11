@@ -7,7 +7,7 @@ export function App() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetch("henrique-godinho.jsonld").then(
+                const data = await fetch("/henrique-godinho.jsonld").then(
                     (res) => res.json()
                 );
                 setState(data);
