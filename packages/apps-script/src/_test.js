@@ -37,6 +37,15 @@ function test_Entity() {
 
     test("Entity.parseString", () => {
         expect(
+            "object",
+            entity.parseString("fruta=banana; sabor=doce")
+        ).toEqual({
+            fruta: "banana",
+            sabor: "doce",
+        });
+
+        expect(
+            "array<object>",
             entity.parseString(
                 "fruta=banana; sabor=doce | fruta=limão; sabor=cítrico"
             )
@@ -51,36 +60,31 @@ function test_Entity() {
             },
         ]);
 
-        expect(entity.parseString("fruta=banana; sabor=doce")).toEqual({
-            fruta: "banana",
-            sabor: "doce",
-        });
-
-        expect(entity.parseString("fruta=banana")).toBe(
-            "https://hgod.in/cv?fruta=banana"
+        expect("path", entity.parseString("fruta/banana")).toBe(
+            "https://hgod.in/cv?fruta/banana"
         );
 
-        expect(entity.parseString("banana")).toBe("banana");
+        expect("single string", entity.parseString("banana")).toBe("banana");
 
-        expect(entity.parseString("https://hgod.in/cv/?person=1")).toBe(
+        expect("url", entity.parseString("https://hgod.in/cv/?person=1")).toBe(
             "https://hgod.in/cv/?person=1"
         );
 
         expect(
+            "array<path>",
             entity.parseString(
-                "certification=1 | certification=2 | certification=3"
+                "certification/1 | certification/2 | certification/3"
             )
         ).toEqual([
-            "https://hgod.in/cv?certification=1",
-            "https://hgod.in/cv?certification=2",
-            "https://hgod.in/cv?certification=3",
+            "https://hgod.in/cv?certification/1",
+            "https://hgod.in/cv?certification/2",
+            "https://hgod.in/cv?certification/3",
         ]);
 
-        expect(entity.parseString("Godinho | Lopes | Costa")).toEqual([
-            "Godinho",
-            "Lopes",
-            "Costa",
-        ]);
+        expect(
+            "simple array",
+            entity.parseString("Godinho | Lopes | Costa")
+        ).toEqual(["Godinho", "Lopes", "Costa"]);
     });
 
     // test("Entity.toJsonLd", () => {
