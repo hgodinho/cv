@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { FileMinus, FilePlus } from "react-feather";
 
 import { useCVContext, useTheme } from "@/provider";
-import { Fields, Collapsible } from "@/components";
+import { Fields, Collapsible, Header } from "@/components";
 import { tw } from "@/lib";
 
 export function ClassView() {
@@ -87,18 +87,25 @@ export function ClassView() {
             openIcon={<FilePlus size={icon} />}
             closeIcon={<FileMinus size={icon} />}
         >
-            <div className={tw("flex", "flex-col", "h-full", "w-full")}>
+            <article className={tw("flex", "flex-col", "h-full", "w-full")}>
                 {!selected ? (
                     <div className="">Select a class to view more info</div>
                 ) : (
-                    <Fields
-                        data={selected}
-                        properties={properties}
-                        filterValue={filterValue}
-                        colors={colors}
-                    />
+                    <>
+                        <Header
+                            data={selected}
+                            colors={colors}
+                            filterValue={filterValue}
+                        />
+                        <Fields
+                            data={selected}
+                            properties={properties}
+                            filterValue={filterValue}
+                            colors={colors}
+                        />
+                    </>
                 )}
-            </div>
+            </article>
         </Collapsible>
     );
 }
