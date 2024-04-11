@@ -1,7 +1,7 @@
 import { useCallback, useRef, useEffect } from "react";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { useFilterContext, useNetworkSettings, useTheme } from "@/provider";
 
@@ -23,8 +23,7 @@ export function useNetwork() {
         setSelected,
     } = useFilterContext();
 
-    const location = useLocation();
-
+    const { type, id } = useParams();
     const settings = useNetworkSettings();
 
     const {
@@ -87,21 +86,14 @@ export function useNetwork() {
     }, []);
 
     useEffect(() => {
-        if (location.pathname === "/cv") {
-            const search = location.search;
-            if (search) {
-                const found = filteredNodes.find((node) =>
-                    (node.id as string).includes(search)
-                );
-                if (
-                    typeof found !== "undefined" &&
-                    (found.id as string).includes(search)
-                ) {
-                    focusOnClick(found);
-                }
-            }
+        const found = filteredNodes.find((node) => {
+            const search = `${type}/${id}`;
+            return node.id?.toString().includes(search);
+        });
+        if (found) {
+            focusOnClick(found);
         }
-    }, [location]);
+    }, [id, type]);
 
     return {
         ref,
