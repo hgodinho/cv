@@ -19,7 +19,7 @@ export function useNetwork() {
         filteredNodes,
         links,
         filteredLinks,
-        data: { colors },
+        data: { colors, config },
         setSelected,
     } = useFilterContext();
 
@@ -88,7 +88,8 @@ export function useNetwork() {
     useEffect(() => {
         const found = filteredNodes.find((node) => {
             const search = `${type}/${id}`;
-            return node.id?.toString().includes(search);
+            const query = node.id?.toString().split(config.query).pop();
+            return query === search;
         });
         if (found) {
             focusOnClick(found);
