@@ -4,14 +4,17 @@ export function Label({
     children,
     ...props
 }: React.PropsWithChildren<
-    React.LabelHTMLAttributes<HTMLLabelElement | HTMLLegendElement> & {
-        as?: "legend";
+    React.LabelHTMLAttributes<
+        HTMLLabelElement | HTMLLegendElement | HTMLParagraphElement
+    > & {
+        as?: "p" | "label" | "legend";
     }
 >) {
-    const Tag = props.as ?? "label";
+    const { as, ...rest } = props;
+    const Tag = as ?? "p";
     return (
         <Tag
-            {...props}
+            {...rest}
             className={tw("label", "text-sm", "font-bold", props.className)}
         >
             {children}

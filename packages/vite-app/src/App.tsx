@@ -18,5 +18,5 @@ export function App() {
         fetchData();
     }, []);
 
-    return <main>{state ? <CV data={state} /> : "Loading..."}</main>;
+    return state ? <CV data={state} /> : <div>Loading...</div>;
 }

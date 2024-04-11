@@ -42,12 +42,27 @@ export function Fields({ data, properties, filterValue }: FieldsProps) {
     );
 }
 
-export type LabelProps = { url?: string; value: string };
+export type LabelProps = {
+    url?: string;
+    value: string;
+} & React.LabelHTMLAttributes<HTMLLabelElement>;
 
-export function FieldLabel({ url, value }: LabelProps) {
+export function FieldLabel({
+    url,
+    value,
+    children,
+    ...rest
+}: React.PropsWithChildren<LabelProps>) {
     return (
-        <Label className={tw()}>
-            {url ? <Link href={url}>{value}</Link> : value}
+        <Label {...rest}>
+            {url ? (
+                <span>
+                    <Link href={url}>{value}</Link>
+                </span>
+            ) : (
+                value
+            )}
+            {children}
         </Label>
     );
 }
@@ -55,29 +70,47 @@ export function FieldLabel({ url, value }: LabelProps) {
 export type FieldProps = {
     label: LabelProps;
     value: string | string[];
-    url?: string;
+    // list?: boolean;
     filterValue?: FilterValue["filterValue"];
 };
 
-export function Field({ label, value, url, filterValue }: FieldProps) {
-    const Value = (value: string) => {
+export function Field({ label, value, filterValue }: FieldProps) {
+    const Value = ({ value, list }: { value: string; list?: boolean }) => {
         const url = filterValue ? filterValue(value.toString()) : value;
         const linkProps = url.startsWith("http") ? { href: url } : { to: url };
-        return (
-            <p key={value} className={tw("text-wrap")}>
-                {value.toString().startsWith("http") ? (
-                    <Link {...linkProps}>{value}</Link>
-                ) : (
-                    value
-                )}
-            </p>
+
+        const LinkOrValue = (value: string) =>
+            value.toString().startsWith("http") ? (
+                <Link {...linkProps}>{value}</Link>
+            ) : (
+                value
+            );
+
+        return list ? (
+            <li key={value} className={tw("text-lg", "font-normal")}>
+                {LinkOrValue(value)}
+            </li>
+        ) : (
+            <span key={value} className={tw("text-lg", "font-normal")}>
+                {LinkOrValue(value)}
+            </span>
         );
     };
 
     return (
-        <div className={tw("field", "mb-4")}>
-            <FieldLabel {...label} />
-            {Array.isArray(value) ? value.map((v) => Value(v)) : Value(value)}
-        </div>
+        <FieldLabel
+            className={tw("field", "flex", "flex-col", "mb-4")}
+            {...label}
+        >
+            {Array.isArray(value) ? (
+                <ul className={tw("list-[square]", "list-inside", "ml-4")}>
+                    {value.map((value) => (
+                        <Value key={value} value={value} list={true} />
+                    ))}
+                </ul>
+            ) : (
+                Value({ value })
+            )}
+        </FieldLabel>
     );
 }

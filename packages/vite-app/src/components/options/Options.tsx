@@ -14,7 +14,7 @@ export function OptionsView() {
 
     const {
         sizes: { icon },
-        viewPort: { height, isTablet, isDesktop, isMobile },
+        viewPort: { height, isTablet, isDesktop },
         collapsibles: { options },
         toggleCollapsible,
     } = useTheme();
@@ -60,7 +60,7 @@ export function OptionsView() {
             isOpen={options}
             onOpenChange={() => toggleCollapsible("options")}
         >
-            <div className={tw("flex", "flex-col")}>
+            <aside className={tw("flex", "flex-col")}>
                 <Options
                     value={selected}
                     onValueChange={(value) => {
@@ -72,7 +72,7 @@ export function OptionsView() {
                     mode={selected.includes("filter") ? "filter" : "link"}
                     settings={selected.includes("settings")}
                 />
-            </div>
+            </aside>
         </Collapsible>
     );
 }

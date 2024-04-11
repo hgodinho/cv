@@ -70,7 +70,7 @@ export function Tree({
     }, [mode, treeData]);
 
     return (
-        <div className={tw("cv", "mr-4", "mt-2", "flex", "flex-col")}>
+        <nav className={tw("cv", "mr-4", "mt-2", "flex", "flex-col")}>
             <RATree.default
                 data={treeData}
                 aria-label="Tree View"
@@ -80,7 +80,7 @@ export function Tree({
                     return <Branch mode={mode} {...props} />;
                 }}
             />
-        </div>
+        </nav>
     );
 }
 

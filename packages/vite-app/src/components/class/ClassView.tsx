@@ -15,7 +15,7 @@ export function ClassView() {
     const {
         sizes: { icon },
         collapsibles: { class: open },
-        viewPort: { height, isMobile },
+        viewPort: { height },
         toggleCollapsible,
         collapsibleOn,
     } = useTheme();
@@ -87,25 +87,27 @@ export function ClassView() {
             openIcon={<FilePlus size={icon} />}
             closeIcon={<FileMinus size={icon} />}
         >
-            <article className={tw("flex", "flex-col", "h-full", "w-full")}>
-                {!selected ? (
-                    <div className="">Select a class to view more info</div>
-                ) : (
-                    <>
-                        <Header
-                            data={selected}
-                            colors={colors}
-                            filterValue={filterValue}
-                        />
-                        <Fields
-                            data={selected}
-                            properties={properties}
-                            filterValue={filterValue}
-                            colors={colors}
-                        />
-                    </>
-                )}
-            </article>
+            <main>
+                <article className={tw("flex", "flex-col", "h-full", "w-full")}>
+                    {!selected ? (
+                        <div className="">Select a class to view more info</div>
+                    ) : (
+                        <>
+                            <Header
+                                data={selected}
+                                colors={colors}
+                                filterValue={filterValue}
+                            />
+                            <Fields
+                                data={selected}
+                                properties={properties}
+                                filterValue={filterValue}
+                                colors={colors}
+                            />
+                        </>
+                    )}
+                </article>
+            </main>
         </Collapsible>
     );
 }
