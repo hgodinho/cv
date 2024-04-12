@@ -1,20 +1,19 @@
 import { tw } from "@/lib";
 
+export type LabelProps = {
+    as?: React.ElementType;
+} & React.HTMLAttributes<HTMLElement>;
+
 export function Label({
     children,
+    as,
     ...props
-}: React.PropsWithChildren<
-    React.LabelHTMLAttributes<
-        HTMLLabelElement | HTMLLegendElement | HTMLParagraphElement
-    > & {
-        as?: "p" | "label" | "legend";
-    }
->) {
-    const { as, ...rest } = props;
-    const Tag = as ?? "p";
+}: React.PropsWithChildren<LabelProps>) {
+    const Tag = as ?? "div";
+
     return (
         <Tag
-            {...rest}
+            {...props}
             className={tw("label", "text-sm", "font-bold", props.className)}
         >
             {children}
