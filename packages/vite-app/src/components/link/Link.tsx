@@ -4,6 +4,7 @@ import {
     Link as LinkRouter,
     LinkProps as LinkRouterProps,
 } from "react-router-dom";
+import { ExternalLink } from "react-feather";
 
 export type LinkProps = Omit<LinkRouterProps, "to"> & {
     href?: string;
@@ -26,10 +27,17 @@ export function Link({
 
     return (
         <LinkRouter
-            className={tw("text-blue-300", "hover:text-blue-500")}
+            className={tw("text-blue-300", "hover:text-blue-500", "gap-2")}
             {...props}
         >
-            {children}
+            {props.target === "_blank" ? (
+                <span className={tw("inline-flex", "gap-2")}>
+                    {children}
+                    <ExternalLink className={tw("self-center", "w-4", "h-4")} />
+                </span>
+            ) : (
+                children
+            )}
         </LinkRouter>
     );
 }
