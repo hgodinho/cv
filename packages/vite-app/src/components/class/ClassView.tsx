@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { FileMinus, FilePlus } from "react-feather";
 
 import { useCVContext, useTheme } from "@/provider";
-import { Fields, Collapsible, Header } from "@/components";
+import { Body, Collapsible, Header } from "@/components";
 import { tw } from "@/lib";
 
 export function ClassView() {
@@ -98,7 +98,7 @@ export function ClassView() {
                                 colors={colors}
                                 filterValue={filterValue}
                             />
-                            <Fields
+                            <Body
                                 data={selected}
                                 properties={properties}
                                 filterValue={filterValue}

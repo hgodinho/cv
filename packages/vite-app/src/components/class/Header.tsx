@@ -42,22 +42,20 @@ export function Header({ data, colors, filterValue }: HeaderProps) {
                     <Field
                         label={{ value: "@type" }}
                         value={data["type"]}
-                        url="https://www.w3.org/TR/json-ld11/#specifying-the-type"
                         filterValue={filterValue}
+                        find={false}
                     />
                 )}
                 {data["id"] && (
                     <Field
                         label={{ value: "@id" }}
                         value={data["id"]}
-                        url="https://www.w3.org/TR/json-ld11/#node-identifiers"
                         filterValue={filterValue}
+                        find={false}
                     />
                 )}
             </div>
-            <h1
-                className={tw("text-3xl", "font-medium", "italic", "text-wrap")}
-            >
+            <h1 className={tw("text-3xl", "font-medium", "italic")}>
                 {data.name}
             </h1>
         </header>
