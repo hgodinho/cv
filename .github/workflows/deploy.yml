@@ -37,4 +37,4 @@ jobs:
         run: mkdir dist
 
       - name: Build for production
-        run: pnpm build:app
+        run: pnpm build
