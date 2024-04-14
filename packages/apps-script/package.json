@@ -1,8 +1,9 @@
 {
     "name": "@hgod-in-cv/apps-script",
-    "version": "0.1.0",
-    "description": "",
+    "version": "0.2.0-alpha.0",
+    "description": "Simple back-end service made with Google Apps Script",
     "main": "index.js",
+    "author": "Henrique Godinho <ola@hgod.in>",
     "scripts": {
         "open": "clasp open",
         "pull": "clasp pull",
@@ -10,6 +11,5 @@
         "dev": "clasp open && clasp push --watch"
     },
     "keywords": [],
-    "author": "",
     "license": "ISC"
 }
