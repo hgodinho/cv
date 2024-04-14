@@ -2,7 +2,7 @@
     "name": "hgod-in-cv",
     "version": "0.1.0",
     "private": true,
-    "description": "",
+    "description": "Monorepo for Henrique Godinho's CV",
     "keywords": [],
     "license": "ISC",
     "author": "Henrique Godinho <ola@hgod.in>",

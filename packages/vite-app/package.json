@@ -1,7 +1,8 @@
 {
     "name": "@hgod-in-cv/vite-app",
     "version": "0.1.0",
-    "private": true,
+    "description": "Vite App for Henrique Godinho's CV",
+    "author": "Henrique Godinho <ola@hgod.in>",
     "type": "module",
     "scripts": {
         "dev": "vite",
