@@ -89,27 +89,29 @@ export function CVProvider({
         let links: LinkObject[] = [];
         if (ld?.nquads) {
             links = (ld?.nquads as unknown as Array<any>).reduce(
-                (acc, node) => {
+                (acc, link) => {
                     const foundSubject = nodes?.find(
-                        (n) => n.id === node.subject.value
+                        (n) => n.id === link.subject.value
                     );
                     const foundObject = nodes?.find(
-                        (n) => n.id === node.object.value
+                        (n) => n.id === link.object.value
                     );
                     if (foundObject && foundSubject) {
                         // return only relations between two classes, excluding properties
-                        const link = {
-                            source: node.subject.value,
-                            target: node.object.value,
-                            predicate: node.predicate.value.replace(
+                        const linkNode = {
+                            subject: link.subject.value,
+                            object: link.object.value,
+                            predicate: link.predicate.value.replace(
                                 "http://schema.org/",
                                 ""
                             ),
                             value: 10,
+                            source: foundSubject,
+                            target: foundObject,
                             // curvature: 0.5,
                             // rotation: Math.PI / Math.random() * 2,
                         };
-                        acc.push(link);
+                        acc.push(linkNode);
                     }
                     return acc;
                 },

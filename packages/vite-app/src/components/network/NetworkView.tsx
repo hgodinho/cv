@@ -39,6 +39,8 @@ export function NetworkView() {
                 onNodeClick={focusOnClick}
                 linkThreeObject={linkLabel}
                 linkPositionUpdate={linkLabelPosition}
+                linkSource="subject"
+                linkTarget="object"
                 linkThreeObjectExtend={true}
                 {...settings}
             />
