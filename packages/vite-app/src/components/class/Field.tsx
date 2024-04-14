@@ -1,4 +1,4 @@
-import { ReactNode, useCallback } from "react";
+import React, { ReactNode, useCallback } from "react";
 
 import { Link, Label, type LabelProps } from "@/components";
 import { useFilterContext } from "@/provider";
@@ -28,9 +28,8 @@ export function FieldLabel({
 
 export type FieldProps = {
     label: FieldLabelProps;
-    value: string | string[];
+    value: ReactNode;
     find?: boolean;
-    filterValue?: FilterValue["filterValue"];
 };
 
 export function Field({ label, value, find }: FieldProps) {
@@ -84,7 +83,7 @@ export function Field({ label, value, find }: FieldProps) {
                 </p>
             );
         },
-        [nodes, links, find, filterValue]
+        [nodes, find, filterValue]
     );
 
     return (
