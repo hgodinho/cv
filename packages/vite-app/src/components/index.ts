@@ -1,6 +1,5 @@
 export * from "./class";
 export * from "./cv";
-export * from "./fields";
 export * from "./layout";
 export * from "./collapsible";
 export * from "./link";

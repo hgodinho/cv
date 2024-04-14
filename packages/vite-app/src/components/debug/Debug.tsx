@@ -1,11 +1,15 @@
 import { tw } from "@/lib";
 import { useTheme } from "@/provider";
 
-export function Debug() {
+export type Debug = {
+    debug?: boolean;
+};
+
+export function Debug({ debug = true }: Debug) {
     const { viewPort } = useTheme();
 
-    return (
-        import.meta.env.DEV && (
+    if (debug && import.meta.env.DEV) {
+        return (
             <div
                 className={tw(
                     "z-50",
@@ -35,6 +39,6 @@ export function Debug() {
                     </fieldset>
                 ))}
             </div>
-        )
-    );
+        );
+    }
 }

@@ -52,14 +52,16 @@ class Entity {
             return str;
         }
 
-        const operators = ["=", ";", "|"];
+        const operators = ["=", "/", "|"];
 
         if (!operators.some((op) => str.includes(op))) {
             return str; // No operators found, return the string as is.
         }
 
         let data;
+
         if (str.includes(";") && str.includes("|") && str.includes("=")) {
+            // this is a list of objects
             data = str.split("|").map((pair) => {
                 return pair.split(";").reduce((acc, item) => {
                     const [key, value] = item
@@ -74,28 +76,32 @@ class Entity {
             str.includes("=") &&
             !str.includes("|")
         ) {
+            // this is a single object
             data = str.split(";").reduce((acc, item) => {
                 const [key, value] = item.split("=").map((item) => item.trim());
                 acc[key] = value;
                 return acc;
             }, {});
         } else if (
-            str.includes("=") &&
+            str.includes("/") &&
             !str.includes(";") &&
             !str.includes("|")
         ) {
+            // this is a single path pair
             data = str.trim();
         } else if (
             str.includes("|") &&
-            str.includes("=") &&
+            str.includes("/") &&
             !str.includes(";")
         ) {
+            // this is a list of path pairs
             data = str.split("|").map((pair) => pair.trim());
         } else if (
             str.includes("|") &&
-            !str.includes("=") &&
+            !str.includes("/") &&
             !str.includes(";")
         ) {
+            // this is a list of strings
             return str.split("|").map((pair) => pair.trim());
         }
 

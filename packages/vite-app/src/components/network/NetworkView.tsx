@@ -19,7 +19,14 @@ export function NetworkView() {
     } = useNetwork();
 
     return (
-        <div className={tw("absolute", "z-10")}>
+        <div
+            className={tw(
+                "absolute",
+                "z-10",
+                "cursor-grab",
+                "active:cursor-grabbing"
+            )}
+        >
             <ForceGraph3d
                 ref={ref}
                 graphData={{ nodes: filteredNodes, links: filteredLinks }}
@@ -32,6 +39,8 @@ export function NetworkView() {
                 onNodeClick={focusOnClick}
                 linkThreeObject={linkLabel}
                 linkPositionUpdate={linkLabelPosition}
+                linkSource="subject"
+                linkTarget="object"
                 linkThreeObjectExtend={true}
                 {...settings}
             />

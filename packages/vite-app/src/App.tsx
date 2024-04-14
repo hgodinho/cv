@@ -7,7 +7,7 @@ export function App() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetch("henrique-godinho.jsonld").then(
+                const data = await fetch("/henrique-godinho.jsonld").then(
                     (res) => res.json()
                 );
                 setState(data);
@@ -18,5 +18,5 @@ export function App() {
         fetchData();
     }, []);
 
-    return <main>{state ? <CV data={state} /> : "Loading..."}</main>;
+    return state ? <CV data={state} /> : <div>Loading...</div>;
 }

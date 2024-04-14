@@ -2,11 +2,12 @@ import { useMemo } from "react";
 import { IFlatMetadata } from "react-accessible-treeview/dist/TreeView/utils";
 import { ChevronRight } from "react-feather";
 import * as RATree from "react-accessible-treeview";
+import { NavLink } from "react-router-dom";
 
 import { Checkbox } from ".";
 import { tw, useTree } from "@/lib";
 import { useTheme, useFilterContext } from "@/provider";
-import { Link as LinkPrimitive, Scroll } from "@/components";
+import { Scroll } from "@/components";
 
 export type TreeTypeEnum = "filter" | "link";
 
@@ -69,7 +70,7 @@ export function Tree({
     }, [mode, treeData]);
 
     return (
-        <div className={tw("cv", "mr-4", "mt-2", "flex", "flex-col")}>
+        <nav className={tw("cv", "mr-4", "mt-2", "flex", "flex-col")}>
             <RATree.default
                 data={treeData}
                 aria-label="Tree View"
@@ -79,7 +80,7 @@ export function Tree({
                     return <Branch mode={mode} {...props} />;
                 }}
             />
-        </div>
+        </nav>
     );
 }
 
@@ -111,9 +112,10 @@ export function Branch({
                 "flex-row",
                 "items-center",
                 "border-b-2",
-                "hover:text-gray-50",
+                "hover:text-gray-400",
                 "gap-1",
-                "py-2"
+                "py-2",
+                "cursor-pointer"
             )}
             style={{
                 marginLeft: 32 * (level - 1),
@@ -162,11 +164,14 @@ export function BranchLabel({ element }: { element: RATree.INode }) {
     return (
         <div className={tw("mr-2")}>
             {isLink ? (
-                <LinkPrimitive
-                    href={filterValue(element.metadata?.id as string)}
+                <NavLink
+                    to={filterValue(element.metadata?.id as string)}
+                    className={({ isActive }) => {
+                        return tw(isActive ? "text-blue-500" : "");
+                    }}
                 >
                     {element.name}
-                </LinkPrimitive>
+                </NavLink>
             ) : (
                 <span>{element.name}</span>
             )}

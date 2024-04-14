@@ -9,19 +9,24 @@ function parseDate(date) {
     return Utilities.formatDate(new Date(date), "GMT", "yyyy-MM-dd");
 }
 
+function logTest(title, message) {
+    console.log(`${title}: ${message}`);
+}
+
 function test(title, callback) {
     console.log(`${title}`);
     callback();
-    console.log("done", new Date());
+    logTest("done", new Date());
 }
 
-function expect(actual) {
+function expect(toBeExpected, actual) {
     return {
         toBe(expected) {
             if (actual === expected) {
-                console.log("Pass");
+                logTest(toBeExpected, "Pass");
             } else {
-                console.log(
+                logTest(
+                    toBeExpected,
                     `Fail: Expected ${JSON.stringify(
                         expected
                     )}, but received ${JSON.stringify(actual)}`
@@ -30,9 +35,10 @@ function expect(actual) {
         },
         toEqual(expected) {
             if (JSON.stringify(actual) === JSON.stringify(expected)) {
-                console.log("Pass");
+                logTest(toBeExpected, "Pass");
             } else {
-                console.log(
+                logTest(
+                    toBeExpected,
                     `Fail: Expected ${JSON.stringify(
                         expected
                     )}, but received ${JSON.stringify(actual)}`
@@ -47,9 +53,12 @@ function expect(actual) {
                 error = true;
             }
             if (error) {
-                console.log("Pass");
+                logTest(toBeExpected, "Pass");
             } else {
-                console.log("Fail: Expected function to throw an error");
+                logTest(
+                    toBeExpected,
+                    "Fail: Expected function to throw an error"
+                );
             }
         },
     };
