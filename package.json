@@ -10,8 +10,7 @@
     "scripts": {
         "commit": "cz",
         "commit:no-verify": "pnpm commit --no-verify",
-        "dev:app": "nx dev @hgod-in-cv/vite-app",
-        "build:app": "nx build @hgod-in-cv/vite-app"
+        "build": "lerna run build"
     },
     "config": {
         "commitizen": {
