@@ -1,9 +1,8 @@
 import { ReactNode, useCallback } from "react";
 
 import { Link, Label, type LabelProps } from "@/components";
-import { type FilterValue } from "@/provider";
+import { useFilterContext } from "@/provider";
 import { tw } from "@/lib";
-import { useCVContext } from "@/provider";
 
 export type FieldLabelProps = {
     url?: string;
@@ -34,8 +33,8 @@ export type FieldProps = {
     filterValue?: FilterValue["filterValue"];
 };
 
-export function Field({ label, value, find, filterValue }: FieldProps) {
-    const { nodes, links } = useCVContext();
+export function Field({ label, value, find }: FieldProps) {
+    const { nodes, filterValue } = useFilterContext();
 
     find = typeof find !== "undefined" ? find : true;
 

@@ -1,19 +1,15 @@
 import { Scroll, Field } from "@/components";
 import { type FilterValue } from "@/provider";
 import { tw } from "@/lib";
+import { useFilterContext } from "@/provider";
 
-export type DescriptionProps = {
-    data: Record<string, any>;
-    properties: string[];
-    filterValue?: FilterValue["filterValue"];
-};
+export function Description() {
+    const {
+        selected,
+        data: { properties },
+    } = useFilterContext();
 
-export function Description({
-    properties,
-    data,
-    filterValue,
-}: DescriptionProps) {
-    return (
+    return selected ? (
         <section className={tw("px-4", "pt-2", "flex", "flex-col")}>
             <h2
                 className={tw(
@@ -30,9 +26,9 @@ export function Description({
                 Descrição
             </h2>
             {properties.map((property) => {
-                const value = data[property];
+                const value = selected[property];
                 if (
-                    data.hasOwnProperty(property) &&
+                    selected.hasOwnProperty(property) &&
                     typeof value !== "undefined"
                 ) {
                     if ("name" === property) {
@@ -43,16 +39,15 @@ export function Description({
                             key={property}
                             label={{
                                 value: property,
-                                url: `${data["@context"]}/${property}`,
+                                url: `${selected["@context"]}/${property}`,
                             }}
                             value={value}
-                            filterValue={filterValue}
                         />
                     );
                 }
             })}
         </section>
-    );
+    ) : null;
 }
 
 export function Connections() {}
@@ -65,11 +60,8 @@ export function Body({ data, properties, filterValue }: BodyProps) {
     return (
         <div className={tw("overflow-auto", "flex", "flex-col", "bg-black/45")}>
             <Scroll root={{ className: tw("mr-2", "mt-2", "mb-2") }}>
-                <Description
-                    data={data}
-                    properties={properties}
-                    filterValue={filterValue}
-                />
+                <Description />
+                <Connections />
             </Scroll>
         </div>
     );

@@ -1,15 +1,14 @@
 import { tw, alphaHex } from "@/lib";
 import { Field } from "@/components";
-import { type FilterValue } from "@/provider";
+import { useFilterContext } from "@/provider";
 
-export type HeaderProps = {
-    data: Record<string, any>;
-    colors: Record<string, string>;
-    filterValue?: FilterValue["filterValue"];
-};
+export function Header() {
+    const {
+        selected,
+        data: { colors },
+    } = useFilterContext();
 
-export function Header({ data, colors, filterValue }: HeaderProps) {
-    return (
+    return selected ? (
         <header
             className={tw(
                 "header",
@@ -26,7 +25,7 @@ export function Header({ data, colors, filterValue }: HeaderProps) {
                 "bg-black/90"
             )}
             style={{
-                borderColor: alphaHex(colors[data.type], 0.6),
+                borderColor: alphaHex(colors[selected.type], 0.6),
             }}
         >
             <div
@@ -38,26 +37,24 @@ export function Header({ data, colors, filterValue }: HeaderProps) {
                     "text-sm"
                 )}
             >
-                {data["type"] && (
+                {selected["type"] && (
                     <Field
                         label={{ value: "@type" }}
-                        value={data["type"]}
-                        filterValue={filterValue}
+                        value={selected["type"]}
                         find={false}
                     />
                 )}
-                {data["id"] && (
+                {selected["id"] && (
                     <Field
                         label={{ value: "@id" }}
-                        value={data["id"]}
-                        filterValue={filterValue}
+                        value={selected["id"]}
                         find={false}
                     />
                 )}
             </div>
             <h1 className={tw("text-3xl", "font-medium", "italic")}>
-                {data.name}
+                {selected.name}
             </h1>
         </header>
-    );
+    ) : null;
 }

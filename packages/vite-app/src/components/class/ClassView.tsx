@@ -9,7 +9,6 @@ export function ClassView() {
     const {
         data: { properties, colors },
         selected,
-        filterValue,
     } = useCVContext();
 
     const {
@@ -93,17 +92,8 @@ export function ClassView() {
                         <div className="">Select a class to view more info</div>
                     ) : (
                         <>
-                            <Header
-                                data={selected}
-                                colors={colors}
-                                filterValue={filterValue}
-                            />
-                            <Body
-                                data={selected}
-                                properties={properties}
-                                filterValue={filterValue}
-                                colors={colors}
-                            />
+                            <Header />
+                            <Body />
                         </>
                     )}
                 </article>
