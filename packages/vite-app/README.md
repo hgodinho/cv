@@ -1,8 +1,8 @@
-> /packages/next/README.md
+> /packages/vite-app/README.md
 
-# `@hgod-in-cv/next`
+[![Netlify Status](https://api.netlify.com/api/v1/badges/50ac178d-0a03-4aae-b4a5-eeb1ac87b2f6/deploy-status)](https://app.netlify.com/sites/hgodin/deploys)
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# `@hgod-in-cv/vite-app`
 
 ## Getting Started
 
@@ -10,6 +10,12 @@ First, run the development server:
 
 ```bash
 pnpm dev
+```
+
+To fetch the data from the API, you need to run the API server:
+
+```bash
+pnpm get:data
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
