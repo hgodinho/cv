@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy to Netlify
 
 on:
   workflow_dispatch:
@@ -11,6 +11,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: netlify-deploy
 
       - name: Use pnpm cache
         uses: actions/cache@v3
@@ -38,14 +40,3 @@ jobs:
 
       - name: Build for production
         run: pnpm build:app
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist/apps/vite-app
-          cname: hgod.in
-
-env:
-  # Required to deploy to GitHub Pages
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
