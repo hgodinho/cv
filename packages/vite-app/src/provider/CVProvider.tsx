@@ -9,7 +9,7 @@ import {
 import * as jsonld from "jsonld";
 import { JsonLdArray } from "jsonld/jsonld-spec";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FilterProvider } from ".";
 
 export type FilterValue = {
@@ -32,7 +32,6 @@ export type CVContextType = {
     nodes: NodeObject[];
     links: LinkObject[];
     setSelected: (node: NodeObject | null) => void;
-    setSearchParams: (search: URLSearchParams) => void;
 } & FilterValue;
 
 export type JsonLDType = {
@@ -61,7 +60,6 @@ export const defaultCVContext: CVContextType = {
     links: [],
     selected: null,
     setSelected: () => {},
-    setSearchParams: () => {},
     filterValue: () => "",
 };
 
@@ -73,7 +71,6 @@ export function CVProvider({
 }: PropsWithChildren<{ data: CVContextType["data"] }>) {
     const ld = data.data;
 
-    const [_, setSearchParams] = useSearchParams();
     const [selected, setSelected] = useState<NodeObject | null>(null);
 
     const { nodes, links } = useMemo(() => {
@@ -92,27 +89,29 @@ export function CVProvider({
         let links: LinkObject[] = [];
         if (ld?.nquads) {
             links = (ld?.nquads as unknown as Array<any>).reduce(
-                (acc, node) => {
+                (acc, link) => {
                     const foundSubject = nodes?.find(
-                        (n) => n.id === node.subject.value
+                        (n) => n.id === link.subject.value
                     );
                     const foundObject = nodes?.find(
-                        (n) => n.id === node.object.value
+                        (n) => n.id === link.object.value
                     );
                     if (foundObject && foundSubject) {
                         // return only relations between two classes, excluding properties
-                        const link = {
-                            source: node.subject.value,
-                            target: node.object.value,
-                            predicate: node.predicate.value.replace(
+                        const linkNode = {
+                            subject: link.subject.value,
+                            object: link.object.value,
+                            predicate: link.predicate.value.replace(
                                 "http://schema.org/",
                                 ""
                             ),
                             value: 10,
+                            source: foundSubject,
+                            target: foundObject,
                             // curvature: 0.5,
                             // rotation: Math.PI / Math.random() * 2,
                         };
-                        acc.push(link);
+                        acc.push(linkNode);
                     }
                     return acc;
                 },
@@ -129,15 +128,14 @@ export function CVProvider({
         return value;
     }, []);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
-        const params =
-            (selected?.id as string)?.split("?").pop()?.split("=") || [];
-        if (params.length > 1) {
-            const searchParams = new URLSearchParams();
-            searchParams.set(params[0], params[1]);
-            setSearchParams(searchParams);
+        const path = selected?.id?.toString().split(data.config.base).pop();
+        if (path) {
+            navigate(path);
         }
-    }, [selected]);
+    }, [selected, navigate]);
 
     return (
         <CVContext.Provider
@@ -147,7 +145,6 @@ export function CVProvider({
                 nodes,
                 links,
                 setSelected,
-                setSearchParams,
                 filterValue,
             }}
         >

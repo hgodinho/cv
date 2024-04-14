@@ -61,13 +61,7 @@ export function Collapsible({
 
     return (
         <CollapsiblePrimitive.Root
-            className={tw(
-                "collapsible",
-                "z-10",
-                // "flex",
-                // "flex-col",
-                className?.root
-            )}
+            className={tw("collapsible", "z-10", className?.root)}
             open={isCollapsibleOpen}
             onOpenChange={onChange}
             defaultOpen={initialOpen || false}
@@ -101,7 +95,6 @@ export function Collapsible({
             <motion.div
                 animate={{
                     opacity: isCollapsibleOpen ? 1 : 0,
-                    // width: isCollapsibleOpen ? "100%" : 0,
                 }}
                 transition={{
                     duration: 0.3,
@@ -109,6 +102,7 @@ export function Collapsible({
                 className={tw("motion", "overflow-auto", className?.motion)}
             >
                 <CollapsiblePrimitive.Content
+                    asChild
                     className={tw("content", "text-wrap", className?.content)}
                     {...contentProps}
                     forceMount={contentProps?.forceMount || true}
