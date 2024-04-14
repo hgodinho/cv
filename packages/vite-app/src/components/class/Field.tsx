@@ -18,6 +18,7 @@ export function FieldLabel({
     return (
         <Label
             {...rest}
+            as="div"
             className={tw("flex", "flex-col", "gap-2", rest.className)}
         >
             {url ? <Link href={url}>{value}</Link> : value}
