@@ -11,8 +11,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: netlify-deploy
 
       - name: Use pnpm cache
         uses: actions/cache@v3
