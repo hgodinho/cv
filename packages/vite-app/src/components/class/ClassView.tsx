@@ -7,7 +7,7 @@ import { tw } from "@/lib";
 
 export function ClassView() {
     const {
-        data: { properties, colors },
+        data: { colors },
         selected,
     } = useCVContext();
 
