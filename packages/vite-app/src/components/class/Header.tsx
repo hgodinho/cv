@@ -1,11 +1,14 @@
+import { Helmet } from "react-helmet";
+
 import { tw, alphaHex } from "@/lib";
 import { Field } from "@/components";
 import { useFilterContext } from "@/provider";
 
 export function Header() {
     const {
+        headerRef,
         selected,
-        data: { colors },
+        data: { name, colors },
     } = useFilterContext();
 
     return selected ? (
@@ -52,7 +55,14 @@ export function Header() {
                     />
                 )}
             </div>
-            <h1 className={tw("text-3xl", "font-medium", "italic")}>
+            <Helmet>
+                <title>{`${name} - ${selected.name}`}</title>
+            </Helmet>
+            <h1
+                ref={headerRef}
+                tabIndex={-1}
+                className={tw("text-3xl", "font-medium", "italic")}
+            >
                 {selected.name}
             </h1>
         </header>
