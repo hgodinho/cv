@@ -54,7 +54,6 @@ export function Tree({ mode = "link" }: TreeProps) {
                 propagateSelect: true,
                 propagateSelectUpwards: true,
                 togglableSelect: true,
-                defaultSelectedIds: initialSelectedIds,
                 onSelect: (props) => onCheck(props, mode),
             };
         }
@@ -74,6 +73,7 @@ export function Tree({ mode = "link" }: TreeProps) {
                     "focus:*:bg-gray-900",
                     "focus:*:font-bold"
                 )}
+                defaultSelectedIds={initialSelectedIds}
                 expandOnKeyboardSelect={true}
                 nodeRenderer={(props) => {
                     return <Branch mode={mode} {...props} />;
