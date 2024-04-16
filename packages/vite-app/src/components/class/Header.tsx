@@ -61,7 +61,15 @@ export function Header() {
             <h1
                 ref={headerRef}
                 tabIndex={-1}
-                className={tw("text-3xl", "font-medium", "italic")}
+                className={tw(
+                    "text-3xl",
+                    "font-medium",
+                    "italic",
+                    "focus:outline-none",
+                    "focus:underline",
+                    "focus:decoration-dotted",
+                    "focus:underline-offset-4"
+                )}
             >
                 {selected.name}
             </h1>
