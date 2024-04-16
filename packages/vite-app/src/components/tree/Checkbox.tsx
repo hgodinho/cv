@@ -5,7 +5,7 @@ import { useTheme } from "@/provider";
 export function Checkbox(
     props: CheckboxPrimitive.CheckboxProps & {
         variant: "all" | "none" | "some";
-        label?: string;
+        label: string;
     }
 ) {
     const {
@@ -24,14 +24,12 @@ export function Checkbox(
         }
     };
     return (
-        <>
-            <CheckboxPrimitive.Root {...props}>
+        <label htmlFor={props.id}>
+            <CheckboxPrimitive.Root tabIndex={-1} {...props}>
                 <CheckboxPrimitive.Indicator></CheckboxPrimitive.Indicator>
                 <CheckType />
             </CheckboxPrimitive.Root>
-            {props.label ? (
-                <label htmlFor={props.id}>{props.label}</label>
-            ) : null}
-        </>
+            {props.label}
+        </label>
     );
 }
