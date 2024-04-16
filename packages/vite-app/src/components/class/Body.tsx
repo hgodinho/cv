@@ -53,14 +53,13 @@ export function Description() {
 }
 
 export function Connections() {
-    const { connectedTo, selected, nodes, filterValue } = useFilterContext();
+    const { connectedTo, selected, filterValue } = useFilterContext();
 
     const [connections, setConnections] = useState<
         Record<string, LinkObject[]> | undefined
     >();
 
     useEffect(() => {
-        console.log({ connectedTo });
         if (Array.isArray(connectedTo) && connectedTo?.length > 0) {
             const connections: Record<string, LinkObject[]> | undefined =
                 connectedTo?.reduce((acc, link) => {
@@ -94,7 +93,6 @@ export function Connections() {
                 Conexões
             </h2>
             {Object.entries(connections).map(([key, links]) => {
-                console.log({ key, links });
                 return (
                     <Field
                         key={key}

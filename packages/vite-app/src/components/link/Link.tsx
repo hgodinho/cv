@@ -27,11 +27,19 @@ export function Link({
 
     return (
         <LinkRouter
-            className={tw("text-blue-300", "hover:text-blue-500", "gap-2")}
+            className={tw(
+                "text-blue-300",
+                "hover:text-blue-500",
+                "focus:outline-none",
+                "focus:underline",
+                "focus:decoration-dotted",
+                "focus:underline-offset-4",
+                "focus:font-bold"
+            )}
             {...props}
         >
             {props.target === "_blank" ? (
-                <span className={tw("inline-flex", "gap-2")}>
+                <span className={tw("flex", "gap-2")}>
                     {children}
                     <ExternalLink className={tw("self-center", "w-4", "h-4")} />
                 </span>

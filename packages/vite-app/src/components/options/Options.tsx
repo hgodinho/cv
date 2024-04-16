@@ -5,7 +5,6 @@ import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import { tw } from "@/lib";
 import { Collapsible, TreeView, Settings } from "@/components";
 import { useTheme } from "@/provider";
-import buttonStyles from "@/components/button/button.module.scss";
 
 export type OptionsEnum = "filter" | "settings";
 
@@ -55,6 +54,9 @@ export function OptionsView() {
                     height: height - 32,
                 },
             }}
+            triggerProps={{
+                "aria-label": "Menu",
+            }}
             openIcon={<Menu size={icon} />}
             closeIcon={<X size={icon} />}
             isOpen={options}
@@ -87,9 +89,22 @@ export function Options(props: OptionsProps) {
         sizes: { icon },
     } = useTheme();
 
+    const toggleClass = tw(
+        "p-2",
+        "data-[state=on]:bg-gray-800",
+        "data-[state=on]:font-bold",
+        "hover:bg-gray-900",
+        "focus:outline-none",
+        "focus:ring-4",
+        "focus:ring-inset",
+        "focus:ring-gray-500",
+        "focus:focus:bg-gray-700"
+    );
+
     return (
         <ToggleGroup.Root
             type="multiple"
+            aria-label="Opções"
             className={tw(
                 "flex",
                 "items-center",
@@ -97,32 +112,23 @@ export function Options(props: OptionsProps) {
                 "top-0",
                 "bg-black",
                 "border-b",
-                "border-t-2",
-                "z-10"
+                "border-t-2"
             )}
             {...props}
         >
-            <ToggleGroup.Item value="filter" asChild>
-                <button
-                    className={tw(
-                        buttonStyles.button,
-                        "p-2",
-                        "hover:bg-gray-900"
-                    )}
-                >
-                    <Filter size={icon} />
-                </button>
+            <ToggleGroup.Item
+                value="filter"
+                aria-label="Filtrar itens"
+                className={toggleClass}
+            >
+                <Filter size={icon} />
             </ToggleGroup.Item>
-            <ToggleGroup.Item value="settings" asChild>
-                <button
-                    className={tw(
-                        buttonStyles.button,
-                        "p-2",
-                        "hover:bg-gray-900"
-                    )}
-                >
-                    <Sliders size={icon} />
-                </button>
+            <ToggleGroup.Item
+                value="settings"
+                aria-label="Configurações"
+                className={toggleClass}
+            >
+                <Sliders size={icon} />
             </ToggleGroup.Item>
         </ToggleGroup.Root>
     );

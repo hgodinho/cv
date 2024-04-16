@@ -6,7 +6,7 @@ import { Label } from "@/components";
 import { alphaHex, tw } from "@/lib";
 
 export type SliderProps = {
-    label?: string;
+    label: string;
 };
 
 const Slider = React.forwardRef<
@@ -46,14 +46,18 @@ const Slider = React.forwardRef<
     const valueToUse = typeof props.value !== "undefined" ? props.value : value;
 
     return (
-        <div
-            className={tw("flex", "flex-col", "gap-2", "pt-2", "pb-4", "pr-2")}
-        >
-            {typeof label === "undefined" ? null : (
-                <Label htmlFor={props.id} className={tw("mb-2")}>
-                    {label}
-                </Label>
+        <Label
+            className={tw(
+                "flex",
+                "flex-col",
+                "gap-2",
+                "pt-2",
+                "pb-4",
+                "pr-2",
+                "mb-2"
             )}
+        >
+            {label}
             <div className={tw("flex", "flex-row", "mx-2", "gap-2")}>
                 {valueToUse.map((v, i) => (
                     <input
@@ -76,17 +80,19 @@ const Slider = React.forwardRef<
                             "[&::-webkit-inner-spin-button]:appearance-none",
                             "ring-offset-background",
                             "placeholder:text-muted-foreground",
-                            "focus-visible:outline-none",
-                            "focus-visible:ring-2",
-                            "focus-visible:ring-ring",
-                            "focus-visible:ring-offset-2",
+                            "focus:outline-none",
+                            "focus:ring-4",
+                            "focus:ring-inset",
+                            "focus:ring-gray-600",
                             "disabled:cursor-not-allowed",
                             "disabled:opacity-50"
                         )}
+                        tabIndex={-1}
                         value={v}
                         onChange={(e) => {
                             onInputChange(parseFloat(e.target.value), i);
                         }}
+                        aria-label={label}
                     />
                 ))}
                 <SliderPrimitive.Root
@@ -129,22 +135,22 @@ const Slider = React.forwardRef<
                             "rounded-full",
                             "border-2",
                             "border-white",
-                            "bg-black/70",
-                            "ring-offset-background",
+                            "bg-black/60",
                             "transition-colors",
-                            "focus-visible:outline-none",
-                            "focus-visible:ring-2",
-                            "focus-visible:ring-ring",
-                            "focus-visible:ring-offset-2",
+                            "focus:outline-none",
+                            "focus:ring-4",
+                            "focus:ring-inset",
+                            "focus:ring-gray-600",
                             "disabled:pointer-events-none",
                             "disabled:opacity-50"
                         )}
                     />
                 </SliderPrimitive.Root>
             </div>
-        </div>
+        </Label>
     );
 });
+
 Slider.displayName = SliderPrimitive.Root.displayName;
 
 export { Slider };

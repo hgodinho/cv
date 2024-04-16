@@ -23,7 +23,7 @@ export function CV({ data }: { data: CVContextType["data"] }) {
                     <Layout>
                         <OptionsView />
                         <ClassView />
-                        <Debug />
+                        <Debug debug={false} />
                     </Layout>
                 </NetworkSettingsProvider>
             </CVProvider>
