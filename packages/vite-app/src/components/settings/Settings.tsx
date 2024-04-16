@@ -43,7 +43,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                     <div className={tw("ml-4")}>
                         <Slider
                             id="nodeOpacity"
-                            label="Opacidade"
+                            label="Opacidade dos nós"
                             min={0.1}
                             max={1}
                             step={0.01}
@@ -55,10 +55,10 @@ export function Settings({ hidden = false }: SettingsProps) {
                         />
                         <Slider
                             id="nodeRelSize"
-                            label="Tamanho"
+                            label="Tamanho dos nós"
                             min={2}
                             max={12}
-                            step={0.1}
+                            step={0.5}
                             defaultValue={[settings.nodeRelSize]}
                             value={[settings.nodeRelSize]}
                             onValueChange={(value) => {
@@ -67,9 +67,9 @@ export function Settings({ hidden = false }: SettingsProps) {
                         />
                         <Slider
                             id="nodeResolution"
-                            label="Resolução"
+                            label="Resolução dos nós"
                             min={1}
-                            max={56}
+                            max={24}
                             step={1}
                             defaultValue={[settings.nodeResolution]}
                             value={[settings.nodeResolution]}
@@ -83,7 +83,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                     <Label className={tw()}>Links</Label>
                     <div className={tw("ml-4")}>
                         <Switch
-                            label="Partículas"
+                            label="Partículas nos links?"
                             checked={particles}
                             onCheckedChange={setParticles}
                         />
@@ -114,8 +114,8 @@ export function Settings({ hidden = false }: SettingsProps) {
                                     id="linkDirectionalParticleWidth"
                                     label="Tamanho da partícula"
                                     min={1}
-                                    max={4}
-                                    step={0.01}
+                                    max={3}
+                                    step={0.05}
                                     defaultValue={[
                                         settings.linkDirectionalParticleWidth ??
                                             1,
@@ -135,7 +135,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                                     id="linkDirectionalParticleResolution"
                                     label="Resolução da partícula"
                                     min={2}
-                                    max={16}
+                                    max={8}
                                     step={1}
                                     defaultValue={[
                                         settings.linkDirectionalParticleResolution ??
@@ -156,10 +156,10 @@ export function Settings({ hidden = false }: SettingsProps) {
                         )}
                         <Slider
                             id="linkWidth"
-                            label="Espessura"
+                            label="Espessura do link"
                             min={0.1}
                             max={3}
-                            step={0.01}
+                            step={0.05}
                             defaultValue={[settings.linkWidth]}
                             value={[settings.linkWidth]}
                             onValueChange={(value) => {
@@ -168,10 +168,10 @@ export function Settings({ hidden = false }: SettingsProps) {
                         />
                         <Slider
                             id="linkDirectionalArrowLength"
-                            label="Indicador de direção"
+                            label="Indicador de direção do link"
                             min={0}
                             max={3}
-                            step={0.01}
+                            step={0.05}
                             defaultValue={[settings.linkDirectionalArrowLength]}
                             value={[settings.linkDirectionalArrowLength]}
                             onValueChange={(value) => {
@@ -183,7 +183,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                         />
                         <Slider
                             id="linkOpacity"
-                            label="Opacidade"
+                            label="Opacidade do link"
                             min={0.1}
                             max={1}
                             step={0.01}
