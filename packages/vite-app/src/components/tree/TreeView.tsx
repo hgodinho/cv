@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { IFlatMetadata } from "react-accessible-treeview/dist/TreeView/utils";
 import { ChevronRight } from "react-feather";
 import * as RATree from "react-accessible-treeview";
 import { NavLink } from "react-router-dom";
@@ -17,7 +16,6 @@ export type TreeViewProps = {
 };
 
 export function TreeView({ mode, settings }: TreeViewProps) {
-    const { treeData, initialSelectedIds, onCheck } = useTree();
     return (
         <div
             className={tw(
@@ -28,54 +26,55 @@ export function TreeView({ mode, settings }: TreeViewProps) {
             )}
         >
             <Scroll>
-                <Tree
-                    treeData={treeData}
-                    initialSelectedIds={initialSelectedIds}
-                    onCheck={onCheck}
-                    mode={mode}
-                />
+                <Tree mode={mode} />
             </Scroll>
         </div>
     );
 }
 
 export type TreeProps = {
-    treeData: RATree.INode<IFlatMetadata>[];
-    initialSelectedIds: RATree.NodeId[];
     mode: TreeViewProps["mode"];
-    onCheck: (props: RATree.ITreeViewOnSelectProps) => void;
 };
 
-export function Tree({
-    treeData,
-    initialSelectedIds,
-    onCheck,
-    mode = "link",
-}: TreeProps) {
+export function Tree({ mode = "link" }: TreeProps) {
+    const { treeData, initialSelectedIds, onCheck } = useTree();
+
     const { filterProps } = useMemo(() => {
-        let filterProps = {};
+        let filterProps: Omit<RATree.ITreeViewProps, "data" | "nodeRenderer"> =
+            {
+                multiSelect: false,
+                propagateSelect: false,
+                propagateSelectUpwards: false,
+                togglableSelect: true,
+                onSelect: (props) => onCheck(props, mode),
+            };
         if (mode === "filter") {
             filterProps = {
                 multiSelect: true,
                 propagateSelect: true,
                 propagateSelectUpwards: true,
                 togglableSelect: true,
-                onSelect: onCheck,
+                onSelect: (props) => onCheck(props, mode),
             };
         }
-
         return {
             filterProps,
         };
-    }, [mode, treeData]);
+    }, [mode]);
 
     return (
         <nav className={tw("cv", "mr-4", "mt-2", "flex", "flex-col")}>
             <RATree.default
-                data={treeData}
-                aria-label="Tree View"
-                defaultSelectedIds={initialSelectedIds}
                 {...filterProps}
+                data={treeData}
+                aria-label="Árvore de dados"
+                className={tw(
+                    "*:outline-none",
+                    "focus:*:bg-gray-900",
+                    "focus:*:font-bold"
+                )}
+                defaultSelectedIds={initialSelectedIds}
+                expandOnKeyboardSelect={true}
                 nodeRenderer={(props) => {
                     return <Branch mode={mode} {...props} />;
                 }}
@@ -102,20 +101,30 @@ export function Branch({
         sizes: { icon },
     } = useTheme();
 
+    const nodeProps = getNodeProps({
+        onClick: handleExpand,
+    });
+
     return (
         <div
-            {...getNodeProps({
-                onClick: handleExpand,
-            })}
+            {...nodeProps}
             className={tw(
+                nodeProps.className,
                 "flex",
                 "flex-row",
                 "items-center",
                 "border-b-2",
-                "hover:text-gray-400",
                 "gap-1",
                 "py-2",
-                "cursor-pointer"
+                "cursor-pointer",
+                "hover:text-blue-300",
+                "focus:outline-none",
+                "focus:font-bold",
+                "focus:decoration-dotted",
+                "focus:underline-offset-4",
+                "focus:underline",
+                "focus:text-gray-200",
+                "focus:bg-gray-900"
             )}
             style={{
                 marginLeft: 32 * (level - 1),
@@ -124,6 +133,7 @@ export function Branch({
                         ? (element.metadata.color as string)
                         : undefined,
             }}
+            aria-label={isBranch ? element.name : undefined}
         >
             {isBranch && (
                 <ChevronRight
@@ -161,20 +171,20 @@ export function Branch({
 export function BranchLabel({ element }: { element: RATree.INode }) {
     const { filterValue } = useFilterContext();
     const isLink = typeof element.metadata?.id !== "undefined";
-    return (
-        <div className={tw("mr-2")}>
-            {isLink ? (
-                <NavLink
-                    to={filterValue(element.metadata?.id as string)}
-                    className={({ isActive }) => {
-                        return tw(isActive ? "text-blue-500" : "");
-                    }}
-                >
-                    {element.name}
-                </NavLink>
-            ) : (
-                <span>{element.name}</span>
-            )}
-        </div>
+    return isLink ? (
+        <NavLink
+            to={filterValue(element.metadata?.id as string)}
+            tabIndex={-1}
+            className={({ isActive }) => {
+                return tw(
+                    isActive ? tw("text-blue-400", "font-bold") : "",
+                    "mr-2"
+                );
+            }}
+        >
+            {element.name}
+        </NavLink>
+    ) : (
+        <span className={tw("mr-2")}>{element.name}</span>
     );
 }

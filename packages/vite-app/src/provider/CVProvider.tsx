@@ -5,6 +5,7 @@ import {
     useMemo,
     useCallback,
     useEffect,
+    useRef,
 } from "react";
 import * as jsonld from "jsonld";
 import { JsonLdArray } from "jsonld/jsonld-spec";
@@ -17,7 +18,9 @@ export type FilterValue = {
 };
 
 export type CVContextType = {
+    headerRef: React.RefObject<HTMLHeadingElement>;
     data: {
+        name: string;
         properties: string[];
         config: {
             base: string;
@@ -43,7 +46,9 @@ export type JsonLDType = {
 };
 
 export const defaultCVContext: CVContextType = {
+    headerRef: { current: null },
     data: {
+        name: "hgod.in",
         properties: [],
         config: {
             base: "",
@@ -70,6 +75,8 @@ export function CVProvider({
     data,
 }: PropsWithChildren<{ data: CVContextType["data"] }>) {
     const ld = data.data;
+
+    const headerRef = useRef<HTMLHeadingElement>(null);
 
     const [selected, setSelected] = useState<NodeObject | null>(null);
 
@@ -134,13 +141,19 @@ export function CVProvider({
         const path = selected?.id?.toString().split(data.config.base).pop();
         if (path) {
             navigate(path);
+            headerRef.current?.focus();
         }
     }, [selected, navigate]);
 
     return (
         <CVContext.Provider
             value={{
-                data,
+                ...defaultCVContext,
+                data: {
+                    ...defaultCVContext.data,
+                    ...data,
+                },
+                headerRef,
                 selected,
                 nodes,
                 links,

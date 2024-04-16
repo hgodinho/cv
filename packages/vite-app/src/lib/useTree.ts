@@ -7,11 +7,14 @@ import {
 
 import { useFilterContext } from "@/provider";
 import { alphaHex } from ".";
+import type { TreeViewProps } from "@/components";
 
 export function useTree() {
     const {
         data: { colors },
         nodes,
+        filteredNodes,
+        setSelected,
         filterNodes,
         filterLinks,
     } = useFilterContext();
@@ -74,7 +77,21 @@ export function useTree() {
     }, [nodes]);
 
     const onCheck = useCallback(
-        (props: ITreeViewOnNodeSelectProps) => {
+        (props: ITreeViewOnNodeSelectProps, mode: TreeViewProps["mode"]) => {
+            if (mode === "link") {
+                // this is a hack to make sure the selected node is the last one
+                if (props.element.id !== props.treeState?.lastUserSelect) {
+                    return;
+                }
+                const found = filteredNodes.find(
+                    (node) => node.id === props.element.id
+                );
+                if (found) {
+                    setSelected(found);
+                }
+                return;
+            }
+
             filterNodes((filteredNodes, nodes) => {
                 const nodesFiltered = nodes.filter((node) => {
                     // @ts-ignore
@@ -103,7 +120,7 @@ export function useTree() {
                 return linksFiltered;
             });
         },
-        [filterNodes, filterLinks]
+        [filteredNodes]
     );
 
     useEffect(() => {

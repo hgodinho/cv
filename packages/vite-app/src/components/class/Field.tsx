@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback } from "react";
+import React, { Key, ReactNode, useCallback } from "react";
 
 import { Link, Label, type LabelProps } from "@/components";
 import { useFilterContext } from "@/provider";
@@ -19,7 +19,7 @@ export function FieldLabel({
         <Label
             {...rest}
             as="div"
-            className={tw("flex", "flex-col", "gap-2", rest.className)}
+            className={tw("flex", "flex-col", "mb-6", "gap-2", rest.className)}
         >
             {url ? <Link href={url}>{value}</Link> : value}
             {children}
@@ -88,11 +88,11 @@ export function Field({ label, value, find }: FieldProps) {
     );
 
     return (
-        <FieldLabel className={tw("field", "mb-6")} {...label}>
+        <FieldLabel className={tw("field")} {...label}>
             {Array.isArray(value) ? (
                 <ul className={tw("list-[square]", "list-inside", "ml-4")}>
-                    {value.map((value) => (
-                        <Value key={value} value={value} list={true} />
+                    {value.map((value: ReactNode, i: Key) => (
+                        <Value key={i} value={value} list={true} />
                     ))}
                 </ul>
             ) : (

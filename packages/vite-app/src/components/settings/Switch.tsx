@@ -4,12 +4,22 @@ import * as SwitchPrimitive from "@radix-ui/react-switch";
 import { Label } from "@/components";
 
 export type SwitchProps = {
-    label?: string;
+    label: string;
 } & React.ComponentProps<typeof SwitchPrimitive.Root>;
 
 export function Switch({ label, ...props }: SwitchProps) {
     return (
-        <div className={tw("mb-4")}>
+        <Label
+            className={tw(
+                "flex",
+                "flex-row",
+                "gap-2",
+                "pt-2",
+                "pb-4",
+                "pr-2",
+                "mb-2"
+            )}
+        >
             <SwitchPrimitive.Root
                 className={tw(
                     "peer",
@@ -23,15 +33,14 @@ export function Switch({ label, ...props }: SwitchProps) {
                     "border-2",
                     "border-transparent",
                     "transition-colors",
-                    "focus-visible:outline-none",
-                    "focus-visible:ring-2",
-                    "focus-visible:ring-ring",
-                    "focus-visible:ring-offset-2",
-                    "focus-visible:ring-offset-background",
+                    "focus:outline-none",
+                    "focus:ring-4",
+                    "focus:ring-inset",
+                    "focus:ring-gray-600",
                     "disabled:cursor-not-allowed",
-                    "disabled:opacity-50",
-                    "data-[state=checked]:bg-white/90",
-                    "data-[state=unchecked]:bg-white/40"
+                    "disabled:bg-gray-400",
+                    "data-[state=checked]:bg-gray-50",
+                    "data-[state=unchecked]:bg-gray-400"
                 )}
                 {...props}
                 name={props.id}
@@ -52,11 +61,7 @@ export function Switch({ label, ...props }: SwitchProps) {
                     )}
                 />
             </SwitchPrimitive.Root>
-            {label && (
-                <Label className={tw("ml-2")} htmlFor={props.id}>
-                    {label}
-                </Label>
-            )}
-        </div>
+            {label}
+        </Label>
     );
 }
