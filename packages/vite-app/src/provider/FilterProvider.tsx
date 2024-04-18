@@ -78,3 +78,8 @@ export function FilterProvider({ children }: React.PropsWithChildren<{}>) {
         </FilterContext.Provider>
     );
 }
+
+export function useFilterContext() {
+    const context = useContext(FilterContext);
+    return context;
+}

@@ -6,6 +6,7 @@ import {
     useCallback,
     useEffect,
     useRef,
+    useContext,
 } from "react";
 import * as jsonld from "jsonld";
 import { JsonLdArray } from "jsonld/jsonld-spec";
@@ -164,4 +165,9 @@ export function CVProvider({
             <FilterProvider>{children}</FilterProvider>
         </CVContext.Provider>
     );
+}
+
+export function useCVContext() {
+    const context = useContext(CVContext);
+    return context;
 }
