@@ -1,85 +1,96 @@
 import {
     createContext,
     PropsWithChildren,
-    useState,
     useMemo,
-    useCallback,
     useEffect,
     useRef,
     useContext,
+    useReducer,
+    useCallback,
 } from "react";
-import * as jsonld from "jsonld";
-import { JsonLdArray } from "jsonld/jsonld-spec";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import { useNavigate } from "react-router-dom";
 import { FilterProvider } from ".";
+import { JsonLDType } from "@/types";
 
-export type FilterValue = {
-    filterValue: (value: string) => string;
+export type CVContextTypeData = {
+    name: string;
+    properties: string[];
+    config: {
+        base: string;
+        namespace: string;
+        url: string;
+        query: string;
+    };
+    data: JsonLDType;
+    colors: Record<string, string>;
+    selected: NodeObject | null;
 };
 
 export type CVContextType = {
     headerRef: React.RefObject<HTMLHeadingElement>;
-    data: {
-        name: string;
-        properties: string[];
-        config: {
-            base: string;
-            namespace: string;
-            url: string;
-            query: string;
-        };
-        data: JsonLDType;
-        colors: Record<string, string>;
-    };
-    selected: NodeObject | null;
+    data: CVContextTypeData;
     nodes: NodeObject[];
     links: LinkObject[];
     setSelected: (node: NodeObject | null) => void;
-} & FilterValue;
+};
 
-export type JsonLDType = {
-    raw: Record<string, any>;
-    expanded?: JsonLdArray;
-    compacted?: jsonld.NodeObject;
-    flattened?: jsonld.NodeObject;
-    nquads?: object;
+export const defaultData = {
+    name: "hgod.in",
+    properties: [],
+    config: {
+        base: "",
+        namespace: "",
+        url: "",
+        query: "",
+    },
+    data: {
+        raw: { "@context": {}, "@graph": [] },
+    },
+    colors: {},
+    selected: null,
 };
 
 export const defaultCVContext: CVContextType = {
     headerRef: { current: null },
-    data: {
-        name: "hgod.in",
-        properties: [],
-        config: {
-            base: "",
-            namespace: "",
-            url: "",
-            query: "",
-        },
-        data: {
-            raw: { "@context": {}, "@graph": [] },
-        },
-        colors: {},
-    },
+    data: defaultData,
     nodes: [],
     links: [],
-    selected: null,
     setSelected: () => {},
-    filterValue: () => "",
 };
 
 export const CVContext = createContext<CVContextType>(defaultCVContext);
 
-export function CVProvider({
-    children,
-    data,
-}: PropsWithChildren<{ data: CVContextType["data"] }>) {
+export function CVProvider({ children }: PropsWithChildren<{}>) {
+    const [data, setState] = useReducer(
+        (s: CVContextTypeData, a: Partial<CVContextTypeData>) => ({
+            ...s,
+            ...a,
+        }),
+        defaultData
+    );
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await fetch("/henrique-godinho.jsonld").then(
+                    (res) => res.json()
+                );
+                setState(data);
+            } catch (e) {
+                console.error(e);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const setSelected = useCallback((node: NodeObject | null) => {
+        setState({ selected: node });
+    }, []);
+
     const ld = data.data;
 
     const headerRef = useRef<HTMLHeadingElement>(null);
-
-    const [selected, setSelected] = useState<NodeObject | null>(null);
 
     const { nodes, links } = useMemo(() => {
         let nodes: NodeObject[] = [];
@@ -129,22 +140,18 @@ export function CVProvider({
         return { nodes, links };
     }, [ld]);
 
-    const filterValue = useCallback((value: string) => {
-        if (value.includes(data.config.base)) {
-            return value.replace(data.config.base, "");
-        }
-        return value;
-    }, []);
-
     const navigate = useNavigate();
 
     useEffect(() => {
-        const path = selected?.id?.toString().split(data.config.base).pop();
+        const path = data.selected?.id
+            ?.toString()
+            .split(data.config.base)
+            .pop();
         if (path) {
             navigate(path);
             headerRef.current?.focus();
         }
-    }, [selected, navigate]);
+    }, [data.selected, navigate]);
 
     return (
         <CVContext.Provider
@@ -155,11 +162,9 @@ export function CVProvider({
                     ...data,
                 },
                 headerRef,
-                selected,
                 nodes,
                 links,
                 setSelected,
-                filterValue,
             }}
         >
             <FilterProvider>{children}</FilterProvider>

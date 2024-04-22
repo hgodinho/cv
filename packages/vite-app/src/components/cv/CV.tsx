@@ -1,11 +1,6 @@
 import React from "react";
 
-import {
-    CVProvider,
-    type CVContextType,
-    NetworkSettingsProvider,
-    ThemeProvider,
-} from "@/provider";
+import { CVProvider, NetworkSettingsProvider, ThemeProvider } from "@/provider";
 import {
     Layout,
     ClassView,
@@ -14,10 +9,10 @@ import {
     Debug,
 } from "@/components";
 
-export function CV({ data }: { data: CVContextType["data"] }) {
+export function CV() {
     return (
         <ThemeProvider>
-            <CVProvider data={data}>
+            <CVProvider>
                 <NetworkSettingsProvider>
                     <NetworkView />
                     <Layout>

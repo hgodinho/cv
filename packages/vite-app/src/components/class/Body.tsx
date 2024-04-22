@@ -7,8 +7,7 @@ import { useFilterContext } from "@/provider";
 
 export function Description() {
     const {
-        selected,
-        data: { properties },
+        data: { properties, selected },
     } = useFilterContext();
 
     return selected ? (
@@ -53,7 +52,10 @@ export function Description() {
 }
 
 export function Connections() {
-    const { connectedTo, selected } = useFilterContext();
+    const {
+        connectedTo,
+        data: { selected },
+    } = useFilterContext();
 
     const [connections, setConnections] = useState<
         Record<string, LinkObject[]> | undefined

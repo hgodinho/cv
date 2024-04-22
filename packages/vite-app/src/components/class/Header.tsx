@@ -7,8 +7,7 @@ import { useFilterContext } from "@/provider";
 export function Header() {
     const {
         headerRef,
-        selected,
-        data: { name, colors },
+        data: { name, colors, selected },
     } = useFilterContext();
 
     return selected ? (
