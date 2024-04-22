@@ -53,7 +53,7 @@ export function Description() {
 }
 
 export function Connections() {
-    const { connectedTo, selected, filterValue } = useFilterContext();
+    const { connectedTo, selected } = useFilterContext();
 
     const [connections, setConnections] = useState<
         Record<string, LinkObject[]> | undefined
@@ -106,7 +106,7 @@ export function Connections() {
                             return typeof link.source !== "string" ? (
                                 <React.Fragment key={index}>
                                     {link.source.type}{" "}
-                                    <Link to={filterValue(link.source.id)}>
+                                    <Link to={link.source.id}>
                                         {link.source.name}
                                     </Link>
                                 </React.Fragment>

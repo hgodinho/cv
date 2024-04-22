@@ -169,11 +169,10 @@ export function Branch({
 }
 
 export function BranchLabel({ element }: { element: RATree.INode }) {
-    const { filterValue } = useFilterContext();
     const isLink = typeof element.metadata?.id !== "undefined";
     return isLink ? (
         <NavLink
-            to={filterValue(element.metadata?.id as string)}
+            to={element.metadata?.id as string}
             tabIndex={-1}
             className={({ isActive }) => {
                 return tw(

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { tw } from "@/lib";
+import { tw, useFilteredURL } from "@/lib";
 import {
     Link as LinkRouter,
     LinkProps as LinkRouterProps,
@@ -17,13 +17,8 @@ export function Link({
     to,
     ...rest
 }: React.PropsWithChildren<LinkProps>) {
-    const props = useMemo<LinkRouterProps>(() => {
-        return {
-            ...rest,
-            target: href ? "_blank" : "_self",
-            to: href || to || "",
-        };
-    }, [href, to, rest]);
+    const target = useMemo(() => (href ? "_blank" : "_self"), [href]);
+    const location = useFilteredURL(to || href || "");
 
     return (
         <LinkRouter
@@ -36,9 +31,11 @@ export function Link({
                 "focus:underline-offset-4",
                 "focus:font-bold"
             )}
-            {...props}
+            target={target}
+            to={location}
+            {...rest}
         >
-            {props.target === "_blank" ? (
+            {target === "_blank" ? (
                 <span className={tw("flex", "gap-2")}>
                     {children}
                     <ExternalLink className={tw("self-center", "w-4", "h-4")} />

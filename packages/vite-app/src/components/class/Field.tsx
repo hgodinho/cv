@@ -34,17 +34,13 @@ export type FieldProps = {
 };
 
 export function Field({ label, value, find }: FieldProps) {
-    const { nodes, filterValue } = useFilterContext();
+    const { nodes } = useFilterContext();
 
     find = typeof find !== "undefined" ? find : true;
 
     const Value = useCallback(
         ({ value, list }: { value: ReactNode; list?: boolean }) => {
-            const url = filterValue
-                ? filterValue(value ? value.toString() : "")
-                : value
-                ? value.toString()
-                : "";
+            const url = value ? value.toString() : "";
 
             if (value?.toString().startsWith("http") && find) {
                 const found = nodes.find((node) => node["id"] === value);
@@ -84,7 +80,7 @@ export function Field({ label, value, find }: FieldProps) {
                 </p>
             );
         },
-        [nodes, find, filterValue]
+        [nodes, find]
     );
 
     return (
