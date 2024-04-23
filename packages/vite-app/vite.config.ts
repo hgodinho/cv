@@ -1,22 +1,26 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import viteTsConfigPaths from "vite-tsconfig-paths";
+import vike from "vike/plugin";
 
 export default defineConfig({
     root: __dirname,
-    plugins: [react(), viteTsConfigPaths()],
-    server: {
-        open: true,
-        port: 3000,
-    },
     base: "/",
+    plugins: [
+        react(),
+        vike({
+            redirects: {
+                "/": "/cv/person/henrique-godinho",
+                "/cv": "/cv/person/henrique-godinho",
+            },
+        }),
+    ],
     build: {
         outDir: "../../dist/apps/vite-app",
         sourcemap: true,
     },
-    css: {
-        modules: {
-            localsConvention: "camelCaseOnly",
+    resolve: {
+        alias: {
+            "#root": __dirname + "/src",
         },
     },
 });

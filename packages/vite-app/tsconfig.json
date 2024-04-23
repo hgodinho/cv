@@ -1,22 +1,30 @@
 {
     "compilerOptions": {
-        "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
-        "skipLibCheck": true,
-        "strict": true,
         "noEmit": true,
-        "esModuleInterop": true,
-        "module": "esnext",
-        "moduleResolution": "bundler",
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "jsx": "preserve",
         "incremental": true,
+        "strict": true,
+        "module": "ES2020",
+        "target": "ES2020",
+        // Doesn't apply to server/, see ts-node config down below and server/tsconfig.json
+        "moduleResolution": "Bundler",
+        "lib": ["DOM", "DOM.Iterable", "ESNext"],
+        "types": ["vite/client"],
+        "jsx": "react-jsx",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
         "paths": {
-            "@/*": ["./src/*"],
-            "@tests/*": ["./tests/*"]
+            "#root/*": ["./src/*"]
         }
     },
-    "include": ["**/*.ts", "**/*.tsx"],
-    "exclude": ["node_modules", ".bin"]
+    "ts-node": {
+        "transpileOnly": true,
+        "esm": true,
+        "compilerOptions": {
+            "module": "Node16",
+            "moduleResolution": "Node16"
+        }
+    }
 }

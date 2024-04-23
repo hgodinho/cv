@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-    content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx,mdx}"],
+    content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
     theme: {
         screens: {
             sm: "480px",

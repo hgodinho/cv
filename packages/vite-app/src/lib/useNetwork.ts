@@ -1,7 +1,7 @@
 import { useCallback, useRef, useEffect } from "react";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
-import { useParams } from "react-router-dom";
+import { useParams } from "#root/provider";
 
 import { useFilterContext, useNetworkSettings, useTheme } from "#root/provider";
 
@@ -23,7 +23,8 @@ export function useNetwork() {
         setSelected,
     } = useFilterContext();
 
-    const { type, id } = useParams();
+    const { id, type } = useParams();
+
     const settings = useNetworkSettings();
 
     const {
