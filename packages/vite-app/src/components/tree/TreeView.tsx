@@ -4,9 +4,9 @@ import * as RATree from "react-accessible-treeview";
 import { NavLink } from "react-router-dom";
 
 import { Checkbox } from ".";
-import { tw, useTree } from "@/lib";
-import { useTheme, useFilterContext } from "@/provider";
-import { Scroll } from "@/components";
+import { tw, useTree } from "#root/lib";
+import { useTheme } from "#root/provider";
+import { Scroll } from "#root/components";
 
 export type TreeTypeEnum = "filter" | "link";
 

@@ -11,7 +11,7 @@ import {
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import { useNavigate } from "react-router-dom";
 import { FilterProvider } from ".";
-import { JsonLDType } from "@/types";
+import { JsonLDType } from "#root/types";
 
 export type CVContextTypeData = {
     name: string;

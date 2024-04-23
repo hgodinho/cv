@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { useCVContext } from "@/provider";
+import { useCVContext } from "#root/provider";
 import { LinkProps } from "react-router-dom";
 
 export type To = string | LinkProps["to"];

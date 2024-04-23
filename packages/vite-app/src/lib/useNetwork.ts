@@ -3,7 +3,7 @@ import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
 import { useParams } from "react-router-dom";
 
-import { useFilterContext, useNetworkSettings, useTheme } from "@/provider";
+import { useFilterContext, useNetworkSettings, useTheme } from "#root/provider";
 
 export type UseNetworkProps = {
     w?: number;

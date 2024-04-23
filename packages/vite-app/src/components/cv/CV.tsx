@@ -1,13 +1,18 @@
 import React from "react";
 
-import { CVProvider, NetworkSettingsProvider, ThemeProvider } from "@/provider";
+import {
+    CVProvider,
+    NetworkSettingsProvider,
+    ThemeProvider,
+} from "#root/provider";
+
 import {
     Layout,
     ClassView,
     OptionsView,
     NetworkView,
     Debug,
-} from "@/components";
+} from "#root/components";
 
 export function CV() {
     return (

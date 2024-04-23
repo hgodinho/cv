@@ -3,8 +3,8 @@ import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import { motion } from "framer-motion";
 import { Plus, Minus, EyeOff } from "react-feather";
 
-import { tw } from "@/lib";
-import { useTheme } from "@/provider";
+import { tw } from "#root/lib";
+import { useTheme } from "#root/provider";
 
 export type CollapsibleProps = {
     className?: {

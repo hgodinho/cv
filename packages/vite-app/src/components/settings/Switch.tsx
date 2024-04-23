@@ -1,7 +1,7 @@
-import { tw } from "@/lib";
+import { tw } from "#root/lib";
 import * as SwitchPrimitive from "@radix-ui/react-switch";
 
-import { Label } from "@/components";
+import { Label } from "#root/components";
 
 export type SwitchProps = {
     label: string;

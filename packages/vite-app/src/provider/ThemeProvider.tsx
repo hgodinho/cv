@@ -6,7 +6,7 @@ import {
     useEffect,
 } from "react";
 
-import { useViewPortSize } from "@/lib";
+import { useViewPortSize } from "#root/lib";
 
 export type ThemeContextType = {
     sizes: Record<string, number>;

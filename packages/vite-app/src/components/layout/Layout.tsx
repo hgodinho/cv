@@ -1,4 +1,4 @@
-import { tw } from "@/lib";
+import { tw } from "#root/lib";
 
 export function Layout({
     children,

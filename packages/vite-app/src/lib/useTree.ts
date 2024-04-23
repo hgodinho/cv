@@ -5,9 +5,9 @@ import {
     NodeId,
 } from "react-accessible-treeview";
 
-import { useFilterContext } from "@/provider";
+import { useFilterContext } from "#root/provider";
 import { alphaHex } from ".";
-import type { TreeViewProps } from "@/components";
+import type { TreeViewProps } from "#root/components";
 
 export function useTree() {
     const {

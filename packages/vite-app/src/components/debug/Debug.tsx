@@ -1,5 +1,5 @@
-import { tw } from "@/lib";
-import { useTheme } from "@/provider";
+import { tw } from "#root/lib";
+import { useTheme } from "#root/provider";
 
 export type Debug = {
     debug?: boolean;

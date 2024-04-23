@@ -1,8 +1,8 @@
 import React, { Key, ReactNode, useCallback } from "react";
 
-import { Link, Label, type LabelProps } from "@/components";
-import { useFilterContext } from "@/provider";
-import { tw } from "@/lib";
+import { Link, Label, type LabelProps } from "#root/components";
+import { useFilterContext } from "#root/provider";
+import { tw } from "#root/lib";
 
 export type FieldLabelProps = {
     url?: string;

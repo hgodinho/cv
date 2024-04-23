@@ -1,6 +1,7 @@
 import ForceGraph3d from "react-force-graph-3d";
 
-import { tw, useNetwork } from "@/lib";
+import { tw, useNetwork } from "#root/lib";
+import { ClientOnly } from "vike-react/ClientOnly";
 
 export function NetworkView() {
     const {

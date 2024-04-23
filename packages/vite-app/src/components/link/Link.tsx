@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { tw, useFilteredURL } from "@/lib";
+import { tw, useFilteredURL } from "#root/lib";
 import {
     Link as LinkRouter,
     LinkProps as LinkRouterProps,

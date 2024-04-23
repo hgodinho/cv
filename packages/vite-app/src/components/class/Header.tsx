@@ -1,8 +1,8 @@
 import { Helmet } from "react-helmet";
 
-import { tw, alphaHex } from "@/lib";
-import { Field } from "@/components";
-import { useFilterContext } from "@/provider";
+import { tw, alphaHex } from "#root/lib";
+import { Field } from "#root/components";
+import { useFilterContext } from "#root/provider";
 
 export function Header() {
     const {
