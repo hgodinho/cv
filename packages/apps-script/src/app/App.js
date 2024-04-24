@@ -1,23 +1,30 @@
 class App {
-    constructor() {
+    constructor(init = true) {
         this.spreadsheet = new Sheet(CONFIG.sheet());
         this.sheets = {
             person: [22],
             place: [6],
-            organization: [16],
-            event: [15],
+            role: [11],
             certification: [34],
             creativeWork: [28],
-            role: [11],
+            article: [33],
+            chapter: [31],
+            event: [15],
+            organization: [16],
         };
-        this.setup();
+
+        this.setup(init);
     }
 
-    setup() {
-        this.setupConfig();
-        this.setupRawData();
-        this.setupData();
-        this.setupColors();
+    setup(init = true) {
+        if (typeof this.config === "undefined") {
+            this.setupConfig();
+        }
+        if (init) {
+            this.setupRawData();
+            this.setupData();
+            this.setupColors();
+        }
     }
 
     setupColors() {
