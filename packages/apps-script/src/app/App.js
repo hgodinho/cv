@@ -37,11 +37,9 @@ class App {
         const { header, values } = this.spreadsheet.findValuesFromSheet(
             "config",
             "[uri]",
-            4
+            2
         );
-        this.config = Object.fromEntries(
-            header.map((key, index) => [key, values[0][index]])
-        );
+        this.config = Object.fromEntries(values);
         const { header: propHeader, values: propValues } =
             this.spreadsheet.findValuesFromSheet("config", "[properties]", 2);
 
