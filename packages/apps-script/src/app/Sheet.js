@@ -1,12 +1,15 @@
 class Sheet {
-    constructor(id) {
-        this.setupSpreadsheet(id);
+    constructor(id, sheets) {
+        this.setupSpreadsheet(id, sheets);
     }
 
-    setupSpreadsheet(id) {
+    setupSpreadsheet(id, sheets) {
         if (id) {
             this.id = id;
             this.spreadsheet = SpreadsheetApp.openById(id);
+        }
+        if (sheets) {
+            this.sheets = sheets;
         }
     }
 
@@ -96,6 +99,62 @@ class Sheet {
             );
 
         return { header, values };
+    }
+
+    getApiConfig() {
+        return this.findValuesFromSheet("config", "[api]", 2).values.reduce(
+            (acc, [key, value]) => {
+                acc[key] = value;
+                return acc;
+            },
+            {}
+        );
+    }
+
+    getMetaHeader(sheetName) {
+        return this.findValuesFromSheet(
+            sheetName,
+            `[${sheetName}]`,
+            this.sheets[sheetName]
+        ).header;
+    }
+
+    getEntityById(sheetName, id) {
+        const sheet = this.getSpreadsheet().getSheetByName(sheetName);
+
+        const finder = sheet.createTextFinder(id);
+        const ranges = finder.findAll();
+
+        let data;
+        for (const range of ranges) {
+            const value = range.getValue();
+            if (value === id) {
+                const row = range.getRow();
+                const header = this.getMetaHeader(sheetName);
+                const values = sheet
+                    .getRange(row, 2, 1, sheet.getLastColumn() - 1)
+                    .getValues()[0];
+                data = new Entity(header, values, this.getApiConfig());
+            }
+        }
+
+        if (!data) {
+            throw new Error(`No row found with id ${id}`);
+        }
+
+        return data;
+    }
+
+    getEntityList(sheetName) {
+        const { header, values } = this.findValuesFromSheet(
+            sheetName,
+            `[${sheetName}]`,
+            this.sheets[sheetName]
+        );
+
+        return values.map(
+            (row) => new Entity(header, row, this.getApiConfig())
+        );
     }
 
     hasSheet(name) {
