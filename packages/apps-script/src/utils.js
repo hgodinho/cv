@@ -39,18 +39,9 @@ function getEntityMap() {
  * @param {string} str | String to be escaped.
  * @returns | Escaped string.
  */
-function escape(str) {
+function sanitize(str) {
     const entityMap = getEntityMap();
     return String(str).replace(/[&<>"'`=\/]/g, (s) => entityMap[s]);
-}
-
-/**
- * Sanitize string.
- * @param {string} str | String to be sanitized.
- * @returns | Sanitized string.
- */
-function sanitize(str) {
-    return String(str).replace(/[&<>"'`=\/]/g, (s) => "");
 }
 
 function test(title, callback) {
