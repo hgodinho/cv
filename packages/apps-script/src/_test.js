@@ -1,8 +1,99 @@
+function test_Api() {
+    let mock = mockRequest("cv/v1");
+    let api = new Api(mock);
+
+    test("Api.getBase", () => {
+        expect("base: cv/v1/", api.getBase()).toBe("cv/v1/");
+    });
+
+    test("Api.getUrl", () => {
+        expect("url: https://hgod.in/cv/v1/", api.getUrl()).toBe(
+            "https://hgod.in/cv/v1/"
+        );
+    });
+
+    test("Api.getClassSchema", () => {
+        api = new Api(mock);
+
+        expect(
+            "schema is object",
+            api.getClassSchema("certification")
+        ).toBeObject();
+    });
+
+    test("Api.getResponse no path", () => {
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response is object", response).toBeObject();
+    });
+
+    test("Api.getResponse schema endpoint", () => {
+        mock = mockRequest("cv/v1/schema");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response is object", response).toBeObject();
+    });
+
+    test("Api.getResponse properties endpoint", () => {
+        mock = mockRequest("cv/v1/properties");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response data is array", response.data).toBeArray();
+    });
+
+    test("Api.getResponse certification list endpoint", () => {
+        mock = mockRequest("cv/v1/certification");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response data is array", response.data).toBeArray();
+    });
+
+    test("Api.getResponse certification get endpoint", () => {
+        mock = mockRequest(
+            "cv/v1/certification/mestrado-profissional-em-ciencia-da-informacao"
+        );
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response data is object", response.data).toBeObject();
+    });
+
+    test("Api.getResponse place get endpoint", () => {
+        mock = mockRequest("cv/v1/place/brasil");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response data is object", response.data).toBeObject();
+    });
+
+    test("Api.getResponse about endpoint", () => {
+        mock = mockRequest("cv/v1/about");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response data is object", response.data).toBeObject();
+    });
+
+    test("Api.getResponse ld-graph endpoint", () => {
+        mock = mockRequest("cv/v1/ld-graph");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response status is 200", response.status).toEqual(200);
+        expect("response data is object", response.data).toBeObject();
+        expect("response graph is array", response.data["@graph"]).toBeArray();
+    });
+}
+
 function test_Entity() {
     const entity = new Entity(
-        ["id", "type", "data", "date"],
+        ["_id", "type", "data", "date"],
         [
-            1,
+            "person/teste",
             "Person",
             "fruta=banana; sabor=doce | fruta=limão; sabor=cítrico",
             "2021-01-01",
@@ -27,8 +118,8 @@ function test_Entity() {
         console.log(entity._values);
     });
 
-    test("Entity.id", () => {
-        console.log(entity.id);
+    test("Entity._id", () => {
+        console.log(entity._id);
     });
 
     test("Entity.data", () => {
@@ -104,24 +195,22 @@ function test_App() {
     });
 
     test("App.setupRawData", () => {
-        console.log(app.rawData);
-    });
-
-    test("App.setupData", () => {
-        console.log(app.data);
-    });
-
-    test("App.getJsonLd", () => {
-        console.log(app.getJsonLd());
-    });
-
-    test("App.getJsonLd", () => {
-        console.log(app.getJsonLd(false));
+        app.setupRawData();
     });
 }
 
 function test_Sheet() {
-    const sheet = new Sheet(CONFIG.sheet());
+    const sheet = new Sheet(CONFIG.sheet(), {
+        person: 22,
+        place: 6,
+        role: 11,
+        certification: 34,
+        creativeWork: 28,
+        article: 33,
+        chapter: 31,
+        event: 15,
+        organization: 16,
+    });
 
     test("Sheet", () => {
         console.log(sheet);
@@ -163,5 +252,9 @@ function test_Sheet() {
 
     test("Sheet.findValuesFromSheet", () => {
         console.log(sheet.findValuesFromSheet("place", "place", 5));
+    });
+
+    test("Sheet.getEntityById", () => {
+        console.log(sheet.getEntityById("place", "city/sao-paulo"));
     });
 }
