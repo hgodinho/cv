@@ -151,6 +151,7 @@ class Api {
                 },
                 {
                     "@context": "https://schema.org",
+                    "@type": data["type"],
                 }
             );
         }

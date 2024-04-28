@@ -125,19 +125,4 @@ class Entity {
         // if we get here, we return the string as is
         return str;
     }
-
-    toJsonLd() {
-        if (!this.type) throw new Error("Entity requires a type");
-        if (!this._id) throw new Error("Entity requires a id");
-        const json = {
-            "@context": "https://schema.org/",
-            "@type": this.type,
-        };
-        this._header.forEach((key, index) => {
-            if (this[key] && key !== "type") {
-                json[key] = this[key];
-            }
-        });
-        return json;
-    }
 }
