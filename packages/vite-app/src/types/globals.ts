@@ -1,7 +1,16 @@
+import { JsonLDType } from "#root/types";
+
 // https://vike.dev/pageContext#typescript
 declare global {
     namespace Vike {
         interface PageContext {
+            ld: JsonLDType;
+            properties: string[];
+            api: {
+                base: string;
+                namespace: string;
+                apiVersion: string;
+            };
             data?: {
                 /** Value for <title> defined dynamically by /pages/some-page/+data.js */
                 title?: string;

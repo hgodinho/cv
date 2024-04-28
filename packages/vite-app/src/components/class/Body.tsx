@@ -108,7 +108,7 @@ export function Connections() {
                             return typeof link.source !== "string" ? (
                                 <React.Fragment key={index}>
                                     {link.source.type}{" "}
-                                    <Link to={link.source.id}>
+                                    <Link href={link.source.id}>
                                         {link.source.name}
                                     </Link>
                                 </React.Fragment>

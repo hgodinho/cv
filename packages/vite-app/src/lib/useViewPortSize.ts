@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from "react";
 import theme from "../../tailwind.config";
 
 function getWindowDimensions() {
-    const { innerWidth: width, innerHeight: height } = window;
     const breakpoints = useMemo(() => {
         const {
             theme: {
@@ -26,12 +25,36 @@ function getWindowDimensions() {
         };
     }, []);
 
+    const { width, height, isDesktop, isMobile, isTablet } = useMemo(() => {
+        if (typeof window !== "undefined") {
+            const { innerWidth, innerHeight } = window;
+            return {
+                width: innerWidth,
+                height: innerHeight,
+                isMobile: innerWidth <= breakpoints.sm && innerWidth >= 0,
+                isTablet:
+                    innerWidth <= breakpoints.lg &&
+                    innerWidth >= breakpoints.md,
+                isDesktop: innerWidth >= breakpoints.lg,
+            };
+        } else {
+            // default to mobile for ssr
+            return {
+                width: 480,
+                height: 800,
+                isMobile: true,
+                isTablet: false,
+                isDesktop: false,
+            };
+        }
+    }, [breakpoints]);
+
     return {
         width,
         height,
-        isMobile: width <= breakpoints.sm && width >= 0,
-        isTablet: width <= breakpoints.lg && width >= breakpoints.md,
-        isDesktop: width >= breakpoints.lg,
+        isDesktop,
+        isMobile,
+        isTablet,
         breakpoints,
     };
 }
@@ -45,8 +68,8 @@ export function useViewPortSize() {
         function handleResize() {
             setWindowDimensions(getWindowDimensions());
         }
-
-        window.addEventListener("resize", handleResize);
+        if (typeof window !== "undefined")
+            window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 

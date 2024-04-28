@@ -5,7 +5,7 @@ import {
     useCallback,
     useEffect,
 } from "react";
-import { CVContextType, defaultCVContext, CVContext } from ".";
+import { CVContextType, defaultCVContext, CVContext, useCVContext } from ".";
 import type { NodeObject, LinkObject } from "react-force-graph-3d";
 
 export type FilterNodesFN = (
@@ -35,8 +35,13 @@ export const FilterContext = createContext<FilterContextType>({
 });
 
 export function FilterProvider({ children }: React.PropsWithChildren<{}>) {
-    const context = useContext(CVContext);
-    const { selected, nodes, links, ...rest } = context;
+    const cv = useCVContext();
+
+    const {
+        data: { selected },
+        nodes,
+        links,
+    } = cv;
 
     const [filteredNodes, setNodes] = useState<NodeObject[]>(nodes);
     const [filteredLinks, setLinks] = useState<LinkObject[]>(links);
@@ -66,7 +71,7 @@ export function FilterProvider({ children }: React.PropsWithChildren<{}>) {
     return (
         <FilterContext.Provider
             value={{
-                ...context,
+                ...cv,
                 filteredNodes,
                 filterNodes,
                 filteredLinks,

@@ -45,18 +45,13 @@ export function Field({ label, value, find }: FieldProps) {
             if (value?.toString().startsWith("http") && find) {
                 const found = nodes.find((node) => node["id"] === value);
                 if (found) {
-                    value = <Link to={url}>{found["name"]}</Link>;
+                    value = <Link href={url}>{found["name"]}</Link>;
                 }
             }
-
-            const linkProps = url.startsWith("http")
-                ? { href: url }
-                : { to: url };
-
             const LinkOrValue = (value: ReactNode) =>
                 value ? (
                     value.toString().startsWith("http") ? (
-                        <Link {...linkProps}>{value}</Link>
+                        <Link href={url}>{value}</Link>
                     ) : (
                         value
                     )

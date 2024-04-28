@@ -1,27 +1,20 @@
 import { useMemo } from "react";
-import { tw, useFilteredURL } from "#root/lib";
-import {
-    Link as LinkRouter,
-    LinkProps as LinkRouterProps,
-} from "react-router-dom";
+import { tw, useLink } from "#root/lib";
 import { ExternalLink } from "react-feather";
 
-export type LinkProps = Omit<LinkRouterProps, "to"> & {
-    href?: string;
-    to?: LinkRouterProps["to"];
+export type LinkProps = {
+    href: string;
 };
 
 export function Link({
     href,
     children,
-    to,
     ...rest
-}: React.PropsWithChildren<LinkProps>) {
-    const target = useMemo(() => (href ? "_blank" : "_self"), [href]);
-    const location = useFilteredURL(to || href || "");
+}: React.PropsWithChildren<React.AnchorHTMLAttributes<HTMLAnchorElement>>) {
+    const { location, target, isActive } = useLink(href);
 
     return (
-        <LinkRouter
+        <a
             className={tw(
                 "text-blue-300",
                 "hover:text-blue-500",
@@ -29,11 +22,13 @@ export function Link({
                 "focus:underline",
                 "focus:decoration-dotted",
                 "focus:underline-offset-4",
-                "focus:font-bold"
+                "focus:font-bold",
+                isActive ? tw("text-blue-400", "font-bold") : "",
+                rest.className
             )}
-            target={target}
-            to={location}
             {...rest}
+            target={rest.target || target}
+            href={location}
         >
             {target === "_blank" ? (
                 <span className={tw("flex", "gap-2")}>
@@ -43,6 +38,6 @@ export function Link({
             ) : (
                 children
             )}
-        </LinkRouter>
+        </a>
     );
 }

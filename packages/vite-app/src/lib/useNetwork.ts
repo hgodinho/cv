@@ -14,14 +14,8 @@ export type UseNetworkProps = {
 export function useNetwork() {
     const ref = useRef();
 
-    const {
-        nodes,
-        filteredNodes,
-        links,
-        filteredLinks,
-        data: { colors, config },
-        setSelected,
-    } = useFilterContext();
+    const { nodes, filteredNodes, links, filteredLinks, setSelected } =
+        useFilterContext();
 
     const { id, type } = useParams();
 
@@ -29,6 +23,7 @@ export function useNetwork() {
 
     const {
         viewPort: { isTablet, isMobile, width, height },
+        colors,
     } = useTheme();
 
     const focusOnClick = useCallback(
@@ -82,15 +77,17 @@ export function useNetwork() {
         Object.assign(sprite.position, middlePos);
     }, []);
 
-    const color = useCallback((node: NodeObject) => {
-        return colors[node.type];
-    }, []);
+    const color = useCallback(
+        (node: NodeObject) => {
+            return colors[node.type];
+        },
+        [colors]
+    );
 
     useEffect(() => {
         const found = filteredNodes.find((node) => {
             const search = `${type}/${id}`;
-            const query = node.id?.toString().split(config.query).pop();
-            return query === search;
+            return node._id === search;
         });
         if (found) {
             focusOnClick(found);

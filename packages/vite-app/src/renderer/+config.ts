@@ -16,6 +16,7 @@ export default {
             env: { server: true, client: true },
         },
     },
+    passToClient: ["ld", "properties", "api"],
     hydrationCanBeAborted: true,
     extends: vikeReact,
 } satisfies Config;

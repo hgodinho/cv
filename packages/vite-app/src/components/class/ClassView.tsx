@@ -7,13 +7,14 @@ import { tw } from "#root/lib";
 
 export function ClassView() {
     const {
-        data: { colors, selected },
+        data: { selected },
     } = useCVContext();
 
     const {
         sizes: { icon },
         collapsibles: { class: open },
         viewPort: { height },
+        colors,
         toggleCollapsible,
         collapsibleOn,
     } = useTheme();

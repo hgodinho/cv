@@ -5,19 +5,15 @@ import {
     NodeId,
 } from "react-accessible-treeview";
 
-import { useFilterContext } from "#root/provider";
+import { useFilterContext, useTheme } from "#root/provider";
 import { alphaHex } from ".";
 import type { TreeViewProps } from "#root/components";
 
 export function useTree() {
-    const {
-        data: { colors },
-        nodes,
-        filteredNodes,
-        setSelected,
-        filterNodes,
-        filterLinks,
-    } = useFilterContext();
+    const { nodes, filteredNodes, setSelected, filterNodes, filterLinks } =
+        useFilterContext();
+
+    const { colors } = useTheme();
 
     const { treeData, initialSelectedIds } = useMemo(() => {
         const lvls = {
@@ -58,10 +54,10 @@ export function useTree() {
         }, {});
 
         const initialSelectedIds = nodes.reduce((acc, cur) => {
-            if (!acc.includes(cur.type)) {
+            if (cur.type && !acc.includes(cur.type)) {
                 acc.push(cur.type);
             }
-            if (!acc.includes(cur.id)) {
+            if (cur.id && !acc.includes(cur.id)) {
                 acc.push(cur.id);
             }
             return acc;

@@ -16,7 +16,8 @@
         "skipLibCheck": true,
         "esModuleInterop": true,
         "paths": {
-            "#root/*": ["./src/*"]
+            "#root/*": ["./src/*"],
+            "#public/*": ["./public/*"]
         }
     },
     "ts-node": {

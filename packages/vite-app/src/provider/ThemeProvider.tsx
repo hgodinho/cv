@@ -21,6 +21,7 @@ export type ThemeContextType = {
         options: boolean;
         class: boolean;
     };
+    colors: Record<string, string>;
     toggleCollapsible: (key: keyof ThemeContextType["collapsibles"]) => void;
     collapsibleOn: (key: keyof ThemeContextType["collapsibles"]) => void;
     collapsibleOff: (key: keyof ThemeContextType["collapsibles"]) => void;
@@ -40,6 +41,23 @@ export const themeDefault: ThemeContextType = {
     collapsibles: {
         options: false,
         class: false,
+    },
+    colors: {
+        Person: "#A2E8F4",
+        Country: "#9CA6C9",
+        City: "#D4B8D1",
+        Place: "#4F4A8C",
+        OrganizationRole: "#6E102A",
+        Role: "#FCFDFF",
+        Certification: "#AB66D9",
+        CreativeWork: "#9578A4",
+        Project: "#F1BCFF",
+        Article: "#52AAF2",
+        ScholarlyArticle: "#D3D3D3",
+        Chapter: "#145A8E",
+        ExhibitionEvent: "#778899",
+        Event: "#B96481",
+        Organization: "#F2CFE5",
     },
     toggleCollapsible: () => {},
     collapsibleOn: () => {},

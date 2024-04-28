@@ -1,7 +1,7 @@
 export * from "./useNetwork";
 export * from "./useTree";
 export * from "./useViewPortSize";
-export * from "./useFilteredURL";
+export * from "./useLink";
 
 export * from "./tw";
 export * from "./alphaHex";

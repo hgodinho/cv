@@ -2,13 +2,15 @@ import { Helmet } from "react-helmet";
 
 import { tw, alphaHex } from "#root/lib";
 import { Field } from "#root/components";
-import { useFilterContext } from "#root/provider";
+import { useFilterContext, useTheme } from "#root/provider";
 
 export function Header() {
     const {
         headerRef,
-        data: { name, colors, selected },
+        data: { name, selected },
     } = useFilterContext();
+
+    const { colors } = useTheme();
 
     return selected ? (
         <header

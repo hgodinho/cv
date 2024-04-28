@@ -3,15 +3,17 @@ import {
     PropsWithChildren,
     useMemo,
     useEffect,
+    useState,
     useRef,
     useContext,
     useReducer,
     useCallback,
 } from "react";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
-import { useNavigate } from "react-router-dom";
 import { FilterProvider } from ".";
 import { JsonLDType } from "#root/types";
+import { usePageContext } from ".";
+import { navigate } from "vike/client/router";
 
 export type CVContextTypeData = {
     name: string;
@@ -22,8 +24,6 @@ export type CVContextTypeData = {
         url: string;
         query: string;
     };
-    data: JsonLDType;
-    colors: Record<string, string>;
     selected: NodeObject | null;
 };
 
@@ -44,10 +44,6 @@ export const defaultData = {
         url: "",
         query: "",
     },
-    data: {
-        raw: { "@context": {}, "@graph": [] },
-    },
-    colors: {},
     selected: null,
 };
 
@@ -61,39 +57,31 @@ export const defaultCVContext: CVContextType = {
 
 export const CVContext = createContext<CVContextType>(defaultCVContext);
 
+export function useCVContext() {
+    const context = useContext(CVContext);
+    return context;
+}
+
 export function CVProvider({ children }: PropsWithChildren<{}>) {
-    const [data, setState] = useReducer(
-        (s: CVContextTypeData, a: Partial<CVContextTypeData>) => ({
-            ...s,
-            ...a,
-        }),
-        defaultData
-    );
+    /**
+     * Get the JSON-LD data from the page context
+     */
+    const { ld, properties, api } = usePageContext();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await fetch("/henrique-godinho.jsonld").then(
-                    (res) => res.json()
-                );
-                setState(data);
-            } catch (e) {
-                console.error(e);
-            }
-        };
-        fetchData();
-    }, []);
+    /**
+     * State to store the selected node
+     */
+    const [selected, setSelected] = useState<NodeObject | null>(null);
 
-    const setSelected = useCallback((node: NodeObject | null) => {
-        setState({ selected: node });
-    }, []);
-
-    const ld = data.data;
-
+    // Reference to the header element
     const headerRef = useRef<HTMLHeadingElement>(null);
 
+    /**
+     * Create nodes and links from the JSON-LD data
+     */
     const { nodes, links } = useMemo(() => {
         let nodes: NodeObject[] = [];
+
         if (ld?.compacted) {
             nodes = (ld?.compacted["@graph"] as NodeObject[]).map((node) => {
                 return {
@@ -140,26 +128,25 @@ export function CVProvider({ children }: PropsWithChildren<{}>) {
         return { nodes, links };
     }, [ld]);
 
-    const navigate = useNavigate();
-
+    /**
+     * Navigate to the selected node
+     */
     useEffect(() => {
-        const path = data.selected?.id
-            ?.toString()
-            .split(data.config.base)
-            .pop();
+        const path = selected ? `/${api.namespace}/${selected._id}` : false;
         if (path) {
             navigate(path);
             headerRef.current?.focus();
         }
-    }, [data.selected, navigate]);
+    }, [selected, navigate]);
 
     return (
         <CVContext.Provider
             value={{
                 ...defaultCVContext,
                 data: {
-                    ...defaultCVContext.data,
-                    ...data,
+                    ...defaultData,
+                    properties,
+                    selected,
                 },
                 headerRef,
                 nodes,
@@ -170,9 +157,4 @@ export function CVProvider({ children }: PropsWithChildren<{}>) {
             <FilterProvider>{children}</FilterProvider>
         </CVContext.Provider>
     );
-}
-
-export function useCVContext() {
-    const context = useContext(CVContext);
-    return context;
 }

@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "npm run server:dev",
+        "dev": "vite dev",
         "get:data": "node .bin/getData.js",
         "prod": "npm run lint && npm run build && npm run server:prod",
         "server": "node --loader ts-node/esm ./server/index.ts",

@@ -21,6 +21,7 @@ export default defineConfig({
     resolve: {
         alias: {
             "#root": __dirname + "/src",
+            "#public": __dirname + "/public",
         },
     },
 });
