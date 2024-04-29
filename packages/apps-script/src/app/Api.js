@@ -3,12 +3,30 @@ class Api {
         this.setup(e);
     }
 
+    _endpoints() {
+        return [
+            "person",
+            "place",
+            "role",
+            "certification",
+            "creativeWork",
+            "article",
+            "chapter",
+            "event",
+            "organization",
+        ];
+    }
+
+    _defaultEndpoints() {
+        return ["schema", "properties", "about", "ld-graph"];
+    }
+
     setup(e) {
         // Set the request object
         this.request = e;
 
         // Set the app object
-        this.app = new App();
+        this.app = new App(this._endpoints());
 
         // Set the config object
         this.config = this.app.getApiConfig();
@@ -28,11 +46,8 @@ class Api {
         this.slashChar = "&#x2F;";
 
         // Set the endpoints
-        this.defaultEndpoints = ["schema", "properties", "about", "ld-graph"];
-        this.endpoints = [
-            ...this.defaultEndpoints,
-            ...Object.keys(this.app.sheets),
-        ];
+        this.defaultEndpoints = this._defaultEndpoints();
+        this.endpoints = [...this.defaultEndpoints, ...this._endpoints()];
 
         // Set the path, parameter, and query string
         const prePath = sanitize(e.pathInfo.replace(this.getBase(false), ""));

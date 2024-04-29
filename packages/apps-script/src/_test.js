@@ -49,7 +49,7 @@ function test_Api() {
         api = new Api(mock);
 
         const response = api.getResponse();
-        expect("response data is array", response.data).toBeArray();
+        expect("response data is array", response.data).toBeArray("object");
     });
 
     test("Api.getResponse certification get endpoint", () => {
@@ -85,7 +85,10 @@ function test_Api() {
         const response = api.getResponse();
         expect("response status is 200", response.status).toEqual(200);
         expect("response data is object", response.data).toBeObject();
-        expect("response graph is array", response.data["@graph"]).toBeArray();
+        expect("response graph is array", response.data["@graph"]).toBeArray(
+            "object"
+        );
+        console.warn(response.data["@graph"]);
     });
 }
 
@@ -184,14 +187,10 @@ function test_Entity() {
 }
 
 function test_App() {
-    const app = new App();
+    const app = new App(["person", "place", "role", "certification"]);
 
     test("App", () => {
-        console.log(app);
-    });
-
-    test("App.setup", () => {
-        console.log(app.setup());
+        // console.log(app);
     });
 
     test("App.setupRawData", () => {
@@ -200,17 +199,17 @@ function test_App() {
 }
 
 function test_Sheet() {
-    const sheet = new Sheet(CONFIG.sheet(), {
-        person: 22,
-        place: 6,
-        role: 11,
-        certification: 34,
-        creativeWork: 28,
-        article: 33,
-        chapter: 31,
-        event: 15,
-        organization: 16,
-    });
+    const sheet = new Sheet(CONFIG.sheet(), [
+        "person",
+        "place",
+        "role",
+        "certification",
+        "creativeWork",
+        "article",
+        "chapter",
+        "event",
+        "organization",
+    ]);
 
     test("Sheet", () => {
         console.log(sheet);
@@ -236,10 +235,6 @@ function test_Sheet() {
         console.log(sheet.getUrl());
     });
 
-    test("Sheet.getLastUpdate", () => {
-        console.log(sheet.getLastUpdate());
-    });
-
     test("Sheet.findRangeFromSheet", () => {
         console.log(
             sheet.findRangeFromSheet({
@@ -255,6 +250,6 @@ function test_Sheet() {
     });
 
     test("Sheet.getEntityById", () => {
-        console.log(sheet.getEntityById("place", "city/sao-paulo"));
+        console.log(sheet.getEntityById("place", "place/sao-paulo"));
     });
 }
