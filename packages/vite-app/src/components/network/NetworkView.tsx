@@ -1,3 +1,4 @@
+import { Loading } from "../loading";
 import { tw, useNetwork } from "#root/lib";
 import { ClientOnly } from "vike-react/ClientOnly";
 
@@ -23,12 +24,15 @@ export function NetworkView() {
                 "absolute",
                 "z-10",
                 "cursor-grab",
-                "active:cursor-grabbing"
+                "active:cursor-grabbing",
+                "w-full",
+                "h-full",
+                "grid"
             )}
         >
             <ClientOnly
                 load={() => import("react-force-graph-3d")}
-                fallback={<div>Loading...</div>}
+                fallback={<Loading />}
             >
                 {(ForceGraph3d) => (
                     <ForceGraph3d
@@ -51,6 +55,7 @@ export function NetworkView() {
                         linkThreeObjectExtend={true}
                         {...settings}
                     />
+                    // <Loading />
                 )}
             </ClientOnly>
         </div>
