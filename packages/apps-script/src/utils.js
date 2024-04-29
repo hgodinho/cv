@@ -13,14 +13,6 @@ function parseDate(date) {
     return Utilities.formatDate(new Date(date), "GMT", "yyyy-MM-dd");
 }
 
-function logTest(title, message) {
-    console.log(`${title}: ${message}`);
-}
-
-function errorTest(title, message) {
-    console.error(`${title}: ${message}`);
-}
-
 function getEntityMap() {
     return {
         "&": "&amp;",

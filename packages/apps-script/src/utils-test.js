@@ -1,3 +1,11 @@
+function logTest(title, message) {
+    console.log(`${title}: ${message}`);
+}
+
+function errorTest(title, message) {
+    console.error(`${title}: ${message}`);
+}
+
 function test(title, callback) {
     console.log(`${title}`);
     callback();
@@ -58,9 +66,23 @@ function expect(toBeExpected, actual) {
                 );
             }
         },
-        toBeArray() {
+        toBeArray(of = undefined) {
             if (Array.isArray(actual)) {
-                logTest(toBeExpected, "Pass");
+                if (typeof of === "undefined") {
+                    logTest(toBeExpected, "Pass");
+                } else {
+                    // verify if the itens of the array is 'of' specific type
+                    actual.map((item, i) => {
+                        if (typeof item === of) {
+                            logTest(toBeExpected, `type of=${of} Pass`);
+                        } else {
+                            errorTest(
+                                toBeExpected,
+                                `type of actual[${i}] doesn't match type '${of}'`
+                            );
+                        }
+                    });
+                }
             } else {
                 errorTest(
                     toBeExpected,
