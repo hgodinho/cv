@@ -1,11 +1,5 @@
-import {
-    createContext,
-    useContext,
-    useState,
-    useCallback,
-    useEffect,
-} from "react";
-import { CVContextType, defaultCVContext, CVContext, useCVContext } from ".";
+import { createContext, useContext, useState, useCallback } from "react";
+import { CVContextType, defaultCVContext, useCVContext } from ".";
 import type { NodeObject, LinkObject } from "react-force-graph-3d";
 
 export type FilterNodesFN = (
@@ -23,7 +17,6 @@ export type FilterContextType = CVContextType & {
     filterNodes: (callback: FilterNodesFN) => void;
     filteredLinks: LinkObject[];
     filterLinks: (callback: FilterLinksFN) => void;
-    connectedTo?: LinkObject[];
 };
 
 export const FilterContext = createContext<FilterContextType>({
@@ -37,15 +30,10 @@ export const FilterContext = createContext<FilterContextType>({
 export function FilterProvider({ children }: React.PropsWithChildren<{}>) {
     const cv = useCVContext();
 
-    const {
-        data: { selected },
-        nodes,
-        links,
-    } = cv;
+    const { nodes, links } = cv;
 
     const [filteredNodes, setNodes] = useState<NodeObject[]>(nodes);
     const [filteredLinks, setLinks] = useState<LinkObject[]>(links);
-    const [connectedTo, setConnectedTo] = useState<LinkObject[] | undefined>();
 
     const filterNodes = useCallback(
         (filter: FilterNodesFN) => {
@@ -61,13 +49,6 @@ export function FilterProvider({ children }: React.PropsWithChildren<{}>) {
         [links, filteredLinks]
     );
 
-    useEffect(() => {
-        const connectedTo: LinkObject[] = links.filter((link) => {
-            return link.object === selected?.id;
-        });
-        setConnectedTo(connectedTo);
-    }, [selected, links]);
-
     return (
         <FilterContext.Provider
             value={{
@@ -76,7 +57,6 @@ export function FilterProvider({ children }: React.PropsWithChildren<{}>) {
                 filterNodes,
                 filteredLinks,
                 filterLinks,
-                connectedTo,
             }}
         >
             {children}

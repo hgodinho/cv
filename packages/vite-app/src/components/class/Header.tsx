@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet";
 
 import { tw, alphaHex } from "#root/lib";
 import { Field } from "#root/components";
-import { useFilterContext, useTheme } from "#root/provider";
+import { useFilterContext, useTheme, usePageContext } from "#root/provider";
 
 export function Header() {
     const {

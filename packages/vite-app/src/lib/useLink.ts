@@ -34,7 +34,5 @@ export function useLink(value: string | undefined) {
         };
     }, []);
 
-    console.log({ urlPathname, props });
-
     return props;
 }

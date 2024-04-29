@@ -6,7 +6,9 @@ export type Debug = {
 };
 
 export function Debug({ debug = true }: Debug) {
-    const { viewPort } = useTheme();
+    const {
+        state: { viewPort },
+    } = useTheme();
 
     if (debug && import.meta.env.DEV) {
         return (

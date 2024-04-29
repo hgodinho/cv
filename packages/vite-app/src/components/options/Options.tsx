@@ -13,9 +13,11 @@ export function OptionsView() {
 
     const {
         sizes: { icon },
-        viewPort: { height, isTablet, isDesktop },
-        collapsibles: { options },
-        toggleCollapsible,
+        state: {
+            viewPort: { height, isTablet, isDesktop },
+            collapsibles: { options },
+            toggleCollapsible,
+        },
     } = useTheme();
 
     return (

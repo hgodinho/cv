@@ -6,9 +6,7 @@ import { tw } from "#root/lib";
 import { useFilterContext } from "#root/provider";
 
 export function Description() {
-    const {
-        data: { properties, selected },
-    } = useFilterContext();
+    const { properties, selected } = useFilterContext();
 
     return selected ? (
         <section className={tw("px-4", "pt-2", "flex", "flex-col")}>
@@ -52,10 +50,7 @@ export function Description() {
 }
 
 export function Connections() {
-    const {
-        connectedTo,
-        data: { selected },
-    } = useFilterContext();
+    const { connectedTo, selected } = useFilterContext();
 
     const [connections, setConnections] = useState<
         Record<string, LinkObject[]> | undefined

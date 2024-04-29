@@ -6,17 +6,17 @@ import { Body, Collapsible, Header } from "#root/components";
 import { tw } from "#root/lib";
 
 export function ClassView() {
-    const {
-        data: { selected },
-    } = useCVContext();
+    const { selected } = useCVContext();
 
     const {
         sizes: { icon },
-        collapsibles: { class: open },
-        viewPort: { height },
+        state: {
+            collapsibles: { class: open },
+            viewPort: { height },
+            toggleCollapsible,
+            collapsibleOn,
+        },
         colors,
-        toggleCollapsible,
-        collapsibleOn,
     } = useTheme();
 
     useEffect(() => {

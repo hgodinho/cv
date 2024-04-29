@@ -15,43 +15,25 @@ import { JsonLDType } from "#root/types";
 import { usePageContext } from ".";
 import { navigate } from "vike/client/router";
 
-export type CVContextTypeData = {
-    name: string;
-    properties: string[];
-    config: {
-        base: string;
-        namespace: string;
-        url: string;
-        query: string;
-    };
-    selected: NodeObject | null;
-};
-
 export type CVContextType = {
     headerRef: React.RefObject<HTMLHeadingElement>;
-    data: CVContextTypeData;
     nodes: NodeObject[];
     links: LinkObject[];
-    setSelected: (node: NodeObject | null) => void;
-};
+    properties: string[];
 
-export const defaultData = {
-    name: "hgod.in",
-    properties: [],
-    config: {
-        base: "",
-        namespace: "",
-        url: "",
-        query: "",
-    },
-    selected: null,
+    selected: NodeObject | null;
+    connectedTo: LinkObject[];
+
+    setSelected: (node: NodeObject | null) => void;
 };
 
 export const defaultCVContext: CVContextType = {
     headerRef: { current: null },
-    data: defaultData,
     nodes: [],
     links: [],
+    properties: [],
+    selected: null,
+    connectedTo: [],
     setSelected: () => {},
 };
 
@@ -67,11 +49,6 @@ export function CVProvider({ children }: PropsWithChildren<{}>) {
      * Get the JSON-LD data from the page context
      */
     const { ld, properties, api } = usePageContext();
-
-    /**
-     * State to store the selected node
-     */
-    const [selected, setSelected] = useState<NodeObject | null>(null);
 
     // Reference to the header element
     const headerRef = useRef<HTMLHeadingElement>(null);
@@ -129,6 +106,23 @@ export function CVProvider({ children }: PropsWithChildren<{}>) {
     }, [ld]);
 
     /**
+     * State to store the selected node
+     */
+    const [selected, setSelected] = useState<NodeObject | null>(null);
+
+    const [connectedTo, setConnectedTo] = useState<LinkObject[]>([]);
+
+    /**
+     *
+     */
+    useEffect(() => {
+        const connectedTo: LinkObject[] = links.filter((link) => {
+            return link.object === selected?.id;
+        });
+        setConnectedTo(connectedTo);
+    }, [selected, links]);
+
+    /**
      * Navigate to the selected node
      */
     useEffect(() => {
@@ -143,14 +137,12 @@ export function CVProvider({ children }: PropsWithChildren<{}>) {
         <CVContext.Provider
             value={{
                 ...defaultCVContext,
-                data: {
-                    ...defaultData,
-                    properties,
-                    selected,
-                },
+                selected,
+                properties,
                 headerRef,
                 nodes,
                 links,
+                connectedTo,
                 setSelected,
             }}
         >

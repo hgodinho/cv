@@ -8,8 +8,7 @@ import {
 
 import { useViewPortSize } from "#root/lib";
 
-export type ThemeContextType = {
-    sizes: Record<string, number>;
+export type ThemeContextState = {
     viewPort: {
         width: number;
         height: number;
@@ -21,16 +20,21 @@ export type ThemeContextType = {
         options: boolean;
         class: boolean;
     };
-    colors: Record<string, string>;
-    toggleCollapsible: (key: keyof ThemeContextType["collapsibles"]) => void;
-    collapsibleOn: (key: keyof ThemeContextType["collapsibles"]) => void;
-    collapsibleOff: (key: keyof ThemeContextType["collapsibles"]) => void;
 };
 
-export const themeDefault: ThemeContextType = {
-    sizes: {
-        icon: 16,
-    },
+export type ThemeContextCallbacks = {
+    toggleCollapsible: (key: keyof ThemeContextState["collapsibles"]) => void;
+    collapsibleOn: (key: keyof ThemeContextState["collapsibles"]) => void;
+    collapsibleOff: (key: keyof ThemeContextState["collapsibles"]) => void;
+};
+
+export type ThemeContextType = {
+    sizes: Record<string, number>;
+    colors: Record<string, string>;
+    state: ThemeContextState & ThemeContextCallbacks;
+};
+
+export const themeStateDefault: ThemeContextState & ThemeContextCallbacks = {
     viewPort: {
         width: 0,
         height: 0,
@@ -41,6 +45,15 @@ export const themeDefault: ThemeContextType = {
     collapsibles: {
         options: false,
         class: false,
+    },
+    toggleCollapsible: () => {},
+    collapsibleOn: () => {},
+    collapsibleOff: () => {},
+};
+
+export const themeDefault: ThemeContextType = {
+    sizes: {
+        icon: 16,
     },
     colors: {
         Person: "#A2E8F4",
@@ -59,25 +72,28 @@ export const themeDefault: ThemeContextType = {
         Event: "#B96481",
         Organization: "#F2CFE5",
     },
-    toggleCollapsible: () => {},
-    collapsibleOn: () => {},
-    collapsibleOff: () => {},
+    state: themeStateDefault,
 };
 
 export const ThemeContext = createContext<ThemeContextType>(themeDefault);
+
+export function useTheme() {
+    const context = useContext(ThemeContext);
+    return context;
+}
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     const viewPort = useViewPortSize();
 
     const [collapsibles, setCollapsibles] = useState<
-        ThemeContextType["collapsibles"]
+        ThemeContextState["collapsibles"]
     >({
         options: true,
         class: false,
     });
 
     const toggleCollapsible = useCallback(
-        (key: keyof ThemeContextType["collapsibles"]) => {
+        (key: keyof ThemeContextState["collapsibles"]) => {
             setCollapsibles((prev) => ({
                 ...prev,
                 [key]: !prev[key],
@@ -94,7 +110,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     );
 
     const collapsibleOn = useCallback(
-        (key: keyof ThemeContextType["collapsibles"]) => {
+        (key: keyof ThemeContextState["collapsibles"]) => {
             setCollapsibles((prev) => ({
                 ...prev,
                 [key]: true,
@@ -112,7 +128,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     );
 
     const collapsibleOff = useCallback(
-        (key: keyof ThemeContextType["collapsibles"]) => {
+        (key: keyof ThemeContextState["collapsibles"]) => {
             setCollapsibles((prev) => ({
                 ...prev,
                 [key]: false,
@@ -125,19 +141,16 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         <ThemeContext.Provider
             value={{
                 ...themeDefault,
-                viewPort,
-                collapsibles,
-                toggleCollapsible,
-                collapsibleOn,
-                collapsibleOff,
+                state: {
+                    viewPort,
+                    collapsibles,
+                    toggleCollapsible,
+                    collapsibleOn,
+                    collapsibleOff,
+                },
             }}
         >
             {children}
         </ThemeContext.Provider>
     );
 };
-
-export function useTheme() {
-    const context = useContext(ThemeContext);
-    return context;
-}

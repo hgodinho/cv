@@ -22,7 +22,9 @@ export function useNetwork() {
     const settings = useNetworkSettings();
 
     const {
-        viewPort: { isTablet, isMobile, width, height },
+        state: {
+            viewPort: { isTablet, isMobile, width, height },
+        },
         colors,
     } = useTheme();
 
