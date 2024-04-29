@@ -13,13 +13,15 @@ export function FieldLabel({
     url,
     value,
     children,
+    className,
     ...rest
 }: React.PropsWithChildren<FieldLabelProps>) {
     return (
         <Label
             {...rest}
             as="div"
-            className={tw("flex", "flex-col", "mb-6", "gap-2", rest.className)}
+            className={tw("flex", "flex-col", "mb-6", "gap-2", className)}
+            {...rest}
         >
             {url ? <Link href={url}>{value}</Link> : value}
             {children}
@@ -31,9 +33,10 @@ export type FieldProps = {
     label: FieldLabelProps;
     value: ReactNode;
     find?: boolean;
+    className?: string;
 };
 
-export function Field({ label, value, find }: FieldProps) {
+export function Field({ label, value, find, className }: FieldProps) {
     const { nodes } = useFilterContext();
 
     find = typeof find !== "undefined" ? find : true;
@@ -60,17 +63,11 @@ export function Field({ label, value, find }: FieldProps) {
                 );
 
             return list ? (
-                <li
-                    key={url}
-                    className={tw("list-item", "text-lg", "font-normal")}
-                >
+                <li key={url} className={tw("list-item", "font-normal")}>
                     {LinkOrValue(value)}
                 </li>
             ) : (
-                <p
-                    key={url}
-                    className={tw("content", "text-lg", "font-normal")}
-                >
+                <p key={url} className={tw("content", "font-normal")}>
                     {LinkOrValue(value)}
                 </p>
             );
@@ -79,7 +76,7 @@ export function Field({ label, value, find }: FieldProps) {
     );
 
     return (
-        <FieldLabel className={tw("field")} {...label}>
+        <FieldLabel className={tw("field", className)} {...label}>
             {Array.isArray(value) ? (
                 <ul className={tw("list-[square]", "list-inside", "ml-4")}>
                     {value.map((value: ReactNode, i: Key) => (

@@ -33,20 +33,13 @@ export function Header() {
                 borderColor: alphaHex(colors[selected.type], 0.6),
             }}
         >
-            <div
-                className={tw(
-                    "flex",
-                    "flex-row",
-                    "justify-between",
-                    "gap-4",
-                    "text-sm"
-                )}
-            >
+            <div className={tw("flex", "flex-row", "justify-between", "gap-4")}>
                 {selected["type"] && (
                     <Field
                         label={{ value: "@type" }}
                         value={selected["type"]}
                         find={false}
+                        className={tw("text-sm")}
                     />
                 )}
                 {selected["id"] && (
@@ -54,6 +47,7 @@ export function Header() {
                         label={{ value: "@id" }}
                         value={selected["id"]}
                         find={false}
+                        className={tw("text-sm")}
                     />
                 )}
             </div>

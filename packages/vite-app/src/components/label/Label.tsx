@@ -16,7 +16,7 @@ export function Label({
     const Tag = as ?? "label";
 
     return (
-        <Tag {...props} className={tw("label", "text-sm", props.className)}>
+        <Tag {...props} className={tw("label", props.className)}>
             {children}
         </Tag>
     );

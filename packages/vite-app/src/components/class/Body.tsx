@@ -41,6 +41,7 @@ export function Description() {
                                 url: `${selected["@context"]}/${property}`,
                             }}
                             value={value}
+                            className={tw("text-lg")}
                         />
                     );
                 }
@@ -109,6 +110,7 @@ export function Connections() {
                                 </React.Fragment>
                             ) : null;
                         })}
+                        className={tw("text-lg")}
                     />
                 );
             })}
