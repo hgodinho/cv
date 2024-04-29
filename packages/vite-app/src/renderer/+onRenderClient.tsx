@@ -3,7 +3,6 @@ export { onRenderClient };
 
 import ReactDOM from "react-dom/client";
 import { PageShell } from "./PageShell";
-import { getPageTitle } from "#root/lib";
 import type { OnRenderClientAsync } from "vike/types";
 
 let root: ReactDOM.Root;
@@ -27,6 +26,7 @@ const onRenderClient: OnRenderClientAsync = async (
             <Page />
         </PageShell>
     );
+
     if (pageContext.isHydration) {
         root = ReactDOM.hydrateRoot(container, page);
     } else {
@@ -35,5 +35,4 @@ const onRenderClient: OnRenderClientAsync = async (
         }
         root.render(page);
     }
-    document.title = getPageTitle(pageContext);
 };

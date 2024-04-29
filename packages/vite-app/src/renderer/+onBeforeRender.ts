@@ -27,6 +27,7 @@ export async function onBeforeRender() {
             ld: data.ld,
             properties: data.properties,
             api: {
+                name: "hgod.in",
                 base: "https://hgod.in",
                 namespace: "cv",
                 version: "v1",

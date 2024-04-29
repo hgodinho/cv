@@ -27,7 +27,6 @@ const onRenderHtml: OnRenderHtmlAsync = async (
     );
 
     // See https://vike.dev/head
-    const title = getPageTitle(pageContext);
     const desc = getPageDescription(pageContext);
     const locale = getPageLocale(pageContext);
 
@@ -42,7 +41,6 @@ const onRenderHtml: OnRenderHtmlAsync = async (
                 href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
                 rel="stylesheet"
             />
-            <title>${title}</title>
         </head>
         <body class="bg-black text-gray-300 text-lg text-wrap break-words box-border">
             <div id="app">${dangerouslySkipEscape(pageHtml)}</div>

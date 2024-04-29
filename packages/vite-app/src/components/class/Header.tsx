@@ -6,9 +6,10 @@ import { useFilterContext, useTheme } from "#root/provider";
 
 export function Header() {
     const {
-        headerRef,
-        data: { name, selected },
-    } = useFilterContext();
+        api: { name },
+    } = usePageContext();
+
+    const { headerRef, selected } = useFilterContext();
 
     const { colors } = useTheme();
 
@@ -57,7 +58,7 @@ export function Header() {
                 )}
             </div>
             <Helmet>
-                <title>{`${name} - ${selected.name}`}</title>
+                <title>{`${name} / ${selected.name}`}</title>
             </Helmet>
             <h1
                 ref={headerRef}
