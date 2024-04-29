@@ -46,7 +46,7 @@ class Sheet {
         return this.findValuesFromSheet(
             sheetName,
             `[${sheetName}]`,
-            this.sheets[sheetName]
+            this.sheets[sheetName].metadata
         ).header;
     }
 
@@ -80,7 +80,7 @@ class Sheet {
         const { header, values } = this.findValuesFromSheet(
             sheetName,
             `[${sheetName}]`,
-            this.sheets[sheetName]
+            this.sheets[sheetName].metadata
         );
 
         return values.map(
@@ -138,12 +138,12 @@ class Sheet {
         return { header, values, sheetName, key };
     }
 
-    findValuesFromSheet(sheetName, key, columns) {
+    findValuesFromSheet(sheetName, key, columns, rows = "auto") {
         const { header, values, ...rest } = this.findRangeFromSheet({
             sheetName,
             key,
             columns,
-            rows: "auto",
+            rows,
         });
 
         return {
@@ -207,7 +207,18 @@ class Sheet {
             this.spreadsheet = SpreadsheetApp.openById(id);
         }
         if (sheets) {
-            this.sheets = sheets;
+            this.sheets = sheets.reduce((acc, endpoint) => {
+                const { values, header } = this.findValuesFromSheet(
+                    "dashboard",
+                    `[${endpoint}]`,
+                    2
+                );
+                acc[endpoint] = values.reduce((acc, row) => {
+                    acc[row[0]] = row[1];
+                    return acc;
+                }, {});
+                return acc;
+            }, {});
         }
     }
 

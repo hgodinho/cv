@@ -1,16 +1,6 @@
 class App extends Sheet {
-    constructor() {
-        super(CONFIG.sheet(), {
-            person: 22,
-            place: 6,
-            role: 11,
-            certification: 34,
-            creativeWork: 28,
-            article: 33,
-            chapter: 31,
-            event: 15,
-            organization: 16,
-        });
+    constructor(endpoints = []) {
+        super(CONFIG.sheet(), endpoints);
         this.setup();
     }
 
@@ -27,10 +17,15 @@ class App extends Sheet {
 
     setupRawData() {
         this.rawData = Object.fromEntries(
-            Object.entries(this.sheets).map(([name, columns]) => {
+            Object.entries(this.sheets).map(([name, { metadata, items }]) => {
                 return [
                     name,
-                    this.findValuesFromSheet(name, `[${name}]`, columns),
+                    this.findValuesFromSheet(
+                        name,
+                        `[${name}]`,
+                        metadata,
+                        items
+                    ),
                 ];
             })
         );
