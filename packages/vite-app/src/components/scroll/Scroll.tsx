@@ -1,4 +1,4 @@
-import { tw } from "@/lib";
+import { tw } from "#root/lib";
 import * as ScrollPrimitive from "@radix-ui/react-scroll-area";
 import React from "react";
 

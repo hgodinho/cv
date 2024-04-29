@@ -1,3 +1,4 @@
+export * from "./accessible-tree";
 export * from "./class";
 export * from "./cv";
 export * from "./layout";

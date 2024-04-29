@@ -1,12 +1,14 @@
-import { tw } from "@/lib";
-import { useTheme } from "@/provider";
+import { tw } from "#root/lib";
+import { useTheme } from "#root/provider";
 
 export type Debug = {
     debug?: boolean;
 };
 
 export function Debug({ debug = true }: Debug) {
-    const { viewPort } = useTheme();
+    const {
+        state: { viewPort },
+    } = useTheme();
 
     if (debug && import.meta.env.DEV) {
         return (

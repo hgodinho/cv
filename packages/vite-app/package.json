@@ -5,12 +5,13 @@
     "author": "Henrique Godinho <ola@hgod.in>",
     "type": "module",
     "scripts": {
-        "build": "tsc && nx build",
-        "dev": "vite",
-        "dev:host": "vite --host",
+        "build": "vite build",
+        "dev": "vite dev",
         "get:data": "node .bin/getData.js",
-        "lint": "lint",
-        "preview": "nx preview",
+        "prod": "npm run lint && npm run build && npm run server:prod",
+        "server": "node --loader ts-node/esm ./server/index.ts",
+        "server:dev": "npm run server",
+        "server:prod": "cross-env NODE_ENV=production npm run server",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --verbose",
         "test:cov": "pnpm test -- --coverage --coverageDirectory=\"tests/coverage\""
     },
@@ -21,19 +22,26 @@
         "@radix-ui/react-slider": "^1.1.2",
         "@radix-ui/react-switch": "^1.0.3",
         "@radix-ui/react-toggle-group": "^1.0.4",
-        "@react-hook/window-size": "^3.1.1",
         "d3": "^7.9.0",
+        "eslint": "^8.55.0",
+        "eslint-plugin-react": "^7.33.2",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react-refresh": "^0.4.5",
         "framer-motion": "^11.0.24",
         "jsonld": "^8.3.2",
+        "node-fetch": "^3.3.2",
         "react": "^18.2.0",
         "react-accessible-treeview": "^2.8.3",
         "react-dom": "^18.2.0",
         "react-feather": "^2.0.10",
         "react-force-graph-3d": "^1.24.2",
         "react-helmet": "^6.1.0",
-        "react-router-dom": "^6.22.3",
         "three": "^0.162.0",
-        "three-spritetext": "^1.8.2"
+        "three-spritetext": "^1.8.2",
+        "ts-node": "^10.9.1",
+        "vike": "^0.4.171",
+        "vike-react": "^0.4.8",
+        "vite": "^5.2.7"
     },
     "devDependencies": {
         "@jest/globals": "^29.7.0",
@@ -44,6 +52,8 @@
         "@types/react-dom": "^18.2.23",
         "@types/react-helmet": "^6.1.11",
         "@types/three": "^0.162.0",
+        "@typescript-eslint/eslint-plugin": "^6.13.2",
+        "@typescript-eslint/parser": "^6.13.2",
         "@vitejs/plugin-react": "^4.2.1",
         "autoprefixer": "^10.4.19",
         "dotenv": "^16.4.5",
@@ -52,11 +62,6 @@
         "postcss": "^8.4.38",
         "tailwindcss": "^3.4.3",
         "ts-jest": "^29.1.2",
-        "typescript": "^5.4.3",
-        "vite": "^5.2.7",
-        "vite-tsconfig-paths": "^4.3.2"
-    },
-    "nx": {
-        "includedScripts": []
+        "typescript": "^5.4.3"
     }
 }

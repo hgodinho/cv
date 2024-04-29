@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from "react";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 
-import { Label } from "@/components";
+import { Label } from "#root/components";
 
-import { alphaHex, tw } from "@/lib";
+import { alphaHex, tw } from "#root/lib";
 
 export type SliderProps = {
     label: string;

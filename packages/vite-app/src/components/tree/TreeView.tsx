@@ -1,12 +1,17 @@
 import { useMemo } from "react";
 import { ChevronRight } from "react-feather";
-import * as RATree from "react-accessible-treeview";
-import { NavLink } from "react-router-dom";
+import {
+    ITreeViewProps,
+    INodeRendererProps,
+    INode,
+} from "react-accessible-treeview";
+
+import * as RATree from "#root/components/accessible-tree";
 
 import { Checkbox } from ".";
-import { tw, useTree } from "@/lib";
-import { useTheme, useFilterContext } from "@/provider";
-import { Scroll } from "@/components";
+import { tw, useTree } from "#root/lib";
+import { useTheme } from "#root/provider";
+import { Scroll, Link } from "#root/components";
 
 export type TreeTypeEnum = "filter" | "link";
 
@@ -40,14 +45,13 @@ export function Tree({ mode = "link" }: TreeProps) {
     const { treeData, initialSelectedIds, onCheck } = useTree();
 
     const { filterProps } = useMemo(() => {
-        let filterProps: Omit<RATree.ITreeViewProps, "data" | "nodeRenderer"> =
-            {
-                multiSelect: false,
-                propagateSelect: false,
-                propagateSelectUpwards: false,
-                togglableSelect: true,
-                onSelect: (props) => onCheck(props, mode),
-            };
+        let filterProps: Omit<ITreeViewProps, "data" | "nodeRenderer"> = {
+            multiSelect: false,
+            propagateSelect: false,
+            propagateSelectUpwards: false,
+            togglableSelect: true,
+            onSelect: (props) => onCheck(props, mode),
+        };
         if (mode === "filter") {
             filterProps = {
                 multiSelect: true,
@@ -94,7 +98,7 @@ export function Branch({
     getNodeProps,
     handleExpand,
     handleSelect,
-}: RATree.INodeRendererProps & {
+}: INodeRendererProps & {
     mode: TreeViewProps["mode"];
 }) {
     const {
@@ -168,21 +172,16 @@ export function Branch({
     );
 }
 
-export function BranchLabel({ element }: { element: RATree.INode }) {
+export function BranchLabel({ element }: { element: INode }) {
     const isLink = typeof element.metadata?.id !== "undefined";
     return isLink ? (
-        <NavLink
-            to={element.metadata?.id as string}
+        <Link
+            href={element.metadata?.id as string}
             tabIndex={-1}
-            className={({ isActive }) => {
-                return tw(
-                    isActive ? tw("text-blue-400", "font-bold") : "",
-                    "mr-2"
-                );
-            }}
+            className={tw("mr-2")}
         >
             {element.name}
-        </NavLink>
+        </Link>
     ) : (
         <span className={tw("mr-2")}>{element.name}</span>
     );

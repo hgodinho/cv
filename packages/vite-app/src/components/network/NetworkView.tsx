@@ -1,6 +1,5 @@
-import ForceGraph3d from "react-force-graph-3d";
-
-import { tw, useNetwork } from "@/lib";
+import { tw, useNetwork } from "#root/lib";
+import { ClientOnly } from "vike-react/ClientOnly";
 
 export function NetworkView() {
     const {
@@ -27,23 +26,33 @@ export function NetworkView() {
                 "active:cursor-grabbing"
             )}
         >
-            <ForceGraph3d
-                ref={ref}
-                graphData={{ nodes: filteredNodes, links: filteredLinks }}
-                showNavInfo={false}
-                width={width - 2}
-                height={height - 2}
-                backgroundColor="black"
-                nodeLabel={nodeLabel}
-                nodeColor={color}
-                onNodeClick={focusOnClick}
-                linkThreeObject={linkLabel}
-                linkPositionUpdate={linkLabelPosition}
-                linkSource="subject"
-                linkTarget="object"
-                linkThreeObjectExtend={true}
-                {...settings}
-            />
+            <ClientOnly
+                load={() => import("react-force-graph-3d")}
+                fallback={<div>Loading...</div>}
+            >
+                {(ForceGraph3d) => (
+                    <ForceGraph3d
+                        ref={ref}
+                        graphData={{
+                            nodes: filteredNodes,
+                            links: filteredLinks,
+                        }}
+                        showNavInfo={false}
+                        width={width - 2}
+                        height={height - 2}
+                        backgroundColor="black"
+                        nodeLabel={nodeLabel}
+                        nodeColor={color}
+                        onNodeClick={focusOnClick}
+                        linkThreeObject={linkLabel}
+                        linkPositionUpdate={linkLabelPosition}
+                        linkSource="subject"
+                        linkTarget="object"
+                        linkThreeObjectExtend={true}
+                        {...settings}
+                    />
+                )}
+            </ClientOnly>
         </div>
     );
 }

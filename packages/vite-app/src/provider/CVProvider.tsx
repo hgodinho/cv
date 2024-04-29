@@ -1,88 +1,64 @@
 import {
     createContext,
     PropsWithChildren,
-    useState,
     useMemo,
-    useCallback,
     useEffect,
+    useState,
     useRef,
     useContext,
+    useReducer,
+    useCallback,
 } from "react";
-import * as jsonld from "jsonld";
-import { JsonLdArray } from "jsonld/jsonld-spec";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
-import { useNavigate } from "react-router-dom";
 import { FilterProvider } from ".";
-
-export type FilterValue = {
-    filterValue: (value: string) => string;
-};
+import { JsonLDType } from "#root/types";
+import { usePageContext } from ".";
+import { navigate } from "vike/client/router";
 
 export type CVContextType = {
     headerRef: React.RefObject<HTMLHeadingElement>;
-    data: {
-        name: string;
-        properties: string[];
-        config: {
-            base: string;
-            namespace: string;
-            url: string;
-            query: string;
-        };
-        data: JsonLDType;
-        colors: Record<string, string>;
-    };
-    selected: NodeObject | null;
     nodes: NodeObject[];
     links: LinkObject[];
-    setSelected: (node: NodeObject | null) => void;
-} & FilterValue;
+    properties: string[];
 
-export type JsonLDType = {
-    raw: Record<string, any>;
-    expanded?: JsonLdArray;
-    compacted?: jsonld.NodeObject;
-    flattened?: jsonld.NodeObject;
-    nquads?: object;
+    selected: NodeObject | null;
+    connectedTo: LinkObject[];
+
+    setSelected: (node: NodeObject | null) => void;
 };
 
 export const defaultCVContext: CVContextType = {
     headerRef: { current: null },
-    data: {
-        name: "hgod.in",
-        properties: [],
-        config: {
-            base: "",
-            namespace: "",
-            url: "",
-            query: "",
-        },
-        data: {
-            raw: { "@context": {}, "@graph": [] },
-        },
-        colors: {},
-    },
     nodes: [],
     links: [],
+    properties: [],
     selected: null,
+    connectedTo: [],
     setSelected: () => {},
-    filterValue: () => "",
 };
 
 export const CVContext = createContext<CVContextType>(defaultCVContext);
 
-export function CVProvider({
-    children,
-    data,
-}: PropsWithChildren<{ data: CVContextType["data"] }>) {
-    const ld = data.data;
+export function useCVContext() {
+    const context = useContext(CVContext);
+    return context;
+}
 
+export function CVProvider({ children }: PropsWithChildren<{}>) {
+    /**
+     * Get the JSON-LD data from the page context
+     */
+    const { ld, properties, api } = usePageContext();
+
+    // Reference to the header element
     const headerRef = useRef<HTMLHeadingElement>(null);
 
-    const [selected, setSelected] = useState<NodeObject | null>(null);
-
+    /**
+     * Create nodes and links from the JSON-LD data
+     */
     const { nodes, links } = useMemo(() => {
         let nodes: NodeObject[] = [];
+
         if (ld?.compacted) {
             nodes = (ld?.compacted["@graph"] as NodeObject[]).map((node) => {
                 return {
@@ -129,17 +105,28 @@ export function CVProvider({
         return { nodes, links };
     }, [ld]);
 
-    const filterValue = useCallback((value: string) => {
-        if (value.includes(data.config.base)) {
-            return value.replace(data.config.base, "");
-        }
-        return value;
-    }, []);
+    /**
+     * State to store the selected node
+     */
+    const [selected, setSelected] = useState<NodeObject | null>(null);
 
-    const navigate = useNavigate();
+    const [connectedTo, setConnectedTo] = useState<LinkObject[]>([]);
 
+    /**
+     *
+     */
     useEffect(() => {
-        const path = selected?.id?.toString().split(data.config.base).pop();
+        const connectedTo: LinkObject[] = links.filter((link) => {
+            return link.object === selected?.id;
+        });
+        setConnectedTo(connectedTo);
+    }, [selected, links]);
+
+    /**
+     * Navigate to the selected node
+     */
+    useEffect(() => {
+        const path = selected ? `/${api.namespace}/${selected._id}` : false;
         if (path) {
             navigate(path);
             headerRef.current?.focus();
@@ -150,24 +137,16 @@ export function CVProvider({
         <CVContext.Provider
             value={{
                 ...defaultCVContext,
-                data: {
-                    ...defaultCVContext.data,
-                    ...data,
-                },
-                headerRef,
                 selected,
+                properties,
+                headerRef,
                 nodes,
                 links,
+                connectedTo,
                 setSelected,
-                filterValue,
             }}
         >
             <FilterProvider>{children}</FilterProvider>
         </CVContext.Provider>
     );
-}
-
-export function useCVContext() {
-    const context = useContext(CVContext);
-    return context;
 }

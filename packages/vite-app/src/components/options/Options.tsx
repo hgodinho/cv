@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Filter, Sliders, Menu, X } from "react-feather";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
 
-import { tw } from "@/lib";
-import { Collapsible, TreeView, Settings } from "@/components";
-import { useTheme } from "@/provider";
+import { tw } from "#root/lib";
+import { Collapsible, TreeView, Settings } from "#root/components";
+import { useTheme } from "#root/provider";
 
 export type OptionsEnum = "filter" | "settings";
 
@@ -13,9 +13,11 @@ export function OptionsView() {
 
     const {
         sizes: { icon },
-        viewPort: { height, isTablet, isDesktop },
-        collapsibles: { options },
-        toggleCollapsible,
+        state: {
+            viewPort: { height, isTablet, isDesktop },
+            collapsibles: { options },
+            toggleCollapsible,
+        },
     } = useTheme();
 
     return (

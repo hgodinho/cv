@@ -1,3 +1,5 @@
+export * from "./PageProvider";
+
 export * from "./CVProvider";
 
 export * from "./FilterProvider";

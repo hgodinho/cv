@@ -1,6 +1,6 @@
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Square, MinusSquare, XSquare } from "react-feather";
-import { useTheme } from "@/provider";
+import { useTheme } from "#root/provider";
 
 export function Checkbox(
     props: CheckboxPrimitive.CheckboxProps & {

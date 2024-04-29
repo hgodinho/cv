@@ -1,22 +1,22 @@
 import { useEffect } from "react";
 import { FileMinus, FilePlus } from "react-feather";
 
-import { useCVContext, useTheme } from "@/provider";
-import { Body, Collapsible, Header } from "@/components";
-import { tw } from "@/lib";
+import { useCVContext, useTheme } from "#root/provider";
+import { Body, Collapsible, Header } from "#root/components";
+import { tw } from "#root/lib";
 
 export function ClassView() {
-    const {
-        data: { colors },
-        selected,
-    } = useCVContext();
+    const { selected } = useCVContext();
 
     const {
         sizes: { icon },
-        collapsibles: { class: open },
-        viewPort: { height },
-        toggleCollapsible,
-        collapsibleOn,
+        state: {
+            collapsibles: { class: open },
+            viewPort: { height },
+            toggleCollapsible,
+            collapsibleOn,
+        },
+        colors,
     } = useTheme();
 
     useEffect(() => {

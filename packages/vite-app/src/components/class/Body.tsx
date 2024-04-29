@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import type { NodeObject, LinkObject } from "react-force-graph-3d";
 
-import { Scroll, Field, Link } from "@/components";
-import { tw } from "@/lib";
-import { useFilterContext } from "@/provider";
+import { Scroll, Field, Link } from "#root/components";
+import { tw } from "#root/lib";
+import { useFilterContext } from "#root/provider";
 
 export function Description() {
-    const {
-        selected,
-        data: { properties },
-    } = useFilterContext();
+    const { properties, selected } = useFilterContext();
 
     return selected ? (
         <section className={tw("px-4", "pt-2", "flex", "flex-col")}>
@@ -106,7 +103,7 @@ export function Connections() {
                             return typeof link.source !== "string" ? (
                                 <React.Fragment key={index}>
                                     {link.source.type}{" "}
-                                    <Link to={link.source.id}>
+                                    <Link href={link.source.id}>
                                         {link.source.name}
                                     </Link>
                                 </React.Fragment>

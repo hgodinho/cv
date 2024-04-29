@@ -1,9 +1,9 @@
 import { useCallback, useRef, useEffect } from "react";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
-import { useParams } from "react-router-dom";
+import { useParams } from "#root/provider";
 
-import { useFilterContext, useNetworkSettings, useTheme } from "@/provider";
+import { useFilterContext, useNetworkSettings, useTheme } from "#root/provider";
 
 export type UseNetworkProps = {
     w?: number;
@@ -14,20 +14,18 @@ export type UseNetworkProps = {
 export function useNetwork() {
     const ref = useRef();
 
-    const {
-        nodes,
-        filteredNodes,
-        links,
-        filteredLinks,
-        data: { colors, config },
-        setSelected,
-    } = useFilterContext();
+    const { nodes, filteredNodes, links, filteredLinks, setSelected } =
+        useFilterContext();
 
-    const { type, id } = useParams();
+    const { id, type } = useParams();
+
     const settings = useNetworkSettings();
 
     const {
-        viewPort: { isTablet, isMobile, width, height },
+        state: {
+            viewPort: { isTablet, isMobile, width, height },
+        },
+        colors,
     } = useTheme();
 
     const focusOnClick = useCallback(
@@ -81,15 +79,17 @@ export function useNetwork() {
         Object.assign(sprite.position, middlePos);
     }, []);
 
-    const color = useCallback((node: NodeObject) => {
-        return colors[node.type];
-    }, []);
+    const color = useCallback(
+        (node: NodeObject) => {
+            return colors[node.type];
+        },
+        [colors]
+    );
 
     useEffect(() => {
         const found = filteredNodes.find((node) => {
             const search = `${type}/${id}`;
-            const query = node.id?.toString().split(config.query).pop();
-            return query === search;
+            return node._id === search;
         });
         if (found) {
             focusOnClick(found);

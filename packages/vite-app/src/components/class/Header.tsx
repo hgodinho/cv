@@ -1,15 +1,17 @@
 import { Helmet } from "react-helmet";
 
-import { tw, alphaHex } from "@/lib";
-import { Field } from "@/components";
-import { useFilterContext } from "@/provider";
+import { tw, alphaHex } from "#root/lib";
+import { Field } from "#root/components";
+import { useFilterContext, useTheme, usePageContext } from "#root/provider";
 
 export function Header() {
     const {
-        headerRef,
-        selected,
-        data: { name, colors },
-    } = useFilterContext();
+        api: { name },
+    } = usePageContext();
+
+    const { headerRef, selected } = useFilterContext();
+
+    const { colors } = useTheme();
 
     return selected ? (
         <header
@@ -56,7 +58,7 @@ export function Header() {
                 )}
             </div>
             <Helmet>
-                <title>{`${name} - ${selected.name}`}</title>
+                <title>{`${name} / ${selected.name}`}</title>
             </Helmet>
             <h1
                 ref={headerRef}

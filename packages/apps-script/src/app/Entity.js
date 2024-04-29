@@ -17,8 +17,11 @@ class Entity {
         this._config = config;
 
         header.forEach((key, index) => {
-            const value = this.parseValue(values[index]);
-            if (value !== undefined && key !== "number") {
+            let value = values[index];
+            if (key !== "_id") {
+                value = this.parseValue(values[index]);
+            }
+            if (typeof value !== "undefined") {
                 this[key] = value;
             }
         });
@@ -106,11 +109,11 @@ class Entity {
         }
 
         if (typeof data === "string") {
-            return this._config.query + data;
+            return `${this._config.url}/${this._config.namespace}/${data}`;
         } else if (Array.isArray(data)) {
             return data.map((item) => {
                 if (typeof item === "string") {
-                    return this._config.query + item;
+                    return `${this._config.url}/${this._config.namespace}/${item}`;
                 } else if (typeof item === "object") {
                     return item;
                 }
@@ -121,21 +124,5 @@ class Entity {
 
         // if we get here, we return the string as is
         return str;
-    }
-
-    toJsonLd() {
-        if (!this.type) throw new Error("Entity requires a type");
-        if (!this.id) throw new Error("Entity requires a id");
-        const json = {
-            "@context": "https://schema.org/",
-            "@type": this.type,
-            "@id": this.id,
-        };
-        this._header.forEach((key, index) => {
-            if (this[key] && key !== "id" && key !== "type") {
-                json[key] = this[key];
-            }
-        });
-        return json;
     }
 }

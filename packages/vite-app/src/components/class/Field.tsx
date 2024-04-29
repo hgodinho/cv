@@ -1,8 +1,8 @@
 import React, { Key, ReactNode, useCallback } from "react";
 
-import { Link, Label, type LabelProps } from "@/components";
-import { useFilterContext } from "@/provider";
-import { tw } from "@/lib";
+import { Link, Label, type LabelProps } from "#root/components";
+import { useFilterContext } from "#root/provider";
+import { tw } from "#root/lib";
 
 export type FieldLabelProps = {
     url?: string;
@@ -45,18 +45,13 @@ export function Field({ label, value, find }: FieldProps) {
             if (value?.toString().startsWith("http") && find) {
                 const found = nodes.find((node) => node["id"] === value);
                 if (found) {
-                    value = <Link to={url}>{found["name"]}</Link>;
+                    value = <Link href={url}>{found["name"]}</Link>;
                 }
             }
-
-            const linkProps = url.startsWith("http")
-                ? { href: url }
-                : { to: url };
-
             const LinkOrValue = (value: ReactNode) =>
                 value ? (
                     value.toString().startsWith("http") ? (
-                        <Link {...linkProps}>{value}</Link>
+                        <Link href={url}>{value}</Link>
                     ) : (
                         value
                     )

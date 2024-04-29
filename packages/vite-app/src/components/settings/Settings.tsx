@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
-import { Label, Slider, Switch, Scroll } from "@/components";
-import { tw } from "@/lib";
-import { useNetworkSettings } from "@/provider";
+import { Label, Slider, Switch, Scroll } from "#root/components";
+import { tw } from "#root/lib";
+import { useNetworkSettings } from "#root/provider";
 
 export type SettingsProps = {
     hidden: boolean;
