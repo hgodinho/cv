@@ -1,0 +1,36 @@
+{
+    "name": "@hgod-in-cv/data",
+    "version": "0.1.0",
+    "description": "Gatsby plugin data for hgod.in",
+    "keywords": [],
+    "license": "MIT",
+    "author": "Henrique Godinho <ola@hgod.in>",
+    "main": "./dist/gatsby-node.js",
+    "files": [
+        "./dist/*",
+        "gatsby-node.js"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "get:data": "node .bin/getData.js",
+        "test": "jest"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "gql-query-builder": "^3.8.0",
+        "jsonld": "^8.3.2",
+        "node-fetch": "^3.3.2",
+        "schema-dts": "^1.1.2"
+    },
+    "devDependencies": {
+        "gatsby": "^5.13.7",
+        "gatsby-plugin-utils": "^4.13.1",
+        "react-force-graph-3d": "^1.24.3",
+        "typescript": "^5.5.4"
+    },
+    "peerDependencies": {
+        "gatsby": "^5.13.5",
+        "react-force-graph-3d": "^1.24.3"
+    }
+}
