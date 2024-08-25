@@ -11,4 +11,6 @@ export * from "./tree";
 export * from "./settings";
 export * from "./scroll";
 export * from "./loading";
+export * from "./icon";
+
 export * from "./debug";

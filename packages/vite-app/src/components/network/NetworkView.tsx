@@ -1,8 +1,7 @@
-import { Loading } from "../loading";
 import { tw, useNetwork } from "#root/lib";
-import { ClientOnly } from "vike-react/ClientOnly";
+import ForceGraph3d from "react-force-graph-3d";
 
-export function NetworkView() {
+function NetworkView() {
     const {
         ref,
         filteredNodes,
@@ -30,34 +29,30 @@ export function NetworkView() {
                 "grid"
             )}
         >
-            <ClientOnly
-                load={() => import("react-force-graph-3d")}
-                fallback={<Loading />}
-            >
-                {(ForceGraph3d) => (
-                    <ForceGraph3d
-                        ref={ref}
-                        graphData={{
-                            nodes: filteredNodes,
-                            links: filteredLinks,
-                        }}
-                        showNavInfo={false}
-                        width={width - 2}
-                        height={height - 2}
-                        backgroundColor="black"
-                        nodeLabel={nodeLabel}
-                        nodeColor={color}
-                        onNodeClick={focusOnClick}
-                        linkThreeObject={linkLabel}
-                        linkPositionUpdate={linkLabelPosition}
-                        linkSource="subject"
-                        linkTarget="object"
-                        linkThreeObjectExtend={true}
-                        {...settings}
-                    />
-                    // <Loading />
-                )}
-            </ClientOnly>
+            {typeof width !== "undefined" && typeof height !== "undefined" ? (
+                <ForceGraph3d
+                    ref={ref}
+                    graphData={{
+                        nodes: filteredNodes,
+                        links: filteredLinks,
+                    }}
+                    showNavInfo={false}
+                    width={width - 2}
+                    height={height - 2}
+                    backgroundColor="black"
+                    nodeLabel={nodeLabel}
+                    nodeColor={color}
+                    onNodeClick={focusOnClick}
+                    linkThreeObject={linkLabel}
+                    linkPositionUpdate={linkLabelPosition}
+                    linkSource="subject"
+                    linkTarget="object"
+                    linkThreeObjectExtend={true}
+                    {...settings}
+                />
+            ) : null}
         </div>
     );
 }
+
+export default NetworkView;

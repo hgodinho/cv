@@ -8,6 +8,7 @@ export default defineConfig({
     plugins: [
         react(),
         vike({
+            prerender: true,
             redirects: {
                 "/": "/cv/person/henrique-godinho",
                 "/cv": "/cv/person/henrique-godinho",
@@ -15,7 +16,8 @@ export default defineConfig({
         }),
     ],
     build: {
-        outDir: "../../dist/apps/vite-app",
+        // outDir: "../../dist/apps/vite-app",
+        outDir: "./dist",
         sourcemap: true,
     },
     resolve: {

@@ -22,8 +22,16 @@ export async function getData() {
             .then(async (res) => {
                 switch (res.status) {
                     case 200:
-                        const response = JSON.parse(await res.text());
-                        return response;
+                        try {
+                            const response = JSON.parse(await res.text());
+                            return response;
+                        } catch (error) {
+                            console.group();
+                            console.error(error);
+                            console.error(await res.text());
+                            console.groupEnd();
+                            throw new Error(error);
+                        }
                     case 401:
                         throw new Error("Unauthorized");
                     default:
@@ -31,26 +39,30 @@ export async function getData() {
                 }
             })
             .catch((err) => {
-                console.error(err);
+                throw new Error(err);
             });
 
-    const graph = await fetchData("ld-graph");
+    try {
+        const graph = await fetchData("ld-graph");
 
-    const properties = await fetchData("properties");
+        const properties = await fetchData("properties");
 
-    console.log({ graph, properties });
+        console.log({ graph: graph.data, properties });
 
-    const json = {
-        properties: properties.data,
-        ld: await getJsonLD(graph.data, graph.data["@context"]),
-    };
+        const json = {
+            properties: properties.data,
+            ld: await getJsonLD(graph.data, graph.data["@context"]),
+        };
 
-    fs.writeFileSync(
-        "public/henrique-godinho.jsonld",
-        JSON.stringify(json, null, 4)
-    );
+        fs.writeFileSync(
+            "public/henrique-godinho.jsonld",
+            JSON.stringify(json, null, 4)
+        );
 
-    console.warn("public/henrique-godinho.jsonld written");
+        console.warn("public/henrique-godinho.jsonld written");
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 await getData();

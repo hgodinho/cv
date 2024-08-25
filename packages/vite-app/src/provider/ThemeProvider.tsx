@@ -1,17 +1,11 @@
-import {
-    createContext,
-    useContext,
-    useState,
-    useCallback,
-    useEffect,
-} from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 
 import { useViewPortSize } from "#root/lib";
 
 export type ThemeContextState = {
     viewPort: {
-        width: number;
-        height: number;
+        width?: number;
+        height?: number;
         isMobile: boolean;
         isTablet: boolean;
         isDesktop: boolean;
@@ -26,6 +20,7 @@ export type ThemeContextCallbacks = {
     toggleCollapsible: (key: keyof ThemeContextState["collapsibles"]) => void;
     collapsibleOn: (key: keyof ThemeContextState["collapsibles"]) => void;
     collapsibleOff: (key: keyof ThemeContextState["collapsibles"]) => void;
+    closeCollapsibles: () => void;
 };
 
 export type ThemeContextType = {
@@ -36,8 +31,6 @@ export type ThemeContextType = {
 
 export const themeStateDefault: ThemeContextState & ThemeContextCallbacks = {
     viewPort: {
-        width: 0,
-        height: 0,
         isMobile: false,
         isTablet: false,
         isDesktop: false,
@@ -46,9 +39,10 @@ export const themeStateDefault: ThemeContextState & ThemeContextCallbacks = {
         options: false,
         class: false,
     },
-    toggleCollapsible: () => {},
-    collapsibleOn: () => {},
-    collapsibleOff: () => {},
+    toggleCollapsible: () => { },
+    collapsibleOn: () => { },
+    collapsibleOff: () => { },
+    closeCollapsibles: () => { },
 };
 
 export const themeDefault: ThemeContextType = {
@@ -87,10 +81,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [collapsibles, setCollapsibles] = useState<
         ThemeContextState["collapsibles"]
-    >({
-        options: true,
-        class: false,
-    });
+    >(themeStateDefault.collapsibles);
 
     const toggleCollapsible = useCallback(
         (key: keyof ThemeContextState["collapsibles"]) => {
@@ -111,16 +102,17 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
     const collapsibleOn = useCallback(
         (key: keyof ThemeContextState["collapsibles"]) => {
-            setCollapsibles((prev) => ({
-                ...prev,
-                [key]: true,
-            }));
-
-            if (viewPort.isMobile) {
+            if (viewPort.isTablet || viewPort.isMobile) {
                 const other = key === "class" ? "options" : "class";
                 setCollapsibles((prev) => ({
                     ...prev,
+                    [key]: true,
                     [other]: false,
+                }));
+            } else {
+                setCollapsibles((prev) => ({
+                    ...prev,
+                    [key]: true,
                 }));
             }
         },
@@ -137,6 +129,14 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         []
     );
 
+    const closeCollapsibles = useCallback(() => {
+        setCollapsibles((prev) => ({
+            ...prev,
+            options: false,
+            class: false,
+        }));
+    }, []);
+
     return (
         <ThemeContext.Provider
             value={{
@@ -147,6 +147,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
                     toggleCollapsible,
                     collapsibleOn,
                     collapsibleOff,
+                    closeCollapsibles,
                 },
             }}
         >

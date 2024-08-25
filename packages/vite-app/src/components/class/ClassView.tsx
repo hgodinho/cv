@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { FileMinus, FilePlus } from "react-feather";
 
 import { useCVContext, useTheme } from "#root/provider";
-import { Body, Collapsible, Header } from "#root/components";
+import { Body, Collapsible, Header, Icon } from "#root/components";
 import { tw } from "#root/lib";
 
 export function ClassView() {
@@ -12,7 +11,6 @@ export function ClassView() {
         sizes: { icon },
         state: {
             collapsibles: { class: open },
-            viewPort: { height },
             toggleCollapsible,
             collapsibleOn,
         },
@@ -74,28 +72,19 @@ export function ClassView() {
             onOpenChange={() => toggleCollapsible("class")}
             rootProps={{
                 disabled: !selected,
-                style: {
-                    height: height - 32,
-                },
             }}
             contentProps={{
                 style: {
                     borderColor: colors[selected?.type],
                 },
             }}
-            openIcon={<FilePlus size={icon} />}
-            closeIcon={<FileMinus size={icon} />}
+            openIcon={<Icon name="FilePlus" size={icon} />}
+            closeIcon={<Icon name="FileMinus" size={icon} />}
         >
             <main>
                 <article className={tw("flex", "flex-col", "h-full", "w-full")}>
-                    {!selected ? (
-                        <div className="">Select a class to view more info</div>
-                    ) : (
-                        <>
-                            <Header />
-                            <Body />
-                        </>
-                    )}
+                    <Header />
+                    <Body />
                 </article>
             </main>
         </Collapsible>

@@ -40,8 +40,8 @@ function getWindowDimensions() {
         } else {
             // default to mobile for ssr
             return {
-                width: 480,
-                height: 800,
+                // width: 480,
+                // height: 800,
                 isMobile: true,
                 isTablet: false,
                 isDesktop: false,

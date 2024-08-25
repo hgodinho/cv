@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Filter, Sliders, Menu, X } from "react-feather";
+import { Filter, Sliders } from "react-feather";
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
 
 import { tw } from "#root/lib";
-import { Collapsible, TreeView, Settings } from "#root/components";
+import { Collapsible, TreeView, Settings, Icon } from "#root/components";
 import { useTheme } from "#root/provider";
 
 export type OptionsEnum = "filter" | "settings";
@@ -14,7 +14,7 @@ export function OptionsView() {
     const {
         sizes: { icon },
         state: {
-            viewPort: { height, isTablet, isDesktop },
+            viewPort: { isTablet, isDesktop },
             collapsibles: { options },
             toggleCollapsible,
         },
@@ -51,16 +51,11 @@ export function OptionsView() {
                 ),
                 content: tw("bg-black/90"),
             }}
-            rootProps={{
-                style: {
-                    height: height - 32,
-                },
-            }}
             triggerProps={{
                 "aria-label": "Menu",
             }}
-            openIcon={<Menu size={icon} />}
-            closeIcon={<X size={icon} />}
+            openIcon={<Icon name="Menu" size={icon} />}
+            closeIcon={<Icon name="X" size={icon} />}
             isOpen={options}
             onOpenChange={() => toggleCollapsible("options")}
         >

@@ -1,30 +1,29 @@
 import {
     createContext,
     PropsWithChildren,
-    useMemo,
+    useReducer,
     useEffect,
-    useState,
     useRef,
     useContext,
-    useReducer,
     useCallback,
 } from "react";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import { FilterProvider } from ".";
-import { JsonLDType } from "#root/types";
-import { usePageContext } from ".";
+import { usePageContext, useParams, useData } from ".";
 import { navigate } from "vike/client/router";
 
-export type CVContextType = {
+export type CVContextState = {
+    selected: NodeObject;
+    connectedTo: LinkObject[];
+};
+
+export type CVContextType = CVContextState & {
     headerRef: React.RefObject<HTMLHeadingElement>;
     nodes: NodeObject[];
     links: LinkObject[];
     properties: string[];
 
-    selected: NodeObject | null;
-    connectedTo: LinkObject[];
-
-    setSelected: (node: NodeObject | null) => void;
+    setSelected: (node: NodeObject) => void;
 };
 
 export const defaultCVContext: CVContextType = {
@@ -32,9 +31,14 @@ export const defaultCVContext: CVContextType = {
     nodes: [],
     links: [],
     properties: [],
-    selected: null,
+    selected: {
+        id: "",
+        _id: "",
+        "@context": "",
+        name: "",
+    },
     connectedTo: [],
-    setSelected: () => {},
+    setSelected: () => { },
 };
 
 export const CVContext = createContext<CVContextType>(defaultCVContext);
@@ -48,101 +52,74 @@ export function CVProvider({ children }: PropsWithChildren<{}>) {
     /**
      * Get the JSON-LD data from the page context
      */
-    const { ld, properties, api } = usePageContext();
+    const { api } = usePageContext();
+    const { type, id } = useParams();
+    const data = useData();
+
+    console.log({ data })
+    const { nodes, links, properties, defaultSelected, defaultConnectedTo } =
+        data;
 
     // Reference to the header element
     const headerRef = useRef<HTMLHeadingElement>(null);
 
-    /**
-     * Create nodes and links from the JSON-LD data
-     */
-    const { nodes, links } = useMemo(() => {
-        let nodes: NodeObject[] = [];
+    const [state, setState] = useReducer(
+        (state: CVContextState, partial: Partial<CVContextState>) => {
+            return { ...state, ...partial };
+        },
+        { selected: defaultSelected, connectedTo: defaultConnectedTo }
+    );
 
-        if (ld?.compacted) {
-            nodes = (ld?.compacted["@graph"] as NodeObject[]).map((node) => {
-                return {
-                    "@context": ld?.compacted
-                        ? ld?.compacted["@context"]
-                        : undefined,
-                    ...node,
-                };
-            });
-        }
+    const filterNodes = useCallback(
+        (search: string) =>
+            nodes.find((node) => {
+                return search === node._id;
+            }),
+        [nodes, id, type]
+    );
 
-        let links: LinkObject[] = [];
-        if (ld?.nquads) {
-            links = (ld?.nquads as unknown as Array<any>).reduce(
-                (acc, link) => {
-                    const foundSubject = nodes?.find(
-                        (n) => n.id === link.subject.value
-                    );
-                    const foundObject = nodes?.find(
-                        (n) => n.id === link.object.value
-                    );
-                    if (foundObject && foundSubject) {
-                        // return only relations between two classes, excluding properties
-                        const linkNode = {
-                            subject: link.subject.value,
-                            object: link.object.value,
-                            predicate: link.predicate.value.replace(
-                                "http://schema.org/",
-                                ""
-                            ),
-                            value: 10,
-                            source: foundSubject,
-                            target: foundObject,
-                            // curvature: 0.5,
-                            // rotation: Math.PI / Math.random() * 2,
-                        };
-                        acc.push(linkNode);
-                    }
-                    return acc;
-                },
-                []
-            );
-        }
-        return { nodes, links };
-    }, [ld]);
+    const setSelected = useCallback((selected: NodeObject) => {
+        setState({ selected });
+    }, []);
 
-    /**
-     * State to store the selected node
-     */
-    const [selected, setSelected] = useState<NodeObject | null>(null);
+    const setConnectedTo = useCallback((connectedTo: LinkObject[]) => {
+        setState({ connectedTo });
+    }, []);
 
-    const [connectedTo, setConnectedTo] = useState<LinkObject[]>([]);
-
-    /**
-     *
-     */
     useEffect(() => {
-        const connectedTo: LinkObject[] = links.filter((link) => {
-            return link.object === selected?.id;
-        });
-        setConnectedTo(connectedTo);
-    }, [selected, links]);
+        const found = filterNodes(`${type}/${id}`);
+        if (found) {
+            const connectedTo = links.filter((link) => {
+                return link.object === found.id;
+            });
+            setState({ selected: found, connectedTo });
+        }
+    }, [type, id]);
 
     /**
      * Navigate to the selected node
      */
     useEffect(() => {
-        const path = selected ? `/${api.namespace}/${selected._id}` : false;
+        const path = state.selected
+            ? `/${api.namespace}/${state.selected._id}`
+            : false;
+
         if (path) {
             navigate(path);
             headerRef.current?.focus();
         }
-    }, [selected, navigate]);
+    }, [state.selected, navigate]);
 
     return (
         <CVContext.Provider
             value={{
                 ...defaultCVContext,
-                selected,
-                properties,
                 headerRef,
+                properties,
                 nodes,
                 links,
-                connectedTo,
+                selected: state.selected,
+                connectedTo: state.connectedTo,
                 setSelected,
             }}
         >

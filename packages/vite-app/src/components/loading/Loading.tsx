@@ -1,21 +1,31 @@
 import { tw } from "#root/lib";
-import { Loader } from "react-feather";
-import { motion } from "framer-motion";
+import { Loader, Compass, Hexagon } from "react-feather";
 
-export function Loading() {
+export function Loading({
+    variant = "spinner",
+}: {
+    variant?: "spinner" | "compass"  | "hexagon";
+}) {
+    const props = {
+        size: 32,
+        className: tw("animate-spin-slow"),
+    };
+
     return (
         <div className={tw("self-center", "justify-self-center")}>
-            <motion.div
-                animate={{
-                    rotate: 90,
-                }}
-                transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                }}
-            >
-                <Loader size={32} />
-            </motion.div>
+            {(() => {
+                switch (variant) {
+                    case "compass":
+                        return <Compass {...props} />;
+
+                    case "hexagon":
+                        return <Hexagon {...props} />;
+
+                    case "spinner":
+                    default:
+                        return <Loader {...props} />;
+                }
+            })()}
         </div>
     );
 }

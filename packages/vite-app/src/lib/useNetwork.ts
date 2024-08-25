@@ -1,4 +1,4 @@
-import { useCallback, useRef, useEffect } from "react";
+import { useCallback, useEffect, useState, createRef } from "react";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
 import { useParams } from "#root/provider";
@@ -12,7 +12,8 @@ export type UseNetworkProps = {
 };
 
 export function useNetwork() {
-    const ref = useRef();
+    const [ref, setRef] = useState(() => createRef());
+    const [loaded, setLoaded] = useState(false);
 
     const { nodes, filteredNodes, links, filteredLinks, setSelected } =
         useFilterContext();
@@ -34,11 +35,11 @@ export function useNetwork() {
             const distRatio =
                 1 +
                 distance /
-                    Math.hypot(
-                        node.x as number,
-                        node.y as number,
-                        node.z as number
-                    );
+                Math.hypot(
+                    node.x as number,
+                    node.y as number,
+                    node.z as number
+                );
             // @ts-ignore
             ref.current?.cameraPosition(
                 {
@@ -86,18 +87,45 @@ export function useNetwork() {
         [colors]
     );
 
+    const mountRef = useCallback((node: any) => {
+        if (!ref.current && node) {
+            console.log("Setting ref")
+            setRef({ current: node });
+            setLoaded(true);
+        }
+    }, [ref]);
+
     useEffect(() => {
         const found = filteredNodes.find((node) => {
             const search = `${type}/${id}`;
             return node._id === search;
         });
+
         if (found) {
             focusOnClick(found);
         }
     }, [id, type]);
 
+    useEffect(() => {
+        const moveTo = () => {
+            const found = filteredNodes.find((node) => {
+                const search = `${type}/${id}`;
+                return node._id === search;
+            });
+
+            if (found) {
+                focusOnClick(found);
+            }
+        }
+        if (loaded) {
+            setTimeout(() => {
+                moveTo();
+            }, 1000);
+        }
+    }, [loaded]);
+
     return {
-        ref,
+        ref: mountRef,
         nodes,
         filteredNodes,
         filteredLinks,

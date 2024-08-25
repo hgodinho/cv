@@ -33,6 +33,9 @@ const config: Config = {
                 options: "2",
                 class: "2",
             },
+            animation: {
+                "spin-slow":  "spin 3s linear infinite", 
+            },
         },
     },
     plugins: [],

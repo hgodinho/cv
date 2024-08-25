@@ -5,7 +5,7 @@ import ReactDOMServer from "react-dom/server";
 import { PageShell } from "./PageShell";
 import { escapeInject, dangerouslySkipEscape } from "vike/server";
 import type { OnRenderHtmlAsync } from "vike/types";
-import { getPageDescription, getPageLocale, getPageTitle } from "#root/lib";
+import { getPageDescription, getPageLocale } from "#root/lib";
 
 const onRenderHtml: OnRenderHtmlAsync = async (
     pageContext
@@ -34,7 +34,11 @@ const onRenderHtml: OnRenderHtmlAsync = async (
     <html lang="${locale}">
         <head>
             <meta charset="UTF-8" />
-            <link rel="icon" href="favicon-64.ico" />
+            <link rel="icon" href="${
+                import.meta.env.DEV
+                    ? "http://localhost:3000/favicon-64.ico"
+                    : "https://hgod.in/favicon-64.ico"
+            }" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=4.0" />
             <meta name="description" content="${desc}" />
             <link

@@ -1,11 +1,9 @@
-import { JsonLDType } from "#root/types";
+import { LinkObject, NodeObject } from "react-force-graph-3d";
 
 // https://vike.dev/pageContext#typescript
 declare global {
     namespace Vike {
         interface PageContext {
-            ld: JsonLDType;
-            properties: string[];
             api: {
                 name: string;
                 base: string;
@@ -18,6 +16,13 @@ declare global {
                 /** Value for <meta name="description"> defined statically */
                 description?: string;
                 locale?: string;
+            };
+            data: {
+                properties: string[];
+                nodes: NodeObject[];
+                links: LinkObject[];
+                defaultConnectedTo: LinkObject[];
+                defaultSelected: NodeObject;
             };
             routeParams: {
                 id: string;

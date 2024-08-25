@@ -22,6 +22,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Environment Variables
 
-Create a `.env.example` file similar to `.env.local.example` and fill the variables with your own values.
+Create a `.env.local` file similar to `.env.local.example` and fill the variables with your own values.
 
 `cp .env.local.example .env.local`

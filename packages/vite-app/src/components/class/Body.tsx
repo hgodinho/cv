@@ -8,7 +8,7 @@ import { useFilterContext } from "#root/provider";
 export function Description() {
     const { properties, selected } = useFilterContext();
 
-    return selected ? (
+    return (
         <section className={tw("px-4", "pt-2", "flex", "flex-col")}>
             <h2
                 className={tw(
@@ -47,7 +47,7 @@ export function Description() {
                 }
             })}
         </section>
-    ) : null;
+    );
 }
 
 export function Connections() {
@@ -96,9 +96,7 @@ export function Connections() {
                         key={key}
                         label={{
                             value: key,
-                            url: selected
-                                ? `${selected["@context"]}/${key}`
-                                : "",
+                            url: `${selected["@context"]}/${key}`,
                         }}
                         value={links.map((link: NodeObject, index: number) => {
                             return typeof link.source !== "string" ? (

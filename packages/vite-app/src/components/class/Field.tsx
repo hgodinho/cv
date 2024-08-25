@@ -18,7 +18,6 @@ export function FieldLabel({
 }: React.PropsWithChildren<FieldLabelProps>) {
     return (
         <Label
-            {...rest}
             as="div"
             className={tw("flex", "flex-col", "mb-6", "gap-2", className)}
             {...rest}

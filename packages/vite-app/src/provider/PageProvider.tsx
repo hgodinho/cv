@@ -27,3 +27,8 @@ export function useParams() {
     const pageContext = usePageContext();
     return pageContext.routeParams;
 }
+
+export function useData() {
+    const pageContext = usePageContext();
+    return pageContext.data;
+}
