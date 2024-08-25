@@ -8,6 +8,7 @@
     },
     "cSpell.words": [
         "collapsibles",
+        "educationaloccupationalcredential",
         "ENJF",
         "foaf",
         "fuén",
@@ -24,5 +25,25 @@
         "ytext"
     ],
     "files.autoSave": "onWindowChange",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#d0f3f9",
+        "activityBar.background": "#d0f3f9",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#ed72db",
+        "activityBarBadge.foreground": "#15202b",
+        "commandCenter.border": "#15202b99",
+        "sash.hoverBorder": "#d0f3f9",
+        "statusBar.background": "#a2e8f4",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#74ddef",
+        "statusBarItem.remoteBackground": "#a2e8f4",
+        "statusBarItem.remoteForeground": "#15202b",
+        "titleBar.activeBackground": "#a2e8f4",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#a2e8f499",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.color": "#A2E8F4"
 }

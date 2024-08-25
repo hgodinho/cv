@@ -1,4 +1,11 @@
 node_modules
-
 dist
-.nx/cache
+public
+.cache
+
+# https://github.com/nrwl/nx/discussions/20813
+.nx 
+
+# local env files
+.env*.local
+.env
