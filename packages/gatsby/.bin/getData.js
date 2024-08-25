@@ -1,11 +1,26 @@
-import dotenv from "dotenv";
-import { getJsonLD } from "./getJsonLD.js";
-import fs from "fs";
-import fetch from "node-fetch";
+const dotenv = require("dotenv");
+const { getJsonLD } = require("./getJsonLD.js");
+const fs = require("fs");
 
 dotenv.config({ path: [".env.local", ".env"] });
 
-export async function getData() {
+function hashString(length) {
+    let result = "";
+    const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+        );
+    }
+    return result;
+}
+
+async function getData() {
+    const nodeFetch = await import("node-fetch");
+    const fetch = nodeFetch.default;
+
     const baseUrl = process.env.BACK_END_URI;
     const deployId = process.env.BACK_END_ID;
     const token = process.env.BACK_END_TOKEN;
@@ -47,22 +62,22 @@ export async function getData() {
 
         const properties = await fetchData("properties");
 
-        console.log({ graph: graph.data, properties });
-
         const json = {
             properties: properties.data,
             ld: await getJsonLD(graph.data, graph.data["@context"]),
         };
 
+        const hash = hashString(6);
+
         fs.writeFileSync(
-            "public/henrique-godinho.jsonld",
+            `static/henrique-godinho-${hash}.jsonld`,
             JSON.stringify(json, null, 4)
         );
 
-        console.warn("public/henrique-godinho.jsonld written");
+        console.warn(`static/henrique-godinho-${hash}.jsonld written`);
     } catch (error) {
         console.error(error);
     }
 }
 
-await getData();
+getData().then(() => process.exit(0));

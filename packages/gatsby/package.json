@@ -1,24 +1,31 @@
 {
     "name": "@hgod-in-cv/gatsby",
-    "version": "1.0.0",
-    "private": true,
+    "version": "0.1.0",
     "description": "gatsby",
-    "author": "hgodinho",
     "keywords": [
         "gatsby"
     ],
+    "author": "Henrique Godinho <ola@hgod.in>",
     "scripts": {
-        "dev": "gatsby develop",
-        "start": "gatsby develop",
-        "build": "gatsby build",
-        "serve": "gatsby serve",
+        "build": "gatsby build --prefix-paths",
         "clean": "gatsby clean",
+        "dev": "gatsby develop",
+        "serve": "gatsby serve",
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "@mdx-js/react": "^3.0.1",
-        "autoprefixer": "^10.4.19",
-        "gatsby": "^5.13.5",
+        "@radix-ui/react-checkbox": "^1.1.1",
+        "@radix-ui/react-collapsible": "^1.1.0",
+        "@radix-ui/react-scroll-area": "^1.1.0",
+        "@radix-ui/react-slider": "^1.2.0",
+        "@radix-ui/react-switch": "^1.1.0",
+        "@radix-ui/react-toggle-group": "^1.1.0",
+        "autoprefixer": "^10.4.20",
+        "dotenv": "^16.4.5",
+        "framer-motion": "^11.3.29",
+        "gatsby": "^5.13.7",
+        "gatsby-plugin-alias-imports": "^1.0.5",
         "gatsby-plugin-google-gtag": "^5.13.1",
         "gatsby-plugin-image": "^3.13.1",
         "gatsby-plugin-manifest": "^5.13.1",
@@ -28,15 +35,23 @@
         "gatsby-plugin-sitemap": "^6.13.1",
         "gatsby-source-filesystem": "^5.13.1",
         "gatsby-transformer-sharp": "^5.13.1",
-        "postcss": "^8.4.38",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "tailwindcss": "^3.4.4"
+        "jsonld": "^8.3.2",
+        "node-fetch": "^3.3.2",
+        "postcss": "^8.4.41",
+        "react": "^18.3.1",
+        "react-accessible-treeview": "^2.9.1",
+        "react-dom": "^18.3.1",
+        "react-feather": "^2.0.10",
+        "react-force-graph-3d": "^1.24.3",
+        "tailwindcss": "^3.4.10",
+        "three-spritetext": "^1.8.2"
     },
     "devDependencies": {
-        "@types/node": "^20.11.19",
-        "@types/react": "^18.2.55",
-        "@types/react-dom": "^18.2.19",
-        "typescript": "^5.3.3"
+        "@hgod-in-cv/data": "workspace:^",
+        "@types/jsonld": "^1.5.15",
+        "@types/node": "^22.5.0",
+        "@types/react": "^18.3.4",
+        "@types/react-dom": "^18.3.0",
+        "typescript": "^5.5.4"
     }
 }

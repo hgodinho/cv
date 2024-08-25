@@ -1,10 +1,10 @@
-import * as jsonld from "jsonld";
+const jsonld = require("jsonld");
 
-export async function getJsonLD(data, context) {
-    const expanded = await jsonld.default.expand(data);
-    const compacted = await jsonld.default.compact(data, context);
-    const flattened = await jsonld.default.flatten(data);
-    const nquads = await jsonld.default.toRDF(data);
+async function getJsonLD(data, context) {
+    const expanded = await jsonld.expand(data);
+    const compacted = await jsonld.compact(data, context);
+    const flattened = await jsonld.flatten(data);
+    const nquads = await jsonld.toRDF(data);
     return {
         raw: data,
         expanded,
@@ -13,3 +13,5 @@ export async function getJsonLD(data, context) {
         nquads,
     };
 }
+
+module.exports = { getJsonLD };
