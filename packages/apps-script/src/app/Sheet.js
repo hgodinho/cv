@@ -46,13 +46,12 @@ class Sheet {
         return this.findValuesFromSheet(
             sheetName,
             `[${sheetName}]`,
-            this.sheets[sheetName].metadata
+            this.sheets[sheetName].meta
         ).header;
     }
 
     getEntityById(sheetName, id) {
         const sheet = this.getSpreadsheet().getSheetByName(sheetName);
-
         const finder = sheet.createTextFinder(id);
         const ranges = finder.findAll();
 
@@ -70,7 +69,7 @@ class Sheet {
         }
 
         if (!data) {
-            throw new Error(`No row found with id ${id}`);
+            throw new Error(`No row found with id ${id} at sheet ${sheetName}`);
         }
 
         return data;
@@ -80,7 +79,8 @@ class Sheet {
         const { header, values } = this.findValuesFromSheet(
             sheetName,
             `[${sheetName}]`,
-            this.sheets[sheetName].metadata
+            this.sheets[sheetName].meta,
+            this.sheets[sheetName].total
         );
 
         return values.map(
@@ -138,28 +138,37 @@ class Sheet {
         return { header, values, sheetName, key };
     }
 
-    findValuesFromSheet(sheetName, key, columns, rows = "auto") {
-        const { header, values, ...rest } = this.findRangeFromSheet({
+    findValuesFromSheet(sheetName, key, columns, rows = "auto", header) {
+        const {
+            header: headerValues,
+            values,
+            ...rest
+        } = this.findRangeFromSheet({
             sheetName,
             key,
             columns,
             rows,
+            header,
         });
 
         return {
-            header: header ? header.getValues()[0] : [],
+            header: headerValues ? headerValues.getValues()[0] : [],
             values: typeof values !== "undefined" ? values.getValues() : [],
             ...rest,
         };
     }
 
-    findRangeFromSheet({ sheetName, key, rows = "auto", columns }) {
+    findRangeFromSheet({ sheetName, key, rows = "auto", columns, header }) {
+        if (typeof header === "undefined") header = true;
+
         const sheet = this.getSpreadsheet().getSheetByName(sheetName);
         const finder = sheet.createTextFinder(key);
 
         const range = finder.findNext();
         if (!range)
-            throw new Error(`No row found with key ${key} in ${sheetName}`);
+            throw new Error(
+                `No row found with key=${key} in sheetName=${sheetName}`
+            );
         const dataColumn = range.getColumn();
         let dataRow = range.getRow();
 
@@ -178,19 +187,24 @@ class Sheet {
             totalRows = rows || 1;
         }
 
-        const header = sheet.getRange(dataRow + 1, dataColumn, 1, columns);
+        let head = null;
+        let offset = 1;
+        if (header) {
+            head = sheet.getRange(dataRow + offset, dataColumn, 1, columns);
+        } else {
+            offset = 0;
+        }
 
         let values = undefined;
-
         if (totalRows > 0)
             values = sheet.getRange(
-                dataRow + 2,
+                dataRow + offset + 1,
                 dataColumn,
                 totalRows,
                 columns
             );
 
-        return { header, values, sheetName, key };
+        return { header: head, values, sheetName, key };
     }
 
     /**
@@ -208,11 +222,14 @@ class Sheet {
         }
         if (sheets) {
             this.sheets = sheets.reduce((acc, endpoint) => {
-                const { values, header } = this.findValuesFromSheet(
+                const { values } = this.findValuesFromSheet(
                     "dashboard",
                     `[${endpoint}]`,
-                    2
+                    2,
+                    undefined,
+                    false
                 );
+
                 acc[endpoint] = values.reduce((acc, row) => {
                     acc[row[0]] = row[1];
                     return acc;

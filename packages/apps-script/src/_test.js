@@ -17,7 +17,7 @@ function test_Api() {
 
         expect(
             "schema is object",
-            api.getClassSchema("certification")
+            api.getClassSchema("credential")
         ).toBeObject();
     });
 
@@ -44,17 +44,17 @@ function test_Api() {
         expect("response data is array", response.data).toBeArray();
     });
 
-    test("Api.getResponse certification list endpoint", () => {
-        mock = mockRequest("cv/v1/certification");
+    test("Api.getResponse credential list endpoint", () => {
+        mock = mockRequest("cv/v1/credential");
         api = new Api(mock);
 
         const response = api.getResponse();
         expect("response data is array", response.data).toBeArray("object");
     });
 
-    test("Api.getResponse certification get endpoint", () => {
+    test("Api.getResponse credential get endpoint", () => {
         mock = mockRequest(
-            "cv/v1/certification/mestrado-profissional-em-ciencia-da-informacao"
+            "cv/v1/educational-occupational-credential/mestrado-profissional-em-ciencia-da-informacao"
         );
         api = new Api(mock);
 
@@ -63,7 +63,7 @@ function test_Api() {
     });
 
     test("Api.getResponse place get endpoint", () => {
-        mock = mockRequest("cv/v1/place/brasil");
+        mock = mockRequest("cv/v1/country/brasil");
         api = new Api(mock);
 
         const response = api.getResponse();
@@ -88,7 +88,6 @@ function test_Api() {
         expect("response graph is array", response.data["@graph"]).toBeArray(
             "object"
         );
-        console.warn(response.data["@graph"]);
     });
 }
 
@@ -155,7 +154,7 @@ function test_Entity() {
         ]);
 
         expect("path", entity.parseString("fruta/banana")).toBe(
-            "https://hgod.in/cv?fruta/banana"
+            "https://hgod.in/cv/fruta/banana"
         );
 
         expect("single string", entity.parseString("banana")).toBe("banana");
@@ -170,9 +169,9 @@ function test_Entity() {
                 "certification/1 | certification/2 | certification/3"
             )
         ).toEqual([
-            "https://hgod.in/cv?certification/1",
-            "https://hgod.in/cv?certification/2",
-            "https://hgod.in/cv?certification/3",
+            "https://hgod.in/cv/certification/1",
+            "https://hgod.in/cv/certification/2",
+            "https://hgod.in/cv/certification/3",
         ]);
 
         expect(
@@ -187,7 +186,7 @@ function test_Entity() {
 }
 
 function test_App() {
-    const app = new App(["person", "place", "role", "certification"]);
+    const app = new App(["person", "place", "intangible", "credential"]);
 
     test("App", () => {
         // console.log(app);
@@ -202,29 +201,23 @@ function test_Sheet() {
     const sheet = new Sheet(CONFIG.sheet(), [
         "person",
         "place",
-        "role",
-        "certification",
-        "creativeWork",
-        "article",
-        "chapter",
         "event",
         "organization",
+        "credential",
+        "creativeWork",
+        "intangible",
     ]);
-
-    test("Sheet", () => {
-        console.log(sheet);
-    });
 
     test("Sheet.hasSheet", () => {
         console.log(sheet.hasSheet("config"));
     });
 
     test("Sheet.getSpreadsheet", () => {
-        console.log(sheet.getSpreadsheet());
+        // console.log(sheet.getSpreadsheet());
     });
 
     test("Sheet.getSheet", () => {
-        console.log(sheet.getSheet("config"));
+        // console.log(sheet.getSheet("config"));
     });
 
     test("Sheet.getId", () => {
@@ -250,6 +243,6 @@ function test_Sheet() {
     });
 
     test("Sheet.getEntityById", () => {
-        console.log(sheet.getEntityById("place", "place/sao-paulo"));
+        console.log(sheet.getEntityById("place", "city/sao-paulo"));
     });
 }
