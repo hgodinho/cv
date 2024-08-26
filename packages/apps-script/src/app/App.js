@@ -17,15 +17,10 @@ class App extends Sheet {
 
     setupRawData() {
         this.rawData = Object.fromEntries(
-            Object.entries(this.sheets).map(([name, { metadata, items }]) => {
+            Object.entries(this.sheets).map(([name, { meta, total }]) => {
                 return [
                     name,
-                    this.findValuesFromSheet(
-                        name,
-                        `[${name}]`,
-                        metadata,
-                        items
-                    ),
+                    this.findValuesFromSheet(name, `[${name}]`, meta, total),
                 ];
             })
         );

@@ -7,14 +7,23 @@ class Api {
         return [
             "person",
             "place",
-            "role",
-            "certification",
+            "intangible",
+            "credential",
             "creativeWork",
-            "article",
-            "chapter",
             "event",
             "organization",
         ];
+    }
+
+    _endpointAlias() {
+        return {
+            place: ["city", "country"],
+            intangible: [],
+            credential: ["educational-occupational-credential"],
+            creativeWork: [],
+            event: [],
+            organization: [],
+        };
     }
 
     _defaultEndpoints() {
@@ -24,6 +33,13 @@ class Api {
     setup(e) {
         // Set the request object
         this.request = e;
+
+        // Set the slash character
+        this.slashChar = "&#x2F;";
+
+        // Set the endpoints
+        this.defaultEndpoints = this._defaultEndpoints();
+        this.endpoints = [...this.defaultEndpoints, ...this._endpoints()];
 
         // Set the app object
         this.app = new App(this._endpoints());
@@ -42,15 +58,10 @@ class Api {
             return;
         }
 
-        // Set the slash character
-        this.slashChar = "&#x2F;";
-
-        // Set the endpoints
-        this.defaultEndpoints = this._defaultEndpoints();
-        this.endpoints = [...this.defaultEndpoints, ...this._endpoints()];
-
         // Set the path, parameter, and query string
-        const prePath = sanitize(e.pathInfo.replace(this.getBase(false), ""));
+        const prePath = utils.sanitize(
+            e.pathInfo.replace(this.getBase(false), "")
+        );
         this.path = prePath.startsWith(this.slashChar)
             ? prePath.slice(this.slashChar.length)
             : prePath;
@@ -79,7 +90,14 @@ class Api {
         const [endpoint, slug] = path.split(this.slashChar);
 
         // return 404 if the endpoint is unknown
-        if (!this.endpoints.includes(endpoint)) {
+        if (
+            ![
+                ...this.endpoints,
+                ...Object.values(this._endpointAlias()).reduce((acc, cur) => {
+                    return [...acc, ...cur];
+                }, []),
+            ].includes(endpoint.toLocaleLowerCase())
+        ) {
             return this.createResponse({
                 status: 404,
                 error: `Unknown endpoint: ${endpoint}`,
@@ -130,18 +148,22 @@ class Api {
 
         // return data for the endpoint based on the slug
         try {
+            const aliasedEndpoint = utils.findKeyByValue(
+                this._endpointAlias(),
+                endpoint.toLowerCase()
+            );
             const data = this.app.getEntityById(
-                endpoint,
+                aliasedEndpoint,
                 `${endpoint}/${slug}`
             );
             return this.createResponse({
                 status: 200,
-                data: this.prepareResponse(data, endpoint),
+                data: this.prepareResponse(data, aliasedEndpoint),
             });
         } catch (error) {
             return this.createResponse({
                 status: 404,
-                error: error.message,
+                error: `Error: ${error.message}`,
             });
         }
     }

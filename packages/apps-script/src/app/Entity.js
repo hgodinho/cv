@@ -109,11 +109,11 @@ class Entity {
         }
 
         if (typeof data === "string") {
-            return `${this._config.url}/${this._config.namespace}/${data}`;
+            return `${this._config.base}/${this._config.namespace}/${data}`;
         } else if (Array.isArray(data)) {
             return data.map((item) => {
                 if (typeof item === "string") {
-                    return `${this._config.url}/${this._config.namespace}/${item}`;
+                    return `${this._config.base}/${this._config.namespace}/${item}`;
                 } else if (typeof item === "object") {
                     return item;
                 }
