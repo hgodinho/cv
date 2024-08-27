@@ -21,6 +21,59 @@ function test_Api() {
         ).toBeObject();
     });
 
+    test("Api.getParameter", () => {
+        const mock = mockRequest("cv/v1", {
+            id: "string",
+            type: "string",
+            data: "object",
+            date: ["string", "date"],
+        });
+        api = new Api(mock);
+        const getParameter = api.getParameter();
+        expect("parameter is object", getParameter).toBe({
+            id: "string",
+            type: "string",
+            data: "object",
+            date: "string",
+        });
+    });
+
+    test("Api.getParameters", () => {
+        const mock = mockRequest("cv/v1", {
+            id: "string",
+            type: "string",
+            data: "object",
+            date: ["string", "date"],
+        });
+        api = new Api(mock);
+        const getParameters = api.getParameters();
+        expect("parameters is object", getParameters).toBeObject();
+    });
+
+    test("Api.getParametersByName", () => {
+        const mock = mockRequest("cv/v1", {
+            id: "string",
+            type: "string",
+            data: "object",
+            date: ["string", "date"],
+        });
+        api = new Api(mock);
+        const getParametersByName = api.getParametersByName("id");
+        expect("parameters is object", getParametersByName).toBeObject();
+    });
+
+    test("Api.getParameterByName", () => {
+        const mock = mockRequest("cv/v1", {
+            id: "string",
+            type: "string",
+            data: "object",
+            date: ["string", "date"],
+        });
+        api = new Api(mock);
+        const getParametersByName = api.getParameterByName("date");
+        expect("parameter is string", getParametersByName).toBe("string");
+    });
+
     test("Api.getResponse no path", () => {
         api = new Api(mock);
 
@@ -244,5 +297,32 @@ function test_Sheet() {
 
     test("Sheet.getEntityById", () => {
         console.log(sheet.getEntityById("place", "city/sao-paulo"));
+    });
+}
+
+function test_Utils() {
+    const mock = mockRequest("cv/v1", {
+        id: "string",
+        type: "string",
+        data: "object",
+        date: ["string", "date"],
+    });
+    test("mockRequest", () => {
+        expect("object", mock).toBe({
+            queryString: `id="string"&type="string"&data="object"&date="string,date"`,
+            parameter: {
+                id: "string",
+                type: "string",
+                data: "object",
+                date: "string",
+            },
+            parameters: {
+                id: ["string"],
+                type: ["string"],
+                data: ["object"],
+                date: ["string", "date"],
+            },
+            pathInfo: "cv/v1",
+        });
     });
 }

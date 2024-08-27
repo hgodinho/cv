@@ -68,10 +68,28 @@ class Api {
 
         this.parameter = e.parameter;
 
+        this.parameters = e.parameters;
+
         this.queryString = e.queryString;
 
         // Set the known paths
         this.knownPaths = ["schema", ...Object.keys(this.getSchema())];
+    }
+
+    getParameters() {
+        return this.parameters;
+    }
+
+    getParameter() {
+        return this.parameter;
+    }
+
+    getParametersByName(name) {
+        return this.parameters[name];
+    }
+
+    getParameterByName(name) {
+        return this.parameter[name];
     }
 
     getResponse() {
@@ -229,6 +247,20 @@ class Api {
         return json;
     }
 
+    getInternalSchema() {
+        return {
+            _id: {
+                type: "string",
+            },
+            "@id": {
+                type: "string",
+            },
+            "@type": {
+                type: "string",
+            },
+        };
+    }
+
     getSchema() {
         return Object.fromEntries(
             this.endpoints.map((e) => {
@@ -325,20 +357,13 @@ class Api {
                     }
                     return acc; // skip class name
                 }
+                if (Object.keys(this.getInternalSchema()).includes(property)) {
+                    return acc; // skip internalSchema properties
+                }
                 acc[property] = oneOf;
                 return acc;
             },
-            {
-                _id: {
-                    type: "string",
-                },
-                "@id": {
-                    type: "string",
-                },
-                "@type": {
-                    type: "string",
-                },
-            }
+            this.getInternalSchema()
         );
 
         return properties;

@@ -2,8 +2,14 @@ function logTest(title, message) {
     console.log(`${title}: ${message}`);
 }
 
-function errorTest(title, message) {
-    console.error(`${title}: ${message}`);
+function errorTest(title, expected, received = undefined) {
+    console.error(`Failed: ${title}`);
+    if (received) {
+        console.error("Expected:", expected);
+        console.error("But received:", received);
+    } else {
+        console.error(expected);
+    }
 }
 
 function test(title, callback) {
@@ -15,55 +21,38 @@ function test(title, callback) {
 function expect(toBeExpected, actual) {
     return {
         toBe(expected) {
-            if (actual === expected) {
+            if (JSON.stringify(actual) === JSON.stringify(expected)) {
                 logTest(toBeExpected, "Pass");
             } else {
-                errorTest(
-                    toBeExpected,
-                    `Fail: Expected ${JSON.stringify(
-                        expected
-                    )}, but received ${JSON.stringify(actual)}`
-                );
+                errorTest(toBeExpected, expected, actual);
             }
         },
         toBeString() {
             if (typeof actual === "string") {
                 logTest(toBeExpected, "Pass");
             } else {
-                errorTest(
-                    toBeExpected,
-                    `Fail: Expected string, but received ${typeof actual}`
-                );
+                errorTest(toBeExpected, "string", typeof actual);
             }
         },
         toBeNumber() {
             if (typeof actual === "number") {
                 logTest(toBeExpected, "Pass");
             } else {
-                errorTest(
-                    toBeExpected,
-                    `Fail: Expected number, but received ${typeof actual}`
-                );
+                errorTest(toBeExpected, "number", typeof actual);
             }
         },
         toBeBoolean() {
             if (typeof actual === "boolean") {
                 logTest(toBeExpected, "Pass");
             } else {
-                errorTest(
-                    toBeExpected,
-                    `Fail: Expected boolean, but received ${typeof actual}`
-                );
+                errorTest(toBeExpected, "boolean", typeof actual);
             }
         },
         toBeObject() {
             if (typeof actual === "object") {
                 logTest(toBeExpected, "Pass");
             } else {
-                errorTest(
-                    toBeExpected,
-                    `Fail: Expected object, but received ${typeof actual}`
-                );
+                errorTest(toBeExpected, "object", typeof actual);
             }
         },
         toBeArray(of = undefined) {
@@ -121,20 +110,31 @@ function expect(toBeExpected, actual) {
     };
 }
 
-function mockRequest(path = "", parameter = undefined) {
+function mockRequest(path = "", options = undefined) {
     let queryString = "";
-    if (parameter) {
-        queryString = Object.entries(parameter).reduce((acc, [key, value]) => {
-            if (acc.length > 0) {
-                acc += "&";
-            }
-            acc += `${key}=${value}`;
-            return acc;
-        }, "");
+    let parameter = {};
+    let parameters = {};
+
+    if (options) {
+        const params = Object.entries(options).map(([key, value]) => {
+            // parameters
+            parameters[key] = Array.isArray(value) ? value : [value];
+
+            // parameter
+            parameter[key] = Array.isArray(value) ? value[0] : value;
+
+            return `${key}=${
+                Array.isArray(value)
+                    ? JSON.stringify(value.join(","))
+                    : JSON.stringify(value)
+            }`;
+        });
+        queryString = params.join("&");
     }
     return {
         queryString,
         parameter,
+        parameters,
         pathInfo: path,
     };
 }

@@ -223,7 +223,7 @@ class Sheet {
         if (sheets) {
             this.sheets = sheets.reduce((acc, endpoint) => {
                 const { values } = this.findValuesFromSheet(
-                    "dashboard",
+                    "🏠",
                     `[${endpoint}]`,
                     2,
                     undefined,
