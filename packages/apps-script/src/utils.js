@@ -48,6 +48,6 @@ const utils = {
                 return key;
             }
         }
-        return null; // Retorna null se a chave não for encontrada
+        return false; // Retorna false se a chave não for encontrada
     },
 };

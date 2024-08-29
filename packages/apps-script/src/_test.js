@@ -1,3 +1,11 @@
+function test_All() {
+    test_Api();
+    test_Entity();
+    test_App();
+    test_Sheet();
+    test_Utils();
+}
+
 function test_Api() {
     let mock = mockRequest("cv/v1");
     let api = new Api(mock);
@@ -112,6 +120,7 @@ function test_Api() {
         api = new Api(mock);
 
         const response = api.getResponse();
+        expect("response 200", response.status).toEqual(200);
         expect("response data is object", response.data).toBeObject();
     });
 
@@ -241,62 +250,75 @@ function test_Entity() {
 function test_App() {
     const app = new App(["person", "place", "intangible", "credential"]);
 
-    test("App", () => {
-        // console.log(app);
+    test("App.configSheet must be object", () => {
+        expect("object", app.configSheet).toBeObject();
     });
 
-    test("App.setupRawData", () => {
-        app.setupRawData();
+    test("setupEndpoints", () => {
+        expect("object", app.endpoints).toBeObject();
+    });
+
+    test("App.getApiConfig", () => {
+        const api = app.getApiConfig();
+        expect("api", api).toBe({
+            url: "https://hgod.in",
+            namespace: "cv",
+            version: "v1",
+        });
+    });
+
+    test("App.getProperties", () => {
+        const properties = app.getProperties();
+        expect("properties", properties).toBeArray();
+    });
+
+    test("App.getRawPropertiesMeta", () => {
+        const meta = app.getRawPropertiesMeta("person");
+        expect("meta", meta).toBeArray();
     });
 }
 
 function test_Sheet() {
-    const sheet = new Sheet(CONFIG.sheet(), [
-        "person",
-        "place",
-        "event",
-        "organization",
-        "credential",
-        "creativeWork",
-        "intangible",
-    ]);
+    const sheet = new Sheet(CONFIG.sheet());
 
     test("Sheet.hasSheet", () => {
-        console.log(sheet.hasSheet("config"));
+        expect("boolean", sheet.hasSheet("person")).toBe(true);
     });
 
     test("Sheet.getSpreadsheet", () => {
-        // console.log(sheet.getSpreadsheet());
+        expect("object", sheet.getSpreadsheet()).toBeObject();
     });
 
     test("Sheet.getSheet", () => {
-        // console.log(sheet.getSheet("config"));
+        expect("object", sheet.getSheet("config")).toBeObject();
     });
 
     test("Sheet.getId", () => {
-        console.log(sheet.getId());
+        expect("id", sheet.getId()).toBe(CONFIG.sheet());
     });
 
     test("Sheet.getUrl", () => {
-        console.log(sheet.getUrl());
+        expect("url", sheet.getUrl()).toBe(
+            "https://docs.google.com/spreadsheets/d/1pmMKdp68v8NXFyyBlvnpKQ2bePqVjzrdWvi3wuRxCWI/edit"
+        );
     });
 
     test("Sheet.findRangeFromSheet", () => {
-        console.log(
+        expect(
+            "object",
             sheet.findRangeFromSheet({
                 sheetName: "place",
                 key: "place",
                 columns: 5,
             })
-        );
+        ).toBeObject();
     });
 
     test("Sheet.findValuesFromSheet", () => {
-        console.log(sheet.findValuesFromSheet("place", "place", 5));
-    });
-
-    test("Sheet.getEntityById", () => {
-        console.log(sheet.getEntityById("place", "city/sao-paulo"));
+        expect(
+            "object",
+            sheet.findValuesFromSheet("place", "place", 5)
+        ).toBeObject();
     });
 }
 

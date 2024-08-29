@@ -170,6 +170,9 @@ class Api {
                 this._endpointAlias(),
                 endpoint.toLowerCase()
             );
+            if (!aliasedEndpoint) {
+                throw new Error(`No endpoint found with name: ${endpoint}`);
+            }
             const data = this.app.getEntityById(
                 aliasedEndpoint,
                 `${endpoint}/${slug}`
@@ -330,11 +333,7 @@ class Api {
     }
 
     getClassSchema(className) {
-        const { values } = this.app.findValuesFromSheet(
-            "meta",
-            `[${className}]`,
-            5
-        );
+        const values = this.app.getRawPropertiesMeta(className);
 
         const oneOf = {
             oneOf: [
