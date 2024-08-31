@@ -63,15 +63,6 @@ class App {
         return this.config;
     }
 
-    getProperties() {
-        if (typeof this.properties === "undefined") {
-            this.properties = this.configSheet
-                .findValuesFromSheet("config", "[properties]", 2)
-                .values.map(([name, order]) => name);
-        }
-        return this.properties;
-    }
-
     getAbout() {
         return this.configSheet
             .findValuesFromSheet("config", "[about]", 2)
@@ -81,28 +72,64 @@ class App {
             }, {});
     }
 
-    getRawPropertiesMeta(sheetName) {
+    getProperties() {
+        if (typeof this.properties === "undefined") {
+            this.properties = this.configSheet
+                .findValuesFromSheet("config", "[properties]", 2)
+                .values.map(([name, order]) => name);
+        }
+        return this.properties;
+    }
+
+    getRawPropertiesMeta(endpoint) {
         const { values } = this.configSheet.findValuesFromSheet(
             "meta",
-            `[${sheetName}]`,
-            5
+            `[${endpoint}]`,
+            6
         );
         return values;
     }
 
-    getEntityById(sheetName, id) {
+    getPropertiesMeta(endpoint) {
+        return this.getRawPropertiesMeta(endpoint).reduce(
+            (acc, [className, property, type, i18n, url, obs]) => {
+                if (className && obs) {
+                    if (obs.trim().startsWith("+")) {
+                        const find = obs.trim().split("+").pop().trim();
+                        const findValues = this.getPropertiesMeta(find);
+                        acc = { ...acc, ...findValues };
+                        return acc;
+                    }
+                }
+                if (property) {
+                    acc[property] = {
+                        class: className,
+                        property,
+                        type,
+                        i18n,
+                        url,
+                        obs,
+                    };
+                }
+                return acc;
+            },
+            {}
+        );
+    }
+
+    getRowByQuery(sheetName, query) {
         try {
             const sheet = this.configSheet
                 .getSpreadsheet()
                 .getSheetByName(sheetName);
-            const finder = sheet.createTextFinder(id);
+            const finder = sheet.createTextFinder(query);
             const ranges = finder.findAll();
 
             let data;
 
             for (const range of ranges) {
                 const value = range.getValue();
-                if (value === id) {
+                if (value === query) {
                     const row = range.getRow();
                     const header = this.getMetaHeader(sheetName);
                     const values = sheet

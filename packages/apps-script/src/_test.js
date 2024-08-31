@@ -274,7 +274,14 @@ function test_App() {
 
     test("App.getRawPropertiesMeta", () => {
         const meta = app.getRawPropertiesMeta("person");
+        // console.log({ meta });
         expect("meta", meta).toBeArray();
+    });
+
+    test("App.getPropertiesMeta", () => {
+        const meta = app.getPropertiesMeta("person");
+        // console.log({ meta });
+        expect("meta", meta).toBeObject();
     });
 }
 

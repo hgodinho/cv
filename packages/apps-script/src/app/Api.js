@@ -173,7 +173,7 @@ class Api {
             if (!aliasedEndpoint) {
                 throw new Error(`No endpoint found with name: ${endpoint}`);
             }
-            const data = this.app.getEntityById(
+            const data = this.app.getRowByQuery(
                 aliasedEndpoint,
                 `${endpoint}/${slug}`
             );
@@ -253,6 +253,9 @@ class Api {
     getInternalSchema() {
         return {
             _id: {
+                type: "string",
+            },
+            path: {
                 type: "string",
             },
             "@id": {
@@ -345,7 +348,7 @@ class Api {
         };
 
         const properties = values.reduce(
-            (acc, [cName, property, type, uri, obs], i) => {
+            (acc, [cName, property, type, i18n, uri, obs], i) => {
                 if (i === 0) {
                     if (obs) {
                         if (obs.trim().startsWith("+")) {

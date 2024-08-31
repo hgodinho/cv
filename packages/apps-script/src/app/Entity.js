@@ -16,9 +16,11 @@ class Entity {
         this._values = values;
         this._config = config;
 
+        const excluded = ["_id", "path"];
+
         header.forEach((key, index) => {
             let value = values[index];
-            if (key !== "_id") {
+            if (!excluded.includes(key)) {
                 value = this.parseValue(values[index]);
             }
             if (typeof value !== "undefined") {
