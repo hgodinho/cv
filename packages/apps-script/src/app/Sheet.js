@@ -144,6 +144,10 @@ class Sheet {
         return true;
     }
 
+    createSheet(name) {
+        return this.getSpreadsheet().insertSheet(name);
+    }
+
     getSpreadsheet() {
         if (!this.spreadsheet) {
             this.setupSpreadsheet(this.id);
