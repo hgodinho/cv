@@ -90,14 +90,24 @@ class App {
         return values;
     }
 
-    getPropertiesMeta(endpoint) {
+    getPropertiesMeta(endpoint, filter = undefined) {
         return this.getRawPropertiesMeta(endpoint).reduce(
             (acc, [className, property, type, i18n, url, obs]) => {
+                if (
+                    typeof filter !== "undefined" &&
+                    !filter({ className, property, type, i18n, url, obs })
+                ) {
+                    return acc;
+                }
+
                 if (className && obs) {
                     if (obs.trim().startsWith("+")) {
-                        const find = obs.trim().split("+").pop().trim();
-                        const findValues = this.getPropertiesMeta(find);
-                        acc = { ...acc, ...findValues };
+                        const search = obs.trim().split("+").pop().trim();
+                        const foundValues = this.getPropertiesMeta(
+                            search,
+                            filter
+                        );
+                        acc = { ...acc, ...foundValues };
                         return acc;
                     }
                 }
@@ -113,8 +123,15 @@ class App {
                 }
                 return acc;
             },
-            {}
+            this.getDefaultPropertiesMeta()
         );
+    }
+
+    getDefaultPropertiesMeta() {
+        return {
+            _id: { class: "Thing", property: "_id", type: "string" },
+            path: { class: "Thing", property: "path", type: "string" },
+        };
     }
 
     getRowByQuery(sheetName, query) {
