@@ -53,7 +53,13 @@ class Sheet {
         return { header, values, sheetName, key };
     }
 
-    findValuesFromSheet(sheetName, key, columns, rows = "auto", header) {
+    findValuesFromSheet(
+        sheetName,
+        key,
+        columns = undefined,
+        rows = "auto",
+        header
+    ) {
         const {
             header: headerValues,
             values,
@@ -73,7 +79,14 @@ class Sheet {
         };
     }
 
-    findRangeFromSheet({ sheetName, key, rows = "auto", columns, header }) {
+    findRangeFromSheet({
+        sheetName,
+        key,
+        rows = "auto",
+        columns = undefined,
+        header,
+    }) {
+        key = `[${key}]`; // add brackets to key
         if (typeof header === "undefined") header = true;
 
         const sheet = this.getSpreadsheet().getSheetByName(sheetName);
@@ -87,6 +100,11 @@ class Sheet {
             );
         const dataColumn = range.getColumn();
         let dataRow = range.getRow();
+
+        columns =
+            typeof columns === "undefined"
+                ? sheet.getLastColumn() - 1
+                : columns;
 
         const sheetTotalRows = sheet
             .getRange(dataRow, dataColumn + columns - 1)

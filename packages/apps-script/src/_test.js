@@ -316,7 +316,6 @@ function test_Sheet() {
             sheet.findRangeFromSheet({
                 sheetName: "place",
                 key: "place",
-                columns: 5,
             })
         ).toBeObject();
     });
@@ -324,7 +323,7 @@ function test_Sheet() {
     test("Sheet.findValuesFromSheet", () => {
         expect(
             "object",
-            sheet.findValuesFromSheet("place", "place", 5)
+            sheet.findValuesFromSheet("place", "place")
         ).toBeObject();
     });
 }
