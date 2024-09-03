@@ -20,7 +20,7 @@ class App {
         this.endpoints = endpoints.reduce((acc, name) => {
             const { values } = this.configSheet.findValuesFromSheet(
                 "🏠",
-                `[${name}]`,
+                name,
                 2,
                 undefined,
                 false
@@ -41,7 +41,7 @@ class App {
                         name,
                         this.configSheet.findValuesFromSheet(
                             name,
-                            `[${name}]`,
+                            name,
                             meta,
                             total
                         ),
@@ -54,7 +54,7 @@ class App {
     getApiConfig() {
         if (typeof this.config === "undefined") {
             this.config = this.configSheet
-                .findValuesFromSheet("config", "[api]", 2)
+                .findValuesFromSheet("config", "api", 2)
                 .values.reduce((acc, [key, value]) => {
                     acc[key] = value;
                     return acc;
@@ -65,7 +65,7 @@ class App {
 
     getAbout() {
         return this.configSheet
-            .findValuesFromSheet("config", "[about]", 2)
+            .findValuesFromSheet("config", "about", 2)
             .values.reduce((acc, [key, value]) => {
                 acc[key] = value;
                 return acc;
@@ -75,7 +75,7 @@ class App {
     getProperties() {
         if (typeof this.properties === "undefined") {
             this.properties = this.configSheet
-                .findValuesFromSheet("config", "[properties]", 2)
+                .findValuesFromSheet("config", "properties", 2)
                 .values.map(([name, order]) => name);
         }
         return this.properties;
@@ -84,7 +84,7 @@ class App {
     getRawPropertiesMeta(endpoint) {
         const { values } = this.configSheet.findValuesFromSheet(
             "meta",
-            `[${endpoint}]`,
+            endpoint,
             6
         );
         return values;
@@ -155,11 +155,10 @@ class App {
         try {
             const { header, values } = this.configSheet.findValuesFromSheet(
                 sheetName,
-                `[${sheetName}]`,
+                sheetName,
                 this.endpoints[sheetName].meta,
                 this.endpoints[sheetName].total
             );
-
             return values.map(
                 (row) => new Entity(header, row, this.getApiConfig())
             );
@@ -172,7 +171,7 @@ class App {
         try {
             return this.configSheet.findValuesFromSheet(
                 sheetName,
-                `[${sheetName}]`,
+                sheetName,
                 this.endpoints[sheetName].meta
             ).header;
         } catch (error) {
