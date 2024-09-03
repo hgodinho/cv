@@ -8,7 +8,7 @@ function errorTest(title, expected, received = undefined) {
         console.error("Expected:", expected);
         console.error("But received:", received);
     } else {
-        console.error(expected);
+        console.error("Expected:", expected);
     }
 }
 
