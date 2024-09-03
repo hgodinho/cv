@@ -241,10 +241,6 @@ function test_Entity() {
             entity.parseString("Godinho | Lopes | Costa")
         ).toEqual(["Godinho", "Lopes", "Costa"]);
     });
-
-    // test("Entity.toJsonLd", () => {
-    //     console.log(entity.toJsonLd());
-    // });
 }
 
 function test_App() {
@@ -254,7 +250,7 @@ function test_App() {
         expect("object", app.configSheet).toBeObject();
     });
 
-    test("setupEndpoints", () => {
+    test("App.setupEndpoints", () => {
         expect("object", app.endpoints).toBeObject();
     });
 
@@ -272,6 +268,11 @@ function test_App() {
         expect("properties", properties).toBeArray();
     });
 
+    test("App.setupRawData", () => {
+        app.setupRawData();
+        expect("rawData", app.rawData).toBeObject();
+    });
+
     test("App.getRawPropertiesMeta", () => {
         const meta = app.getRawPropertiesMeta("person");
         // console.log({ meta });
@@ -280,8 +281,36 @@ function test_App() {
 
     test("App.getPropertiesMeta", () => {
         const meta = app.getPropertiesMeta("person");
-        // console.log({ meta });
         expect("meta", meta).toBeObject();
+    });
+
+    test("App.getPropertiesMeta with filter", () => {
+        const meta = app.getPropertiesMeta("person", ({ i18n }) => i18n);
+        expect("meta", meta).toBeObject();
+    });
+
+    test_App_I18n();
+}
+
+function test_App_I18n() {
+    const app = new App(["person"], "en");
+
+    test("App.setupL10n", () => {
+        app.setupL10n("en");
+        expect("app.lang", app.lang).toBe("en");
+        expect("app.l10n", app.l10n).toBeObject();
+        expect("app.l10n.sheets", app.l10n.sheets).toBeObject();
+        expect("app.l10n.labels", app.l10n.labels).toBeObject();
+    });
+
+    test("App.verifyL10n", () => {
+        app.verifyL10n(({ name, lang, spreadsheet }) => {
+            // console.log({
+            //     name,
+            //     lang,
+            //     spreadsheet,
+            // });
+        });
     });
 }
 
@@ -335,6 +364,7 @@ function test_Utils() {
         data: "object",
         date: ["string", "date"],
     });
+
     test("mockRequest", () => {
         expect("object", mock).toBe({
             queryString: `id="string"&type="string"&data="object"&date="string,date"`,

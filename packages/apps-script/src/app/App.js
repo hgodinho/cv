@@ -1,8 +1,9 @@
 class App {
-    constructor(endpoints = []) {
+    constructor(endpoints = [], lang = "en") {
         this.configSheet = new Sheet(CONFIG.sheet());
         this.setup();
         this.setupEndpoints(endpoints);
+        this.setupL10n(lang);
     }
 
     setup() {
@@ -33,6 +34,38 @@ class App {
         }, {});
     }
 
+    setupL10n(lang) {
+        this.lang = lang;
+        this.l10n = {
+            sheets: this.configSheet
+                .findValuesFromSheet("config", "l10n", 4)
+                .values.reduce((acc, [lang, name, id, principal]) => {
+                    acc[lang] = {
+                        lang,
+                        name,
+                        id,
+                        principal,
+                        sheet: principal || !id ? false : new Sheet(id),
+                    };
+                    return acc;
+                }, {}),
+            labels: {
+                en: {
+                    classes: this.configSheet.findValuesFromSheet(
+                        "l10n",
+                        "classes",
+                        2
+                    ).values,
+                    properties: this.configSheet.findValuesFromSheet(
+                        "l10n",
+                        "properties",
+                        2
+                    ).values,
+                },
+            },
+        };
+    }
+
     setupRawData() {
         this.rawData = Object.fromEntries(
             Object.entries(this.endpoints).map(
@@ -61,6 +94,40 @@ class App {
                 }, {});
         }
         return this.config;
+    }
+
+    verifyL10n(callbackOnFail = undefined, callbackOnFinish = undefined) {
+        Object.entries(this.l10n.sheets).forEach(
+            ([lang, { sheet, principal, ...rest }]) => {
+                if (!sheet) {
+                    // do nothing if the sheet is principal
+                    return;
+                }
+
+                Object.keys(this.endpoints).forEach((name) => {
+                    if (!sheet.hasSheet(name)) {
+                        if (!callbackOnFail) {
+                            throw new Error(
+                                `Sheet ${name} not found for language ${lang} at spreadsheet ${spreadsheet.getId()}`
+                            );
+                        }
+                        callbackOnFail({
+                            name,
+                            lang,
+                            spreadsheet: sheet,
+                        });
+                    } else {
+                        if (callbackOnFinish) {
+                            callbackOnFinish({
+                                name,
+                                lang,
+                                spreadsheet: sheet,
+                            });
+                        }
+                    }
+                });
+            }
+        );
     }
 
     getAbout() {
