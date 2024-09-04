@@ -89,7 +89,7 @@ class Sheet {
         key = `[${key}]`; // add brackets to key
         if (typeof header === "undefined") header = true;
 
-        const sheet = this.getSpreadsheet().getSheetByName(sheetName);
+        const sheet = this.getSheet(sheetName);
 
         const finder = sheet.createTextFinder(key);
 
@@ -138,7 +138,46 @@ class Sheet {
                 columns
             );
 
-        return { header: head, values, sheetName, key };
+        return { header: head, values, sheetName, key, total: totalRows };
+    }
+
+    getOffset(sheetName) {
+        const sheet = this.getSheet(sheetName);
+        const finder = sheet.createTextFinder("offset");
+        const range = finder.findNext();
+        const offset = sheet.getRange(range.getRow(), range.getColumn() + 1);
+        return offset.getValue();
+    }
+
+    getTotalRows(sheetName) {
+        const { total } = this.findRangeFromSheet({
+            sheetName,
+            key: sheetName,
+        });
+        return total;
+    }
+
+    getRowById(sheetName, id) {
+        const sheet = this.getSheet(sheetName);
+        const offset = this.getOffset(sheetName);
+        const total = this.getTotalRows(sheetName);
+        const range = sheet.getRange(offset + 1, 2, total);
+
+        let row = offset + 1;
+        range.getValues().forEach((data, i) => {
+            if (data[0] === id) {
+                row += i;
+            }
+        });
+
+        const rangeRow = sheet.getRange(row, 2, 1, sheet.getLastColumn() - 1);
+        const valuesRow = rangeRow.getValues();
+        return valuesRow[0];
+    }
+
+    getHeader(sheetName) {
+        const { header } = this.findValuesFromSheet(sheetName, sheetName);
+        return header;
     }
 
     /**

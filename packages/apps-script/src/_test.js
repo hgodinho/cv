@@ -349,6 +349,23 @@ function test_Sheet() {
         ).toBeObject();
     });
 
+    test("Sheet.getOffset", () => {
+        expect("number", sheet.getOffset("place")).toBe(13);
+    });
+
+    test("Sheet.getTotalRows", () => {
+        expect("number", sheet.getTotalRows("place")).toBe(7);
+    });
+
+    test("Sheet.getRowById", () => {
+        expect("row is array", sheet.getRowById("person", "prs-2")).toBeArray();
+        expect("row is array", sheet.getRowById("place", "plc-3")).toBeArray();
+    });
+
+    test("Sheet.getHeader", () => {
+        expect("header is array", sheet.getHeader("person")).toBeArray();
+    });
+
     test("Sheet.findValuesFromSheet", () => {
         expect(
             "object",
