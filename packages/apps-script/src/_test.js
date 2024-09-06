@@ -293,6 +293,16 @@ function test_App() {
 function test_App_I18n() {
     const app = new App(["person"], "en");
 
+    test("App.getL10nConfig", () => {
+        const l10n = app.getL10nConfig();
+        expect("l10n", l10n).toBeObject();
+    });
+
+    test("App.getEndpointsConfig", () => {
+        const endpoints = app.getEndpointsConfig();
+        expect("endpoints", endpoints).toBeArray();
+    });
+
     test("App.setupL10n", () => {
         app.setupL10n("en");
         expect("app.lang", app.lang).toBe("en");
