@@ -48,6 +48,20 @@ function expect(toBeExpected, actual) {
                 errorTest(toBeExpected, "boolean", typeof actual);
             }
         },
+        toBeTruthy() {
+            if (actual) {
+                logTest(toBeExpected, "Pass");
+            } else {
+                errorTest(toBeExpected, "Truthy", actual);
+            }
+        },
+        toBeFalsy() {
+            if (!actual) {
+                logTest(toBeExpected, "Pass");
+            } else {
+                errorTest(toBeExpected, "Falsy", actual);
+            }
+        },
         toBeObject() {
             if (typeof actual === "object") {
                 logTest(toBeExpected, "Pass");
