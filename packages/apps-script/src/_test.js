@@ -410,3 +410,23 @@ function test_Utils() {
         });
     });
 }
+
+function test_I18n() {
+    const app = new App(["person", "place", "intangible", "credential"]);
+
+    const i18n = new I18n(app.getL10nConfig());
+
+    test("I18n.getEntityById", () => {
+        i18n.setLocale("es");
+        const data = i18n.getEntityById("place", "#plc-7");
+        // console.log({ data });
+        expect("data is object", data).toBeObject();
+    });
+
+    test("I18n.getEntities", () => {
+        i18n.setLocale("pt-br");
+        const data = i18n.getEntities("place");
+        // console.log({ data });
+        expect("data is array", data).toBeArray();
+    });
+}
