@@ -246,7 +246,7 @@ class App {
                         header,
                         values,
                         endpoints: this.getEndpointsConfig(),
-                        i18n: this.i18n,
+                        i18n: new I18n(this.getL10nConfig(), this.locale),
                     });
                 }
             }
@@ -277,7 +277,7 @@ class App {
                         header,
                         values: row,
                         endpoints: this.endpointsConfig(),
-                        i18n: this.i18n,
+                        i18n: new I18n(this.getL10nConfig(), this.locale),
                     })
             );
         } catch (error) {

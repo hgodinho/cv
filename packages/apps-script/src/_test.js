@@ -287,12 +287,6 @@ function test_App() {
         expect("meta", meta).toBeObject();
     });
 
-    test_App_I18n();
-}
-
-function test_App_I18n() {
-    const app = new App(["person"], "en");
-
     test("App.getL10nConfig", () => {
         const l10n = app.getL10nConfig();
         expect("l10n", l10n).toBeObject();
