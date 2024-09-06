@@ -1,5 +1,5 @@
 class Entity {
-    constructor(header, values, config) {
+    constructor({ header, values, endpoints, i18n, recursive = true }) {
         if (!header || !values)
             throw new Error("Entity requires header and values");
         if (!Array.isArray(header))
@@ -10,11 +10,15 @@ class Entity {
             throw new Error(
                 "Entity requires header and values to be the same length"
             );
-        if (!config) throw new Error("Entity requires a config");
+        if (!endpoints) throw new Error("Entity requires endpoints");
+        if (!i18n)
+            throw new Error("Entity requires an instantiated I18n class");
 
+        this.i18n = i18n;
         this._header = header;
         this._values = values;
-        this._config = config;
+        this._endpoints = endpoints;
+        this.recursive = recursive;
 
         const excluded = ["_id", "path"];
 
@@ -44,12 +48,6 @@ class Entity {
      *
      * @param {string} str | String to be parsed.
      * @returns String | Object | Array | Parsed string, object or array.
-     * @example
-     * const entity = new Entity(["name", "age"], ["John", "25"]);
-     * console.log(entity.parseString("name=John; age=25")); // { name: "John", age: 25 }
-     *
-     * const entity = new Entity(["name", "age"], ["John", "25"]);
-     * console.log(entity.parseString("name=John; age=25 | name=Jane; age=30")); // [{ name: "John", age: 25 }, { name: "Jane", age: 30 }]
      */
     parseString(str) {
         // return early if the string is URL
@@ -57,9 +55,16 @@ class Entity {
             return str;
         }
 
-        const operators = ["=", "/", "|"];
+        const operators = ["=", "/", "|", ["#", "-"]];
 
-        if (!operators.some((op) => str.includes(op))) {
+        if (
+            !operators.some((op) => {
+                if (Array.isArray(op)) {
+                    return op.every((subOp) => str.includes(subOp));
+                }
+                return str.includes(op);
+            })
+        ) {
             return str; // No operators found, return the string as is.
         }
 
@@ -88,18 +93,20 @@ class Entity {
                 return acc;
             }, {});
         } else if (
-            str.includes("/") &&
+            str.includes("#") &&
+            str.includes("-") &&
             !str.includes(";") &&
             !str.includes("|")
         ) {
-            // this is a single path pair
+            // this is a single id
             data = str.trim();
         } else if (
             str.includes("|") &&
-            str.includes("/") &&
+            str.includes("#") &&
+            str.includes("-") &&
             !str.includes(";")
         ) {
-            // this is a list of path pairs
+            // this is probably list of ids
             data = str.split("|").map((pair) => pair.trim());
         } else if (
             str.includes("|") &&
@@ -111,11 +118,27 @@ class Entity {
         }
 
         if (typeof data === "string") {
-            return `${this._config.url}/${this._config.namespace}/${data}`;
+            if (this.getRecursive()) {
+                const entity = this.i18n.getEntityById(
+                    this.getTypeById(data),
+                    data,
+                    false
+                );
+                return entity["@id"];
+            }
+            return data;
         } else if (Array.isArray(data)) {
             return data.map((item) => {
                 if (typeof item === "string") {
-                    return `${this._config.url}/${this._config.namespace}/${item}`;
+                    if (this.getRecursive()) {
+                        const entity = this.i18n.getEntityById(
+                            this.getTypeById(item),
+                            item,
+                            false
+                        );
+                        return entity["@id"];
+                    }
+                    return item;
                 } else if (typeof item === "object") {
                     return item;
                 }
@@ -126,5 +149,25 @@ class Entity {
 
         // if we get here, we return the string as is
         return str;
+    }
+
+    setProperty(key, value) {
+        this[key] = value;
+    }
+
+    setI18n(i18n) {
+        this.i18n = i18n;
+    }
+
+    getTypeById(id) {
+        const idType = this._endpoints.find(([name, slug]) => {
+            return id.includes(slug);
+        });
+        if (!idType) return false;
+        return idType[0];
+    }
+
+    getRecursive() {
+        return this.recursive;
     }
 }

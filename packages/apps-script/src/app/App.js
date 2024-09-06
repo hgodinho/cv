@@ -84,16 +84,39 @@ class App {
         );
     }
 
+    getL10nConfig() {
+        if (typeof this.l10nConfig === "undefined") {
+            this.l10nConfig = this.configSheet
+                .findValuesFromSheet("config", "l10n", 4)
+                .values.reduce((acc, [lang, name, id, principal]) => {
+                    acc.push({ lang, name, id, principal });
+                    return acc;
+                }, []);
+        }
+        return this.l10nConfig;
+    }
+
+    getEndpointsConfig() {
+        if (typeof this.endpointsConfig === "undefined") {
+            this.endpointsConfig = this.configSheet.findValuesFromSheet(
+                "config",
+                "endpoints",
+                2
+            ).values;
+        }
+        return this.endpointsConfig;
+    }
+
     getApiConfig() {
-        if (typeof this.config === "undefined") {
-            this.config = this.configSheet
+        if (typeof this.apiConfig === "undefined") {
+            this.apiConfig = this.configSheet
                 .findValuesFromSheet("config", "api", 2)
                 .values.reduce((acc, [key, value]) => {
                     acc[key] = value;
                     return acc;
                 }, {});
         }
-        return this.config;
+        return this.apiConfig;
     }
 
     verifyL10n(callbackOnFail = undefined, callbackOnFinish = undefined) {
@@ -219,7 +242,12 @@ class App {
                     const values = sheet
                         .getRange(row, 2, 1, sheet.getLastColumn() - 1)
                         .getValues()[0];
-                    data = new Entity(header, values, this.getApiConfig());
+                    data = new Entity({
+                        header,
+                        values,
+                        endpoints: this.getEndpointsConfig(),
+                        i18n: this.i18n,
+                    });
                 }
             }
 
@@ -244,7 +272,13 @@ class App {
                 this.endpoints[sheetName].total
             );
             return values.map(
-                (row) => new Entity(header, row, this.getApiConfig())
+                (row) =>
+                    new Entity({
+                        header,
+                        values: row,
+                        endpoints: this.endpointsConfig(),
+                        i18n: this.i18n,
+                    })
             );
         } catch (error) {
             throw new Error(error);

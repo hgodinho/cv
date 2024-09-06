@@ -125,7 +125,7 @@ function test_Api() {
     });
 
     test("Api.getResponse place get endpoint", () => {
-        mock = mockRequest("cv/v1/country/brasil");
+        mock = mockRequest("cv/en/country/brazil");
         api = new Api(mock);
 
         const response = api.getResponse();
@@ -154,21 +154,18 @@ function test_Api() {
 }
 
 function test_Entity() {
-    const entity = new Entity(
-        ["_id", "type", "data", "date"],
-        [
+    const app = new App(["person", "place", "intangible", "credential"]);
+    const entity = new Entity({
+        header: ["_id", "type", "data", "date"],
+        values: [
             "person/teste",
             "Person",
             "fruta=banana; sabor=doce | fruta=limão; sabor=cítrico",
             "2021-01-01",
         ],
-        {
-            base: "https://hgod.in",
-            namespace: "cv",
-            url: "https://hgod.in/cv",
-            query: "https://hgod.in/cv?",
-        }
-    );
+        endpoints: app.getEndpointsConfig(),
+        i18n: new I18n(app.getL10nConfig()),
+    });
 
     test("Entity", () => {
         console.log(entity);
@@ -188,6 +185,11 @@ function test_Entity() {
 
     test("Entity.data", () => {
         console.log(entity.data);
+    });
+
+    test("Entity.getTypeById", () => {
+        const type = entity.getTypeById("prs-2");
+        expect("type", type).toBe("person");
     });
 
     test("Entity.parseString", () => {
@@ -215,8 +217,8 @@ function test_Entity() {
             },
         ]);
 
-        expect("path", entity.parseString("fruta/banana")).toBe(
-            "https://hgod.in/cv/fruta/banana"
+        expect("path", entity.parseString("#prs-1")).toBe(
+            "https://hgod.in/cv/en/person/henrique-godinho"
         );
 
         expect("single string", entity.parseString("banana")).toBe("banana");
@@ -225,15 +227,11 @@ function test_Entity() {
             "https://hgod.in/cv/?person=1"
         );
 
-        expect(
-            "array<path>",
-            entity.parseString(
-                "certification/1 | certification/2 | certification/3"
-            )
-        ).toEqual([
-            "https://hgod.in/cv/certification/1",
-            "https://hgod.in/cv/certification/2",
-            "https://hgod.in/cv/certification/3",
+        const arrayPath = entity.parseString("#cdt-2 | #cdt-3 | #cdt-4");
+        expect("array<path>", arrayPath).toEqual([
+            "https://hgod.in/cv/en/educational-occupational-credential/pos-graduacao-em-comunicacao-e-design-digital",
+            "https://hgod.in/cv/en/educational-occupational-credential/bacharelado-em-artes-visuais-pintura-gravura-e-escultura",
+            "https://hgod.in/cv/en/educational-occupational-credential/extensao-universitaria-em-transmedia-storytelling",
         ]);
 
         expect(
