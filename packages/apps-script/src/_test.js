@@ -356,8 +356,11 @@ function test_Sheet() {
     });
 
     test("Sheet.getRowById", () => {
-        expect("row is array", sheet.getRowById("person", "prs-2")).toBeArray();
-        expect("row is array", sheet.getRowById("place", "plc-3")).toBeArray();
+        expect(
+            "row is array",
+            sheet.getRowById("person", "#prs-2")
+        ).toBeArray();
+        expect("row is array", sheet.getRowById("place", "#plc-3")).toBeArray();
     });
 
     test("Sheet.getHeader", () => {
@@ -365,10 +368,8 @@ function test_Sheet() {
     });
 
     test("Sheet.findValuesFromSheet", () => {
-        expect(
-            "object",
-            sheet.findValuesFromSheet("place", "place")
-        ).toBeObject();
+        const values = sheet.findValuesFromSheet("place", "place");
+        expect("object", values).toBeObject();
     });
 }
 

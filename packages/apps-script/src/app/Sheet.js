@@ -163,15 +163,18 @@ class Sheet {
         const total = this.getTotalRows(sheetName);
         const range = sheet.getRange(offset + 1, 2, total);
 
-        let row = offset + 1;
+        let row;
         range.getValues().forEach((data, i) => {
             if (data[0] === id) {
-                row += i;
+                row = i + offset + 1;
             }
         });
-
+        if (!row) {
+            throw new Error(`No row found with id ${id} at sheet ${sheetName}`);
+        }
         const rangeRow = sheet.getRange(row, 2, 1, sheet.getLastColumn() - 1);
         const valuesRow = rangeRow.getValues();
+
         return valuesRow[0];
     }
 
