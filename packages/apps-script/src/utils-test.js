@@ -4,12 +4,8 @@ function logTest(title, message) {
 
 function errorTest(title, expected, received = undefined) {
     console.error(`Failed: ${title}`);
-    if (received) {
-        console.error("Expected:", expected);
-        console.error("But received:", received);
-    } else {
-        console.error("Expected:", expected);
-    }
+    console.error("Expected:", expected);
+    console.error("Received:", received);
 }
 
 function test(title, callback) {
@@ -22,52 +18,45 @@ function expect(toBeExpected, actual) {
     return {
         toBe(expected) {
             if (JSON.stringify(actual) === JSON.stringify(expected)) {
-                logTest(toBeExpected, "Pass");
-            } else {
-                errorTest(toBeExpected, expected, actual);
+                return logTest(toBeExpected, "Pass");
             }
+            return errorTest(toBeExpected, expected, actual);
         },
         toBeString() {
             if (typeof actual === "string") {
-                logTest(toBeExpected, "Pass");
-            } else {
-                errorTest(toBeExpected, "string", typeof actual);
+                return logTest(toBeExpected, "Pass");
             }
+            return errorTest(toBeExpected, "string", typeof actual);
         },
         toBeNumber() {
             if (typeof actual === "number") {
-                logTest(toBeExpected, "Pass");
-            } else {
-                errorTest(toBeExpected, "number", typeof actual);
+                return logTest(toBeExpected, "Pass");
             }
+            return errorTest(toBeExpected, "number", typeof actual);
         },
         toBeBoolean() {
             if (typeof actual === "boolean") {
-                logTest(toBeExpected, "Pass");
-            } else {
-                errorTest(toBeExpected, "boolean", typeof actual);
+                return logTest(toBeExpected, "Pass");
             }
+            return errorTest(toBeExpected, "boolean", typeof actual);
         },
         toBeTruthy() {
             if (actual) {
-                logTest(toBeExpected, "Pass");
-            } else {
-                errorTest(toBeExpected, "Truthy", actual);
+                return logTest(toBeExpected, "Pass");
             }
+            return errorTest(toBeExpected, "Truthy", actual);
         },
         toBeFalsy() {
             if (!actual) {
-                logTest(toBeExpected, "Pass");
-            } else {
-                errorTest(toBeExpected, "Falsy", actual);
+                return logTest(toBeExpected, "Pass");
             }
+            return errorTest(toBeExpected, "Falsy", actual);
         },
         toBeObject() {
             if (typeof actual === "object") {
-                logTest(toBeExpected, "Pass");
-            } else {
-                errorTest(toBeExpected, "object", typeof actual);
+                return logTest(toBeExpected, "Pass");
             }
+            return errorTest(toBeExpected, "object", typeof actual);
         },
         toBeArray(of = undefined) {
             if (Array.isArray(actual)) {
@@ -95,15 +84,14 @@ function expect(toBeExpected, actual) {
         },
         toEqual(expected) {
             if (JSON.stringify(actual) === JSON.stringify(expected)) {
-                logTest(toBeExpected, "Pass");
-            } else {
-                errorTest(
-                    toBeExpected,
-                    `Fail: Expected ${JSON.stringify(
-                        expected
-                    )}, but received ${JSON.stringify(actual)}`
-                );
+                return logTest(toBeExpected, "Pass");
             }
+            return errorTest(
+                toBeExpected,
+                `Fail: Expected ${JSON.stringify(
+                    expected
+                )}, but received ${JSON.stringify(actual)}`
+            );
         },
         toThrow() {
             let error = false;
@@ -113,13 +101,12 @@ function expect(toBeExpected, actual) {
                 error = true;
             }
             if (error) {
-                logTest(toBeExpected, "Pass");
-            } else {
-                errorTest(
-                    toBeExpected,
-                    "Fail: Expected function to throw an error"
-                );
+                return logTest(toBeExpected, "Pass");
             }
+            return errorTest(
+                toBeExpected,
+                "Fail: Expected function to throw an error"
+            );
         },
     };
 }
