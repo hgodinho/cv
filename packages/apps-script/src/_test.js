@@ -375,6 +375,12 @@ function test_Sheet() {
         const values = sheet.findValuesFromSheet("place", "place");
         expect("object", values).toBeObject();
     });
+
+    test("Sheet.getRowByQuery", () => {
+        const values = sheet.getRowByQuery("place", "country/brazil");
+        console.log({ values });
+        expect("object", values).toBeArray();
+    });
 }
 
 function test_Utils() {

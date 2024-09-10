@@ -178,6 +178,23 @@ class Sheet {
         return valuesRow[0];
     }
 
+    getRowByQuery(sheetName, query) {
+        const sheet = this.getSheet(sheetName);
+        const finder = sheet.createTextFinder(query);
+        const ranges = finder.findAll();
+
+        for (const range of ranges) {
+            const value = range.getValue();
+            if (value === query) {
+                const row = range.getRow();
+                const values = sheet
+                    .getRange(row, 2, 1, sheet.getLastColumn() - 1)
+                    .getValues()[0];
+                return values;
+            }
+        }
+    }
+
     getHeader(sheetName) {
         const { header } = this.findValuesFromSheet(sheetName, sheetName);
         return header;
