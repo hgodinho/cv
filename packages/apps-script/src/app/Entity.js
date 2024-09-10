@@ -29,6 +29,14 @@ class Entity {
             }
             if (typeof value !== "undefined") {
                 this[key] = value;
+                if (key === "type") {
+                    this.type = value.includes(" ")
+                        ? value
+                              .split(" ")
+                              .map((s) => s.trim())
+                              .join("")
+                        : value;
+                }
             }
         });
     }
