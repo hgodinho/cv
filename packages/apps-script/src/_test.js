@@ -429,4 +429,33 @@ function test_I18n() {
         // console.log({ data });
         expect("data is array", data).toBeArray();
     });
+
+    test("I18n.getAliasedTranslatedEndpoint", () => {
+        const i18n = new I18n(app.getL10nConfig());
+
+        expect(
+            "banana",
+            i18n.getAliasedTranslatedEndpoint("banana")
+        ).toBeFalsy();
+
+        expect("person", i18n.getAliasedTranslatedEndpoint("person")).toBe(
+            "person"
+        );
+
+        expect(
+            "pessoa",
+            (() => {
+                i18n.setLocale("pt-br");
+                return i18n.getAliasedTranslatedEndpoint("pessoa");
+            })()
+        ).toBe("person");
+
+        expect(
+            "persona",
+            (() => {
+                i18n.setLocale("es");
+                return i18n.getAliasedTranslatedEndpoint("persona");
+            })()
+        ).toBe("person");
+    });
 }

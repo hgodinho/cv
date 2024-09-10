@@ -86,4 +86,29 @@ class I18n {
     setLocale(locale) {
         this.locale = locale;
     }
+
+    getAliasedTranslatedEndpoint(query) {
+        let lastKey;
+        const search = Object.entries(
+            this.sheets[this.locale]
+                .findValuesFromSheet("l10n", "endpoints", 2)
+                .values.reduce((acc, [key, value]) => {
+                    if (key) {
+                        acc[key] = [value];
+                        lastKey = key;
+                    } else {
+                        acc[lastKey].push(value);
+                    }
+                    return acc;
+                }, {})
+        ).find(([key, alias]) => {
+            if (alias.includes(query)) {
+                return true;
+            }
+        });
+        if (search) {
+            return search[0];
+        }
+        return false;
+    }
 }
