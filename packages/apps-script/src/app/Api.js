@@ -1,5 +1,7 @@
 class Api {
     constructor(e) {
+        // Set the slash character
+        this.slashChar = "&#x2F;";
         this.setup(e);
     }
 
@@ -15,17 +17,6 @@ class Api {
         ];
     }
 
-    _endpointAlias() {
-        return {
-            place: ["city", "country"],
-            intangible: [],
-            credential: ["educational-occupational-credential"],
-            creativeWork: [],
-            event: [],
-            organization: [],
-        };
-    }
-
     _defaultEndpoints() {
         return ["schema", "properties", "about", "ld-graph"];
     }
@@ -34,11 +25,9 @@ class Api {
         // Set the request object
         this.request = e;
 
-        // Set the slash character
-        this.slashChar = "&#x2F;";
-
         // Set the endpoints
         this.defaultEndpoints = this._defaultEndpoints();
+
         this.endpoints = [...this.defaultEndpoints, ...this._endpoints()];
 
         // Set the app object
@@ -47,6 +36,16 @@ class Api {
         // Set the config object
         this.config = this.app.getApiConfig();
 
+        this.parsePath(e);
+
+        this.parameter = e.parameter;
+
+        this.parameters = e.parameters;
+
+        this.queryString = e.queryString;
+    }
+
+    parsePath(e) {
         if (
             typeof e.pathInfo === "undefined" ||
             !e.pathInfo.startsWith(this.getBase(false))
@@ -55,25 +54,66 @@ class Api {
                 status: 400,
                 error: `The path must have namespace and version [cv/v1].`,
             });
+            throw new Error(this.error.message);
+        }
+
+        let prePath = utils.sanitize(
+            e.pathInfo.replace(this.getBase(false), "")
+        );
+
+        // Set the path, parameter, and query string
+        if (prePath.startsWith(this.slashChar)) {
+            prePath = prePath.slice(this.slashChar.length);
+        }
+
+        prePath = prePath.split(this.slashChar).filter(Boolean);
+
+        if (prePath.length === 0) {
             return;
         }
 
-        // Set the path, parameter, and query string
-        const prePath = utils.sanitize(
-            e.pathInfo.replace(this.getBase(false), "")
-        );
-        this.path = prePath.startsWith(this.slashChar)
-            ? prePath.slice(this.slashChar.length)
-            : prePath;
+        if (prePath[0] === "schema") {
+            this.endpoint = "schema";
+            return;
+        }
 
-        this.parameter = e.parameter;
+        const [locale, endpoint, slug] = prePath;
 
-        this.parameters = e.parameters;
+        const l10n = this.app.getL10nConfig().map((l) => l.lang);
 
-        this.queryString = e.queryString;
+        if (!l10n.includes(locale)) {
+            this.error = this.createResponse({
+                status: 400,
+                error: `The locale ${locale} is not supported.`,
+            });
+            throw new Error(this.error.message);
+        }
 
-        // Set the known paths
-        this.knownPaths = ["schema", ...Object.keys(this.getSchema())];
+        this.locale = locale;
+
+        this.app.setupI18n(locale);
+
+        // Set the i18n object
+        this.i18n = new I18n(this.app.getL10nConfig(), locale);
+
+        if (!this.defaultEndpoints.includes(endpoint)) {
+            this.endpoint = this.i18n.getAliasedTranslatedEndpoint(endpoint);
+        } else {
+            this.endpoint = endpoint;
+        }
+
+        if (!this.endpoint) {
+            this.error = this.createResponse({
+                status: 400,
+                error: `The endpoint ${endpoint} is not supported.`,
+            });
+            throw new Error(this.error.message);
+        }
+        this.endpointAlias = endpoint;
+
+        if (slug) {
+            this.slug = slug;
+        }
     }
 
     getParameters() {
@@ -98,29 +138,18 @@ class Api {
             return this.error;
         }
 
-        const path = this.path;
+        const endpoint = this.endpoint
+            ? this.endpoint.toLowerCase()
+            : undefined;
 
-        // return schema if no path is provided
-        if (path === "" || path === this.slashChar) {
-            return this.createResponse({ status: 200, data: this.getSchema() });
-        }
-
-        const [endpoint, slug] = path.split(this.slashChar);
-
-        // return 404 if the endpoint is unknown
-        if (
-            ![
-                ...this.endpoints,
-                ...Object.values(this._endpointAlias()).reduce((acc, cur) => {
-                    return [...acc, ...cur];
-                }, []),
-            ].includes(endpoint.toLocaleLowerCase())
-        ) {
+        if (!endpoint) {
             return this.createResponse({
-                status: 404,
-                error: `Unknown endpoint: ${endpoint}`,
+                status: 200,
+                data: this.getSchema(),
             });
         }
+
+        const slug = this.slug;
 
         if (typeof slug === "undefined" || slug === null || slug === "") {
             switch (endpoint) {
@@ -153,6 +182,7 @@ class Api {
                     });
 
                 // return list for the endpoint
+                // TODO add pagination support
                 default:
                     return this.createResponse({
                         status: 200,
@@ -166,24 +196,17 @@ class Api {
 
         // return data for the endpoint based on the slug
         try {
-            const aliasedEndpoint = utils.findKeyByValue(
-                this._endpointAlias(),
-                endpoint.toLowerCase()
-            );
-            if (!aliasedEndpoint) {
-                throw new Error(`No endpoint found with name: ${endpoint}`);
-            }
             const data = this.app.getRowByQuery(
-                aliasedEndpoint,
-                `${endpoint}/${slug}`
+                endpoint,
+                `${this.endpointAlias}/${slug}`
             );
             return this.createResponse({
                 status: 200,
-                data: this.prepareResponse(data, aliasedEndpoint),
+                data: this.prepareResponse(data, endpoint),
             });
         } catch (error) {
             return this.createResponse({
-                status: 404,
+                status: 400,
                 error: `Error: ${error.message}`,
             });
         }
@@ -221,7 +244,7 @@ class Api {
             response["data"] = data;
         }
         if (error) {
-            response["error"] = error;
+            response["message"] = error;
         }
         return response;
     }
@@ -239,7 +262,13 @@ class Api {
             ([key, { header, values, sheetName }]) => {
                 values.forEach((row) => {
                     const data = this.prepareResponse(
-                        new Entity(header, row, this.config),
+                        new Entity({
+                            header,
+                            values: row,
+                            endpoints: this.app.getEndpointsConfig(),
+                            i18n: this.i18n,
+                            recursive: false,
+                        }),
                         sheetName
                     );
                     json["@graph"].push(data);

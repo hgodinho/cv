@@ -1,14 +1,56 @@
 function test_All() {
-    test_Api();
-    test_Entity();
-    test_App();
-    test_Sheet();
     test_Utils();
+    test_Api();
+    test_Sheet();
+    test_Entity();
+    test_I18n();
+    test_App();
 }
 
 function test_Api() {
     let mock = mockRequest("cv/v1");
     let api = new Api(mock);
+
+    test("Api.parsePath cv/v1", () => {
+        api.parsePath({ pathInfo: "cv/v1" });
+        expect("locale", api.locale).toBe(undefined);
+        expect("endpoint", api.endpoint).toBe(undefined);
+        expect("slug", api.slug).toBe(undefined);
+    });
+
+    test("Api.parsePath cv/v1/schema", () => {
+        api.parsePath({ pathInfo: "cv/v1/schema" });
+        expect("locale", api.locale).toBe(undefined);
+        expect("endpoint", api.endpoint).toBe("schema");
+        expect("slug", api.slug).toBe(undefined);
+    });
+
+    test("Api.parsePath cv/v1/en/properties", () => {
+        api.parsePath({ pathInfo: "cv/v1/en/properties" });
+        expect("locale", api.locale).toBe("en");
+        expect("endpoint", api.endpoint).toBe("properties");
+        expect("slug", api.slug).toBe(undefined);
+    });
+
+    test("Api.parsePath cv/v1/en/person/henrique-godinho", () => {
+        api.parsePath({ pathInfo: "cv/v1/en/person/henrique-godinho" });
+        expect("locale", api.locale).toBe("en");
+        expect("endpoint", api.endpoint).toBe("person");
+        expect("slug", api.slug).toBe("henrique-godinho");
+    });
+
+    test("Api.parsePath cv/v1/pt-br/pessoa/henrique-godinho", () => {
+        api.parsePath({ pathInfo: "cv/v1/pt-br/pessoa/henrique-godinho" });
+        expect("locale", api.locale).toBe("pt-br");
+        expect("endpoint", api.endpoint).toBe("person");
+        expect("slug", api.slug).toBe("henrique-godinho");
+    });
+
+    test("Api.parsePath cv/v1/en/banana/henrique-godinho", () => {
+        expect("toThrow", () =>
+            api.parsePath({ pathInfo: "cv/v1/en/banana/henrique-godinho" })
+        ).toThrow();
+    });
 
     test("Api.getBase", () => {
         expect("base: cv/v1/", api.getBase()).toBe("cv/v1/");
@@ -98,24 +140,46 @@ function test_Api() {
     });
 
     test("Api.getResponse properties endpoint", () => {
-        mock = mockRequest("cv/v1/properties");
+        mock = mockRequest("cv/v1/en/properties");
         api = new Api(mock);
 
         const response = api.getResponse();
         expect("response data is array", response.data).toBeArray();
     });
 
-    test("Api.getResponse credential list endpoint", () => {
-        mock = mockRequest("cv/v1/credential");
+    test("Api.getResponse ld-graph endpoint", () => {
+        mock = mockRequest("cv/v1/en/ld-graph");
         api = new Api(mock);
 
         const response = api.getResponse();
+        expect("response status is 200", response.status).toEqual(200);
+        expect("response data is object", response.data).toBeObject();
+        expect("response graph is array", response.data["@graph"]).toBeArray(
+            "object"
+        );
+    });
+
+    test("Api.getResponse about endpoint", () => {
+        mock = mockRequest("cv/v1/en/about");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response 200", response.status).toEqual(200);
+        expect("response data is object", response.data).toBeObject();
+    });
+
+    test("Api.getResponse credential list endpoint", () => {
+        mock = mockRequest("cv/v1/en/credential");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response 200", response.status).toEqual(200);
         expect("response data is array", response.data).toBeArray("object");
     });
 
     test("Api.getResponse credential get endpoint", () => {
         mock = mockRequest(
-            "cv/v1/educational-occupational-credential/mestrado-profissional-em-ciencia-da-informacao"
+            "cv/v1/en/educational-occupational-credential/mestrado-profissional-em-ciencia-da-informacao"
         );
         api = new Api(mock);
 
@@ -125,31 +189,22 @@ function test_Api() {
     });
 
     test("Api.getResponse place get endpoint", () => {
-        mock = mockRequest("cv/en/country/brazil");
+        mock = mockRequest("cv/v1/en/country/brazil");
         api = new Api(mock);
 
         const response = api.getResponse();
+        expect("response 200", response.status).toEqual(200);
         expect("response data is object", response.data).toBeObject();
     });
 
-    test("Api.getResponse about endpoint", () => {
-        mock = mockRequest("cv/v1/about");
+    test("Api.getResponse place get endpoint pt-br", () => {
+        mock = mockRequest("cv/v1/pt-br/pais/brasil");
         api = new Api(mock);
 
         const response = api.getResponse();
-        expect("response data is object", response.data).toBeObject();
-    });
 
-    test("Api.getResponse ld-graph endpoint", () => {
-        mock = mockRequest("cv/v1/ld-graph");
-        api = new Api(mock);
-
-        const response = api.getResponse();
-        expect("response status is 200", response.status).toEqual(200);
+        expect("response 200", response.status).toEqual(200);
         expect("response data is object", response.data).toBeObject();
-        expect("response graph is array", response.data["@graph"]).toBeArray(
-            "object"
-        );
     });
 }
 
@@ -273,7 +328,6 @@ function test_App() {
 
     test("App.getRawPropertiesMeta", () => {
         const meta = app.getRawPropertiesMeta("person");
-        // console.log({ meta });
         expect("meta", meta).toBeArray();
     });
 
@@ -378,7 +432,6 @@ function test_Sheet() {
 
     test("Sheet.getRowByQuery", () => {
         const values = sheet.getRowByQuery("place", "country/brazil");
-        console.log({ values });
         expect("object", values).toBeArray();
     });
 }
