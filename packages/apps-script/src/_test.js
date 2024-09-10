@@ -168,23 +168,23 @@ function test_Entity() {
     });
 
     test("Entity", () => {
-        console.log(entity);
+        expect("Entity", entity).toBeObject();
     });
 
     test("Entity._header", () => {
-        console.log(entity._header);
+        expect("_header is array", entity._header).toBeArray();
     });
 
     test("Entity._values", () => {
-        console.log(entity._values);
+        expect("_values is array", entity._values).toBeArray();
     });
 
     test("Entity._id", () => {
-        console.log(entity._id);
+        expect("_id", entity._id).toBe("person/teste");
     });
 
     test("Entity.data", () => {
-        console.log(entity.data);
+        expect("data is object", entity.data).toBeObject();
     });
 
     test("Entity.getTypeById", () => {
