@@ -1,20 +1,22 @@
 class App {
-    constructor(endpoints = [], lang = "en") {
+    constructor(endpoints = [], locale) {
         this.configSheet = new Sheet(CONFIG.sheet());
-        this.setup();
+        this.setupConfig();
         this.setupEndpoints(endpoints);
-        this.setupL10n(lang);
-    }
 
-    setup() {
-        if (typeof this.config === "undefined") {
-            this.setupConfig();
+        if (locale) {
+            this.setupI18n(locale);
         }
     }
 
     setupConfig() {
         this.getApiConfig();
         this.getProperties();
+    }
+
+    setupI18n(locale) {
+        this.locale = locale;
+        this.i18n = new I18n(this.getL10nConfig(), locale);
     }
 
     setupEndpoints(endpoints) {
@@ -32,38 +34,6 @@ class App {
             }, {});
             return acc;
         }, {});
-    }
-
-    setupL10n(lang) {
-        this.lang = lang;
-        this.l10n = {
-            sheets: this.configSheet
-                .findValuesFromSheet("config", "l10n", 4)
-                .values.reduce((acc, [lang, name, id, principal]) => {
-                    acc[lang] = {
-                        lang,
-                        name,
-                        id,
-                        principal,
-                        sheet: principal || !id ? false : new Sheet(id),
-                    };
-                    return acc;
-                }, {}),
-            labels: {
-                en: {
-                    classes: this.configSheet.findValuesFromSheet(
-                        "l10n",
-                        "classes",
-                        2
-                    ).values,
-                    properties: this.configSheet.findValuesFromSheet(
-                        "l10n",
-                        "properties",
-                        2
-                    ).values,
-                },
-            },
-        };
     }
 
     setupRawData() {
@@ -226,38 +196,14 @@ class App {
 
     getRowByQuery(sheetName, query) {
         try {
-            const sheet = this.configSheet
-                .getSpreadsheet()
-                .getSheetByName(sheetName);
-            const finder = sheet.createTextFinder(query);
-            const ranges = finder.findAll();
-
-            let data;
-
-            for (const range of ranges) {
-                const value = range.getValue();
-                if (value === query) {
-                    const row = range.getRow();
-                    const header = this.getMetaHeader(sheetName);
-                    const values = sheet
-                        .getRange(row, 2, 1, sheet.getLastColumn() - 1)
-                        .getValues()[0];
-                    data = new Entity({
-                        header,
-                        values,
-                        endpoints: this.getEndpointsConfig(),
-                        i18n: new I18n(this.getL10nConfig(), this.locale),
-                    });
-                }
-            }
-
-            if (!data) {
+            const i18n = this.i18n;
+            const entity = i18n.getEntityByQuery(sheetName, query);
+            if (!entity) {
                 throw new Error(
-                    `No row found with id ${id} at sheet ${sheetName}`
+                    `No row found with query ${query} at sheet ${sheetName}`
                 );
             }
-
-            return data;
+            return entity;
         } catch (error) {
             throw new Error(error);
         }
@@ -276,8 +222,8 @@ class App {
                     new Entity({
                         header,
                         values: row,
-                        endpoints: this.endpointsConfig(),
-                        i18n: new I18n(this.getL10nConfig(), this.locale),
+                        endpoints: this.getEndpointsConfig(),
+                        i18n: this.i18n,
                     })
             );
         } catch (error) {
