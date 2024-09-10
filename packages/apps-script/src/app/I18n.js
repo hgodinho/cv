@@ -39,6 +39,15 @@ class I18n {
         return entity;
     }
 
+    getEntityByQuery(sheetName, query) {
+        const row = this.sheets[this.locale].getRowByQuery(sheetName, query);
+        const id = row[0];
+        const entity = this.getEntityById(sheetName, id);
+        if (entity) {
+            return entity;
+        }
+    }
+
     getEntities(sheetName) {
         const config = this.sheets.en
             .findValuesFromSheet("config", "api", 2)
