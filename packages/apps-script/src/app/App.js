@@ -89,40 +89,6 @@ class App {
         return this.apiConfig;
     }
 
-    verifyL10n(callbackOnFail = undefined, callbackOnFinish = undefined) {
-        Object.entries(this.l10n.sheets).forEach(
-            ([lang, { sheet, principal, ...rest }]) => {
-                if (!sheet) {
-                    // do nothing if the sheet is principal
-                    return;
-                }
-
-                Object.keys(this.endpoints).forEach((name) => {
-                    if (!sheet.hasSheet(name)) {
-                        if (!callbackOnFail) {
-                            throw new Error(
-                                `Sheet ${name} not found for language ${lang} at spreadsheet ${spreadsheet.getId()}`
-                            );
-                        }
-                        callbackOnFail({
-                            name,
-                            lang,
-                            spreadsheet: sheet,
-                        });
-                    } else {
-                        if (callbackOnFinish) {
-                            callbackOnFinish({
-                                name,
-                                lang,
-                                spreadsheet: sheet,
-                            });
-                        }
-                    }
-                });
-            }
-        );
-    }
-
     getAbout() {
         return this.configSheet
             .findValuesFromSheet("config", "about", 2)
@@ -241,5 +207,39 @@ class App {
         } catch (error) {
             throw new Error(error);
         }
+    }
+
+    verifyL10n(callbackOnFail = undefined, callbackOnFinish = undefined) {
+        Object.entries(this.l10n.sheets).forEach(
+            ([lang, { sheet, principal, ...rest }]) => {
+                if (!sheet) {
+                    // do nothing if the sheet is principal
+                    return;
+                }
+
+                Object.keys(this.endpoints).forEach((name) => {
+                    if (!sheet.hasSheet(name)) {
+                        if (!callbackOnFail) {
+                            throw new Error(
+                                `Sheet ${name} not found for language ${lang} at spreadsheet ${spreadsheet.getId()}`
+                            );
+                        }
+                        callbackOnFail({
+                            name,
+                            lang,
+                            spreadsheet: sheet,
+                        });
+                    } else {
+                        if (callbackOnFinish) {
+                            callbackOnFinish({
+                                name,
+                                lang,
+                                spreadsheet: sheet,
+                            });
+                        }
+                    }
+                });
+            }
+        );
     }
 }
