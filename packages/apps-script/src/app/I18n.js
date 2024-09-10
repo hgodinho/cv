@@ -49,13 +49,6 @@ class I18n {
     }
 
     getEntities(sheetName) {
-        const config = this.sheets.en
-            .findValuesFromSheet("config", "api", 2)
-            .values.reduce((acc, [key, value]) => {
-                acc[key] = value;
-                return acc;
-            }, {});
-
         const { header, values } = this.sheets[
             this.defaultLocale
         ].findValuesFromSheet(sheetName, sheetName);
