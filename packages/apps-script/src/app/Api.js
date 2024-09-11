@@ -18,7 +18,7 @@ class Api {
     }
 
     _defaultEndpoints() {
-        return ["schema", "properties", "about", "ld-graph"];
+        return ["schema", "properties", "about", "ld-graph", "locales"];
     }
 
     setup(e) {
@@ -68,12 +68,13 @@ class Api {
 
         prePath = prePath.split(this.slashChar).filter(Boolean);
 
-        if (prePath.length === 0) {
+        if (prePath.length === 0 || prePath[0] === "schema") {
+            this.endpoint = "schema";
             return;
         }
 
-        if (prePath[0] === "schema") {
-            this.endpoint = "schema";
+        if (prePath[0] === "locales") {
+            this.endpoint = "locales";
             return;
         }
 
@@ -179,6 +180,12 @@ class Api {
                     return this.createResponse({
                         status: 200,
                         data: this.getGraphData(),
+                    });
+
+                case "locales":
+                    return this.createResponse({
+                        status: 200,
+                        data: this.app.getL10nConfig(),
                     });
 
                 // return list for the endpoint
@@ -347,6 +354,34 @@ class Api {
                                 type: "array",
                                 items: {
                                     type: "string",
+                                },
+                            },
+                        ];
+
+                    case "locales":
+                        return [
+                            e,
+                            {
+                                type: "array",
+                                items: {
+                                    type: "object",
+                                    properties: {
+                                        lang: {
+                                            type: "string",
+                                        },
+                                        name: {
+                                            type: "string",
+                                        },
+                                        id: {
+                                            type: "string",
+                                        },
+                                        icon: {
+                                            type: "string",
+                                        },
+                                        principal: {
+                                            type: "string",
+                                        },
+                                    },
                                 },
                             },
                         ];

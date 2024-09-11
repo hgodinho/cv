@@ -21,6 +21,18 @@ function test_I18n() {
         expect("data is array", data).toBeArray();
     });
 
+    test("I18n.getEntitiesMeta en", () => {
+        const i18n = new I18n(app.getL10nConfig());
+        const data = i18n.getEntitiesMeta("place");
+        expect("data is object", data).toBeObject();
+    });
+
+    test("I18n.getEntitiesMeta pt-br", () => {
+        const i18n = new I18n(app.getL10nConfig(), "pt-br");
+        const data = i18n.getEntitiesMeta("place");
+        expect("data is object", data).toBeObject();
+    });
+
     test("I18n.getAliasedTranslatedEndpoint", () => {
         const i18n = new I18n(app.getL10nConfig());
 

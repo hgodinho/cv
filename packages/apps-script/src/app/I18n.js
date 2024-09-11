@@ -12,6 +12,21 @@ class I18n {
         }, {});
     }
 
+    getEntitiesMeta(sheetName) {
+        return this.sheets[this.locale]
+            .findValuesFromSheet(sheetName, "meta", 2)
+            .values.reduce((acc, [key, value]) => {
+                if (key === "allowed_types") {
+                    acc["allowed_types"] = [value];
+                } else if (key === "") {
+                    acc["allowed_types"].push(value);
+                } else {
+                    acc[key] = value;
+                }
+                return acc;
+            }, {});
+    }
+
     getEntityById(sheetName, id, recursive = true) {
         const entity = new Entity({
             header: this.sheets[this.defaultLocale].getHeader(sheetName),
@@ -85,8 +100,8 @@ class I18n {
         return entities;
     }
 
-    setLocale(locale) {
-        this.locale = locale;
+    getLastUpdated() {
+        return this.sheets[this.locale].getValueFromSheet("🏠", "E4");
     }
 
     getAliasedTranslatedEndpoint(query) {
@@ -112,5 +127,9 @@ class I18n {
             return search[0];
         }
         return false;
+    }
+
+    setLocale(locale) {
+        this.locale = locale;
     }
 }

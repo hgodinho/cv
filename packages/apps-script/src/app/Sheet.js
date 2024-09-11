@@ -141,6 +141,11 @@ class Sheet {
         return { header: head, values, sheetName, key, total: totalRows };
     }
 
+    getValueFromSheet(sheetName, range) {
+        const sheet = this.getSheet(sheetName);
+        return sheet.getRange(range).getValue();
+    }
+
     getOffset(sheetName) {
         const sheet = this.getSheet(sheetName);
         const finder = sheet.createTextFinder("offset");

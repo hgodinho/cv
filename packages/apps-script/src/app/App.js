@@ -57,9 +57,9 @@ class App {
     getL10nConfig() {
         if (typeof this.l10nConfig === "undefined") {
             this.l10nConfig = this.configSheet
-                .findValuesFromSheet("config", "l10n", 4)
-                .values.reduce((acc, [lang, name, id, principal]) => {
-                    acc.push({ lang, name, id, principal });
+                .findValuesFromSheet("config", "l10n", 5)
+                .values.reduce((acc, [lang, name, id, icon, principal]) => {
+                    acc.push({ lang, name, id, icon, principal });
                     return acc;
                 }, []);
         }

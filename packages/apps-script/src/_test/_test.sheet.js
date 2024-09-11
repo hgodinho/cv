@@ -33,6 +33,12 @@ function test_Sheet() {
         ).toBeObject();
     });
 
+    test("Sheet.getValueFromSheet", () => {
+        expect("value", sheet.getValueFromSheet("🏠", "B2")).toBe(
+            "curriculum-vitae"
+        );
+    });
+
     test("Sheet.getOffset", () => {
         expect("number", sheet.getOffset("place")).toBe(13);
     });

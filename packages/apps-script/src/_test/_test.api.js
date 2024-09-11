@@ -5,7 +5,7 @@ function test_Api() {
     test("Api.parsePath cv/v1", () => {
         api.parsePath({ pathInfo: "cv/v1" });
         expect("locale", api.locale).toBe(undefined);
-        expect("endpoint", api.endpoint).toBe(undefined);
+        expect("endpoint", api.endpoint).toBe("schema");
         expect("slug", api.slug).toBe(undefined);
     });
 
@@ -130,6 +130,14 @@ function test_Api() {
         expect("response is object", response).toBeObject();
     });
 
+    test("Api.getResponse locales endpoint", () => {
+        mock = mockRequest("cv/v1/locales");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response is object", response.data).toBeArray();
+    });
+
     test("Api.getResponse properties endpoint", () => {
         mock = mockRequest("cv/v1/en/properties");
         api = new Api(mock);
@@ -143,6 +151,7 @@ function test_Api() {
         api = new Api(mock);
 
         const response = api.getResponse();
+
         expect("response status is 200", response.status).toEqual(200);
         expect("response data is object", response.data).toBeObject();
         expect("response graph is array", response.data["@graph"]).toBeArray(
