@@ -240,6 +240,7 @@ class Api {
                 {
                     "@context": "https://schema.org",
                     "@type": data["type"],
+                    "@id": data["id"],
                 }
             );
         }
@@ -265,23 +266,10 @@ class Api {
             "@graph": [],
         };
 
-        Object.entries(this.app.rawData).forEach(
-            ([key, { header, values, sheetName }]) => {
-                values.forEach((row) => {
-                    const data = this.prepareResponse(
-                        new Entity({
-                            header,
-                            values: row,
-                            endpoints: this.app.getEndpointsConfig(),
-                            i18n: this.i18n,
-                            recursive: false,
-                        }),
-                        sheetName
-                    );
-                    json["@graph"].push(data);
-                });
-            }
-        );
+        this._endpoints().forEach((endpoint) => {
+            const entities = this.i18n.getEntities(endpoint);
+            json["@graph"].push(...entities);
+        });
 
         return json;
     }

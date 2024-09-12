@@ -146,17 +146,31 @@ function test_Api() {
         expect("response data is array", response.data).toBeArray();
     });
 
-    test("Api.getResponse ld-graph endpoint", () => {
+    test("Api.getResponse ld-graph endpoint en locale", () => {
         mock = mockRequest("cv/v1/en/ld-graph");
         api = new Api(mock);
 
         const response = api.getResponse();
-
         expect("response status is 200", response.status).toEqual(200);
         expect("response data is object", response.data).toBeObject();
         expect("response graph is array", response.data["@graph"]).toBeArray(
             "object"
         );
+    });
+
+    test("Api.getResponse ld-graph endpoint pt-br locale", () => {
+        mock = mockRequest("cv/v1/pt-br/ld-graph");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response status is 200", response.status).toEqual(200);
+        expect("response data is object", response.data).toBeObject();
+        expect("response graph is array", response.data["@graph"]).toBeArray(
+            "object"
+        );
+        response.data["@graph"].forEach((item) => {
+            expect("@id includes pt-br locale", item["@id"]).toInclude("pt-br");
+        });
     });
 
     test("Api.getResponse about endpoint", () => {

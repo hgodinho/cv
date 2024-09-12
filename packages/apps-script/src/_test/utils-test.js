@@ -52,6 +52,12 @@ function expect(toBeExpected, actual) {
             }
             return errorTest(toBeExpected, "Falsy", actual);
         },
+        toInclude(expected) {
+            if (actual.includes(expected)) {
+                return logTest(toBeExpected, "Pass");
+            }
+            return errorTest(toBeExpected, expected, actual);
+        },
         toBeObject() {
             if (typeof actual === "object") {
                 return logTest(toBeExpected, "Pass");
