@@ -194,7 +194,7 @@ class Api {
                     return this.createResponse({
                         status: 200,
                         data: this.prepareResponse(
-                            this.app.getEntityList(endpoint),
+                            this.i18n.getEntities(endpoint),
                             endpoint
                         ),
                     });

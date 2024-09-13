@@ -1,7 +1,14 @@
 class Entity {
-    constructor({ header, values, endpoints, i18n, recursive = true }) {
-        if (!header || !values)
-            throw new Error("Entity requires header and values");
+    constructor({
+        header, // english header
+        defaultValues, // english values
+        values, // current locale values
+        endpoints, // endpoints for the entity
+        i18n, // i18n class
+        recursive = true, // recursive flag
+    }) {
+        if (!header || !values || !defaultValues)
+            throw new Error("Entity requires header, defaultValues and values");
         if (!Array.isArray(header))
             throw new Error("Entity requires header to be an array");
         if (!Array.isArray(values))
@@ -16,6 +23,7 @@ class Entity {
 
         this.i18n = i18n;
         this._header = header;
+        this._defaultValues = defaultValues;
         this._values = values;
         this._endpoints = endpoints;
         this.recursive = recursive;
@@ -30,12 +38,12 @@ class Entity {
             if (typeof value !== "undefined") {
                 this[key] = value;
                 if (key === "type") {
-                    this.type = value.includes(" ")
-                        ? value
+                    this.type = defaultValues[index].includes(" ")
+                        ? defaultValues[index]
                               .split(" ")
                               .map((s) => s.trim())
                               .join("")
-                        : value;
+                        : defaultValues[index];
                 }
             }
         });
@@ -159,12 +167,12 @@ class Entity {
         return str;
     }
 
-    setProperty(key, value) {
-        this[key] = value;
-    }
-
-    setI18n(i18n) {
-        this.i18n = i18n;
+    getEntity() {
+        const entity = {};
+        this._header.forEach((key) => {
+            if (this[key] !== undefined) entity[key] = this[key];
+        });
+        return entity;
     }
 
     getTypeById(id) {
@@ -177,5 +185,13 @@ class Entity {
 
     getRecursive() {
         return this.recursive;
+    }
+
+    setProperty(key, value) {
+        this[key] = value;
+    }
+
+    setI18n(i18n) {
+        this.i18n = i18n;
     }
 }

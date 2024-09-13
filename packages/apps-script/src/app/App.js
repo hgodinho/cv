@@ -175,28 +175,6 @@ class App {
         }
     }
 
-    getEntityList(sheetName) {
-        try {
-            const { header, values } = this.configSheet.findValuesFromSheet(
-                sheetName,
-                sheetName,
-                this.endpoints[sheetName].meta,
-                this.endpoints[sheetName].total
-            );
-            return values.map(
-                (row) =>
-                    new Entity({
-                        header,
-                        values: row,
-                        endpoints: this.getEndpointsConfig(),
-                        i18n: this.i18n,
-                    })
-            );
-        } catch (error) {
-            throw new Error(error);
-        }
-    }
-
     getMetaHeader(sheetName) {
         try {
             return this.configSheet.findValuesFromSheet(

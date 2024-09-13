@@ -29,8 +29,12 @@ class I18n {
 
     getEntityById(sheetName, id, recursive = true) {
         const entity = new Entity({
-            header: this.sheets[this.defaultLocale].getHeader(sheetName),
-            values: this.sheets[this.defaultLocale].getRowById(sheetName, id),
+            header: this.sheets[this.locale].getHeader(sheetName),
+            defaultValues: this.sheets[this.defaultLocale].getRowById(
+                sheetName,
+                id
+            ),
+            values: this.sheets[this.locale].getRowById(sheetName, id),
             endpoints: this.sheets[this.defaultLocale].findValuesFromSheet(
                 "config",
                 "endpoints",
@@ -40,18 +44,7 @@ class I18n {
             recursive,
         });
 
-        if (this.locale === this.defaultLocale) {
-            return entity;
-        }
-
-        const header = this.sheets[this.locale].getHeader(sheetName);
-        const translations = this.sheets[this.locale].getRowById(sheetName, id);
-
-        header.forEach((key, index) => {
-            entity.setProperty(key, translations[index]);
-        });
-
-        return entity;
+        return entity.getEntity();
     }
 
     getEntityByQuery(sheetName, query) {
@@ -64,13 +57,18 @@ class I18n {
     }
 
     getEntities(sheetName) {
-        const { header, values } = this.sheets[
-            this.defaultLocale
-        ].findValuesFromSheet(sheetName, sheetName);
+        const { header, values } = this.sheets[this.locale].findValuesFromSheet(
+            sheetName,
+            sheetName
+        );
 
         const entities = values.map((row) => {
             return new Entity({
                 header,
+                defaultValues: this.sheets[this.defaultLocale].getRowById(
+                    sheetName,
+                    row[0]
+                ),
                 values: row,
                 endpoints: this.sheets[this.defaultLocale].findValuesFromSheet(
                     "config",
@@ -78,23 +76,7 @@ class I18n {
                     2
                 ).values,
                 i18n: this,
-            });
-        });
-
-        if (this.locale === this.defaultLocale) {
-            return entities;
-        }
-
-        const translations = this.sheets[this.locale].findValuesFromSheet(
-            sheetName,
-            sheetName
-        );
-
-        entities.forEach((entity, i) => {
-            translations.header.forEach((key, index) => {
-                if (entity._id !== translations.values[i][0]) return;
-                entity.setProperty(key, translations.values[i][index]);
-            });
+            }).getEntity();
         });
 
         return entities;
