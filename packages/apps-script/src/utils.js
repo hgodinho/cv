@@ -2,7 +2,9 @@
  * Get the access token
  */
 function getToken() {
-    console.log("access_token:", ScriptApp.getOAuthToken());
+    const token = ScriptApp.getOAuthToken();
+    console.log("access_token:", token);
+    return token;
 }
 
 function stripTrailingSlash(str) {
