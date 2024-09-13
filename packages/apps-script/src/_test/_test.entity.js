@@ -2,6 +2,12 @@ function test_Entity() {
     const app = new App(["person", "place", "intangible", "credential"]);
     const entity = new Entity({
         header: ["_id", "type", "data", "date"],
+        defaultValues: [
+            "person/teste",
+            "Person",
+            "fruta=banana; sabor=doce | fruta=limão; sabor=cítrico",
+            "2021-01-01",
+        ],
         values: [
             "person/teste",
             "Person",
@@ -83,5 +89,10 @@ function test_Entity() {
             "simple array",
             entity.parseString("Godinho | Lopes | Costa")
         ).toEqual(["Godinho", "Lopes", "Costa"]);
+    });
+
+    test("Entity.getEntity", () => {
+        const test = entity.getEntity();
+        expect("Entity", test).toBeObject();
     });
 }

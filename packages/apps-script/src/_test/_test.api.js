@@ -182,8 +182,17 @@ function test_Api() {
         expect("response data is object", response.data).toBeObject();
     });
 
-    test("Api.getResponse credential list endpoint", () => {
+    test("Api.getResponse credential list endpoint en locale", () => {
         mock = mockRequest("cv/v1/en/credential");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response 200", response.status).toEqual(200);
+        expect("response data is array", response.data).toBeArray("object");
+    });
+
+    test("Api.getResponse credential list endpoint pt-br locale", () => {
+        mock = mockRequest("cv/v1/pt-br/credencial");
         api = new Api(mock);
 
         const response = api.getResponse();
