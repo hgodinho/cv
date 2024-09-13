@@ -203,6 +203,13 @@ class Api {
 
         // return data for the endpoint based on the slug
         try {
+            if ("meta" === slug) {
+                return this.createResponse({
+                    status: 200,
+                    data: this.i18n.getEntitiesMeta(endpoint),
+                });
+            }
+
             const data = this.app.getRowByQuery(
                 endpoint,
                 `${this.endpointAlias}/${slug}`

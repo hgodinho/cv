@@ -182,6 +182,24 @@ function test_Api() {
         expect("response data is object", response.data).toBeObject();
     });
 
+    test("Api.getResponse credential meta endpoint en locale", () => {
+        mock = mockRequest("cv/v1/en/place/meta");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response 200", response.status).toEqual(200);
+        expect("response data is array", response.data).toBeObject();
+    });
+
+    test("Api.getResponse credential meta endpoint pt-br locale", () => {
+        mock = mockRequest("cv/v1/pt-br/lugar/meta");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response 200", response.status).toEqual(200);
+        expect("response data is array", response.data).toBeObject();
+    });
+
     test("Api.getResponse credential list endpoint en locale", () => {
         mock = mockRequest("cv/v1/en/credential");
         api = new Api(mock);
