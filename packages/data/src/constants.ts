@@ -10,16 +10,19 @@ export const ERROR_CODES = {
     GraphQLSourcing: `10000`,
 } as const;
 
-export const NODE_TYPES = {
-    Graph: "Graph",
+export const ENDPOINTS = {
     Person: "Person",
+    Intangible: "Intangible",
     Place: "Place",
-    Certification: "Certification",
-    Article: "Article",
+    Credential: "Credential",
     CreativeWork: "CreativeWork",
-    Chapter: "Chapter",
-    Organization: "Organization",
     Event: "Event",
-    Role: "Role",
+    Organization: "Organization",
+} as const;
+
+export const NODE_TYPES = {
+    Locales: "Locales",
+    Graph: "Graph",
     Properties: "Properties",
+    ...ENDPOINTS,
 } as const;
