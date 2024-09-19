@@ -1,6 +1,5 @@
 import path from "path";
 import { GatsbyNode } from "gatsby";
-// import { getType } from "../utils";
 import { PageQueryResponse } from "../types";
 import { getType } from "../utils";
 
@@ -101,12 +100,11 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
     }`);
 
     const site = result.data?.site.siteMetadata;
-    // const locales = result.data?.locales;
+    const locales = result.data?.locales;
     const properties = result.data?.properties;
-    const nodes = result.data?.graph.nodes;
-    const links = result.data?.graph.links;
+    const graph = result.data?.graph;
 
-    Object.entries(nodes).forEach(([locale, nodes]) => {
+    Object.entries(graph.nodes).forEach(([locale, nodes]) => {
         for (const node of nodes) {
             let type = getType(node);
             if (node.path) {
@@ -120,9 +118,9 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
                         name: node.name,
                         type: node.type,
                         locale,
+                        locales,
                         properties,
-                        nodes,
-                        links,
+                        graph,
                     },
                 });
             }

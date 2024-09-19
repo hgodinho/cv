@@ -75,25 +75,6 @@ export interface NodeBuilderArgs {
     input: NodeInput;
 }
 
-// export type NodeBuilderInput =
-//     | { type: typeof NODE_TYPES.Locales; data: Locales }
-//     | { type: typeof NODE_TYPES.Graph; data: Graph }
-//     | { type: typeof NODE_TYPES.Properties; data: Properties }
-//     | { type: LOCALES; data: NodeObject[] }
-//     | { type: typeof NODE_TYPES.Person; data: Person }
-//     | { type: typeof NODE_TYPES.Place; data: Place }
-//     | { type: typeof NODE_TYPES.Credential; data: Credential }
-//     | { type: typeof NODE_TYPES.Intangible; data: Intangible }
-//     | { type: typeof NODE_TYPES.CreativeWork; data: CreativeWork }
-//     | { type: typeof NODE_TYPES.Organization; data: Organization }
-//     | { type: typeof NODE_TYPES.Event; data: Event };
-
-// export type NodeBuilderArgs = {
-//     gatsbyApi: SourceNodesArgs;
-//     input: NodeBuilderInput;
-//     id: string;
-// };
-
 export type PageQueryResponse = {
     graph: Graph;
     properties: Properties;
@@ -111,9 +92,10 @@ export type PageContext = {
     id: string;
     name: string;
     type: string;
-    properties: string[];
-    nodes: NodeObject[];
-    links: LinkObject[];
+    properties: Properties;
+    graph: Graph;
+    locale: LOCALES;
+    locales: Locales;
     site: {
         title: string;
         siteUrl: string;
