@@ -1,21 +1,18 @@
 import React from "react";
 
 import { PageProps, graphql } from "gatsby";
-import { CreativeWork, PageContext } from "@hgod-in-cv/data/src/types";
+import { Credential, PageContext } from "@hgod-in-cv/data/src/types";
 import { Head as PrimitiveHead } from "#root/components";
 
-export type CreativeWorkPage = PageProps<
-    { creativeWork: CreativeWork },
-    PageContext
->;
+export type CredentialPage = PageProps<{ credential: Credential }, PageContext>;
 
-export default function ({ data, pageContext }: CreativeWorkPage) {
+export default function ({ data, pageContext }: CredentialPage) {
     return null;
 }
 
 export const query = graphql`
     query byId($locale: String, $slug: String) {
-        creativeWork(locale: { eq: $locale }, path: { eq: $slug }) {
+        credential(locale: { eq: $locale }, path: { eq: $slug }) {
             _id
             path
             type
@@ -28,6 +25,12 @@ export const query = graphql`
             image
             subjectOf
             additionalType
+            auditDate
+            certificationIdentification
+            certificationStatus
+            issuedBy
+            validFrom
+            validIn
             about
             author
             abstract
@@ -76,10 +79,10 @@ export const query = graphql`
     }
 `;
 
-export const Head = ({ pageContext, data }: CreativeWorkPage) => {
+export function Head({ data, pageContext }: CredentialPage) {
     return (
         <PrimitiveHead
-            title={`${data.creativeWork.name} @${pageContext.site.title}`}
+            title={`${data.credential.name} @${pageContext.site.title}`}
         />
     );
-};
+}

@@ -20,8 +20,8 @@
     },
     "include": [
         "./src/**/*",
-        "./gatsby-node.ts",
-        "./gatsby-config.ts",
+        "src/gatsby-node.ts",
+        "src/gatsby-config.ts",
         "./plugins/**/*",
         "../data/src/types.ts",
         "../data/src/schema.ts"

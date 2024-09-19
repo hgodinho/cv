@@ -1,6 +1,5 @@
 import React from "react";
 
-import { PageShell } from "#root/layouts";
 import { PageProps, graphql } from "gatsby";
 import { Organization, PageContext } from "@hgod-in-cv/data/src/types";
 import { Head as PrimitiveHead } from "#root/components";
@@ -11,32 +10,37 @@ export type OrganizationPage = PageProps<
 >;
 
 export default function ({ data, pageContext }: OrganizationPage) {
-    return (
-        <PageShell selected={data.organization} pageContext={pageContext}>
-            <div>organization</div>
-        </PageShell>
-    );
+    return null;
 }
 
 export const query = graphql`
-    query byId($id: String) {
-        organization(_id: { eq: $id }) {
+    query byId($locale: String, $slug: String) {
+        organization(locale: { eq: $locale }, path: { eq: $slug }) {
             _id
-            id
+            path
             type
+            locale
             name
+            alternateName
+            description
+            identifier
+            sameAs
+            image
+            subjectOf
+            additionalType
             address
+            alumni
             award
             contactPoint
             location
+            department
             member
             members
             employee
             employees
-            department
             event
             events
-            sameAs
+            openingHours
         }
     }
 `;

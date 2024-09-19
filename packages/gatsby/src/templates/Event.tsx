@@ -1,6 +1,5 @@
 import React from "react";
 
-import { PageShell } from "#root/layouts";
 import { PageProps, graphql } from "gatsby";
 import { Event, PageContext } from "@hgod-in-cv/data/src/types";
 import { Head as PrimitiveHead } from "#root/components";
@@ -8,20 +7,24 @@ import { Head as PrimitiveHead } from "#root/components";
 export type EventPage = PageProps<{ event: Event }, PageContext>;
 
 export default function ({ data, pageContext }: EventPage) {
-    return (
-        <PageShell selected={data.event} pageContext={pageContext}>
-            <div>event</div>
-        </PageShell>
-    );
+    return null;
 }
 
 export const query = graphql`
-    query byId($id: String) {
-        event(_id: { eq: $id }) {
+    query byId($locale: String, $slug: String) {
+        event(locale: { eq: $locale }, path: { eq: $slug }) {
             _id
-            id
+            path
             type
             name
+            locale
+            alternateName
+            description
+            identifier
+            sameAs
+            image
+            subjectOf
+            additionalType
             about
             contributor
             duration
@@ -32,7 +35,8 @@ export const query = graphql`
             eventStatus
             location
             organizer
-            sameAs
+            subEvent
+            superEvent
         }
     }
 `;
@@ -43,4 +47,4 @@ export const Head = ({ pageContext, data }: EventPage) => {
             title={`${data.event.name} @${pageContext.site.title}`}
         />
     );
-}
+};

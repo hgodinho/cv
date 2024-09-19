@@ -1,6 +1,5 @@
 import React from "react";
 
-import { PageShell } from "#root/layouts";
 import { PageProps, graphql } from "gatsby";
 import { Person, PageContext } from "@hgod-in-cv/data/dist/types";
 import { Head as PrimitiveHead } from "#root/components";
@@ -9,27 +8,41 @@ export type PersonPage = PageProps<{ person: Person }, PageContext>;
 
 export default function ({ data, pageContext }: PersonPage) {
     return null;
-    // <PageShell selected={data.person} pageContext={pageContext}>
-    //     {/* <div>Person</div> */}
-    // </PageShell>
 }
 
 export const query = graphql`
-    query byId($id: String) {
-        person(_id: { eq: $id }) {
+    query byId($locale: String, $slug: String) {
+        person(locale: { eq: $locale }, path: { eq: $slug }) {
             id
             _id
-            birthDate
-            _context
-            name
+            path
             type
+            locale
+            name
+            alternateName
             description
-            email
-            familyName
+            identifier
+            sameAs
+            image
+            subjectOf
+            additionalType
             givenName
-            hasCertification
-            homeLocation
+            familyName
+            jobTitle
+            email
+            birthDate
+            birthPlace
             honorificPrefix
+            nationality
+            homeLocation
+            award
+            brand
+            hasCertification
+            hasOccupation
+            knowsAbout
+            memberOf
+            performerIn
+            seeks
         }
     }
 `;
