@@ -9,3 +9,6 @@ public
 # local env files
 .env*.local
 .env
+
+creds.json
+.clasprc.json
