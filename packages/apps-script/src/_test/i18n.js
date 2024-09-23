@@ -9,14 +9,14 @@ function test_I18n() {
     });
 
     test("I18n.getEntityByQuery", () => {
-        const i18n = new I18n(app.getL10nConfig(), "pt-br");
+        const i18n = new I18n(app.getL10nConfig(), "pt_br");
         const data = i18n.getEntityByQuery("place", "pais/brasil");
         expect("data is object", data).toBeObject();
     });
 
     test("I18n.getEntities", () => {
         const i18n = new I18n(app.getL10nConfig());
-        i18n.setLocale("pt-br");
+        i18n.setLocale("pt_br");
         const data = i18n.getEntities("place");
         expect("data is array", data).toBeArray();
     });
@@ -27,8 +27,8 @@ function test_I18n() {
         expect("data is object", data).toBeObject();
     });
 
-    test("I18n.getEntitiesMeta pt-br", () => {
-        const i18n = new I18n(app.getL10nConfig(), "pt-br");
+    test("I18n.getEntitiesMeta pt_br", () => {
+        const i18n = new I18n(app.getL10nConfig(), "pt_br");
         const data = i18n.getEntitiesMeta("place");
         expect("data is object", data).toBeObject();
     });
@@ -48,7 +48,7 @@ function test_I18n() {
         expect(
             "pessoa",
             (() => {
-                i18n.setLocale("pt-br");
+                i18n.setLocale("pt_br");
                 return i18n.getAliasedTranslatedEndpoint("pessoa");
             })()
         ).toBe("person");

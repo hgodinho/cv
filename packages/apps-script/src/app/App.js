@@ -99,12 +99,7 @@ class App {
     }
 
     getProperties() {
-        if (typeof this.properties === "undefined") {
-            this.properties = this.configSheet
-                .findValuesFromSheet("config", "properties", 2)
-                .values.map(([name, order]) => name);
-        }
-        return this.properties;
+        return this.i18n?.getLabels("properties");
     }
 
     getRawPropertiesMeta(endpoint) {

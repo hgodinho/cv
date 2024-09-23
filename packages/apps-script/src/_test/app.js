@@ -20,7 +20,7 @@ function test_App() {
 
     test("App.getProperties", () => {
         const properties = app.getProperties();
-        expect("properties", properties).toBeArray();
+        expect("properties", properties).toBeObject();
     });
 
     test("App.setupRawData", () => {

@@ -30,9 +30,9 @@ function test_Api() {
         expect("slug", api.slug).toBe("henrique-godinho");
     });
 
-    test("Api.parsePath cv/v1/pt-br/pessoa/henrique-godinho", () => {
-        api.parsePath({ pathInfo: "cv/v1/pt-br/pessoa/henrique-godinho" });
-        expect("locale", api.locale).toBe("pt-br");
+    test("Api.parsePath cv/v1/pt_br/pessoa/henrique-godinho", () => {
+        api.parsePath({ pathInfo: "cv/v1/pt_br/pessoa/henrique-godinho" });
+        expect("locale", api.locale).toBe("pt_br");
         expect("endpoint", api.endpoint).toBe("person");
         expect("slug", api.slug).toBe("henrique-godinho");
     });
@@ -138,12 +138,20 @@ function test_Api() {
         expect("response is object", response.data).toBeArray();
     });
 
-    test("Api.getResponse properties endpoint", () => {
+    test("Api.getResponse properties endpoint en locale", () => {
         mock = mockRequest("cv/v1/en/properties");
         api = new Api(mock);
 
         const response = api.getResponse();
-        expect("response data is array", response.data).toBeArray();
+        expect("response data is array", response.data).toBeObject();
+    });
+
+    test("Api.getResponse properties endpoint pt_br locale", () => {
+        mock = mockRequest("cv/v1/pt_br/properties");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response data is array", response.data).toBeObject();
     });
 
     test("Api.getResponse ld-graph endpoint en locale", () => {
@@ -158,8 +166,8 @@ function test_Api() {
         );
     });
 
-    test("Api.getResponse ld-graph endpoint pt-br locale", () => {
-        mock = mockRequest("cv/v1/pt-br/ld-graph");
+    test("Api.getResponse ld-graph endpoint pt_br locale", () => {
+        mock = mockRequest("cv/v1/pt_br/ld-graph");
         api = new Api(mock);
 
         const response = api.getResponse();
@@ -169,7 +177,7 @@ function test_Api() {
             "object"
         );
         response.data["@graph"].forEach((item) => {
-            expect("@id includes pt-br locale", item["@id"]).toInclude("pt-br");
+            expect("@id includes pt_br locale", item["@id"]).toInclude("pt_br");
         });
     });
 
@@ -191,8 +199,8 @@ function test_Api() {
         expect("response data is array", response.data).toBeObject();
     });
 
-    test("Api.getResponse credential meta endpoint pt-br locale", () => {
-        mock = mockRequest("cv/v1/pt-br/lugar/meta");
+    test("Api.getResponse credential meta endpoint pt_br locale", () => {
+        mock = mockRequest("cv/v1/pt_br/lugar/meta");
         api = new Api(mock);
 
         const response = api.getResponse();
@@ -209,8 +217,8 @@ function test_Api() {
         expect("response data is array", response.data).toBeArray("object");
     });
 
-    test("Api.getResponse credential list endpoint pt-br locale", () => {
-        mock = mockRequest("cv/v1/pt-br/credencial");
+    test("Api.getResponse credential list endpoint pt_br locale", () => {
+        mock = mockRequest("cv/v1/pt_br/credencial");
         api = new Api(mock);
 
         const response = api.getResponse();
@@ -238,8 +246,8 @@ function test_Api() {
         expect("response data is object", response.data).toBeObject();
     });
 
-    test("Api.getResponse place get endpoint pt-br", () => {
-        mock = mockRequest("cv/v1/pt-br/pais/brasil");
+    test("Api.getResponse place get endpoint pt_br", () => {
+        mock = mockRequest("cv/v1/pt_br/pais/brasil");
         api = new Api(mock);
 
         const response = api.getResponse();

@@ -82,6 +82,18 @@ class I18n {
         return entities;
     }
 
+    getLabels(labels) {
+        const { values } = this.sheets[this.locale].findValuesFromSheet(
+            "l10n",
+            labels,
+            2
+        );
+        return values.reduce((acc, [key, label]) => {
+            acc[key] = label;
+            return acc;
+        }, {});
+    }
+
     getLastUpdated() {
         return this.sheets[this.locale].getValueFromSheet("🏠", "E4");
     }
