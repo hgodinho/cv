@@ -83,15 +83,8 @@ class I18n {
     }
 
     getLabels(labels) {
-        const { values } = this.sheets[this.locale].findValuesFromSheet(
-            "l10n",
-            labels,
-            2
-        );
-        return values.reduce((acc, [key, label]) => {
-            acc[key] = label;
-            return acc;
-        }, {});
+        return this.sheets[this.locale].findValuesFromSheet("l10n", labels, 2)
+            .values;
     }
 
     getLastUpdated() {

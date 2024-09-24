@@ -143,7 +143,7 @@ function test_Api() {
         api = new Api(mock);
 
         const response = api.getResponse();
-        expect("response data is array", response.data).toBeObject();
+        expect("response data is array", response.data).toBeArray();
     });
 
     test("Api.getResponse properties endpoint pt_br locale", () => {
@@ -151,7 +151,7 @@ function test_Api() {
         api = new Api(mock);
 
         const response = api.getResponse();
-        expect("response data is array", response.data).toBeObject();
+        expect("response data is array", response.data).toBeArray();
     });
 
     test("Api.getResponse ld-graph endpoint en locale", () => {
