@@ -1,4 +1,4 @@
-import { CVContextType } from "#root/types";
+import { CVContextType } from "./types";
 import { createContext } from "react";
 import { defaultCVContext } from "./defaultContext";
 

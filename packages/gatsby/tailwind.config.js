@@ -20,7 +20,7 @@ module.exports = {
             gridTemplateRows: {
                 layout: "32px 64px var(--middle-height) 32px 32px",
                 "layout-md": "32px 64px var(--middle-height) 32px 32px",
-                "layout-lg": "32px 32px var(--middle-height) 32px 16px", // ok
+                "layout-lg": "32px 32px var(--middle-height) 16px 32px 16px", // ok
             },
             animation: {
                 "spin-slow": "spin 3s linear infinite",

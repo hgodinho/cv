@@ -1,30 +1,35 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useCVContext } from "../cv";
 import { LinkObject, NodeObject } from "react-force-graph-3d";
-import { FilterLinksFN, FilterNodesFN } from "#root/types";
+import { FilterLinksFN, FilterNodesFN } from "./";
 import { FilterContext } from "./Context";
+import { useI18nContext } from "../i18n";
 
 export function FilterProvider({ children }: React.PropsWithChildren<{}>) {
+    const { locale } = useI18nContext();
     const cv = useCVContext();
 
-    const { nodes, links } = cv;
-
-    const [filteredNodes, setNodes] = useState<NodeObject[]>(nodes);
-    const [filteredLinks, setLinks] = useState<LinkObject[]>(links);
+    const [filteredNodes, setNodes] = useState<NodeObject[]>(cv.nodes);
+    const [filteredLinks, setLinks] = useState<LinkObject[]>(cv.links);
 
     const filterNodes = useCallback(
         (filter: FilterNodesFN) => {
-            setNodes(filter(filteredNodes, nodes));
+            setNodes(filter(filteredNodes, cv.nodes));
         },
-        [nodes, filteredNodes]
+        [cv.nodes, filteredNodes]
     );
 
     const filterLinks = useCallback(
         (filter: FilterLinksFN) => {
-            setLinks(filter(filteredLinks, links));
+            setLinks(filter(filteredLinks, cv.links));
         },
-        [links, filteredLinks]
+        [cv.links, filteredLinks]
     );
+
+    useEffect(() => {
+        setNodes(cv.nodes);
+        setLinks(cv.links);
+    }, [locale])
 
     return (
         <FilterContext.Provider

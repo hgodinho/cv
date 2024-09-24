@@ -1,4 +1,4 @@
-import { NetworkSettingsCallbacks, NetworkSettingsType } from "#root/types";
+import { NetworkSettingsCallbacks, NetworkSettingsType } from "./";
 
 export const defaultSettings: NetworkSettingsType = {
     nodeRelSize: 4,

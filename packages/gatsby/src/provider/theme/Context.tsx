@@ -1,5 +1,4 @@
-import { ThemeContextType } from "#root/types";
 import { createContext } from "react";
-import { themeDefault } from "./defaultContext";
+import { ThemeContextType, themeDefault } from "./";
 
 export const ThemeContext = createContext<ThemeContextType>(themeDefault);

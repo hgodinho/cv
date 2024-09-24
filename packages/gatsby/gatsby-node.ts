@@ -1,6 +1,9 @@
 import { GatsbyNode } from "gatsby";
 
-export const createPages: GatsbyNode["createPages"] = async ({ actions, graphql }) => {
+export const createPages: GatsbyNode["createPages"] = async (
+    { actions, graphql },
+    options
+) => {
     const { createRedirect } = actions;
 
     /**
@@ -8,8 +11,8 @@ export const createPages: GatsbyNode["createPages"] = async ({ actions, graphql 
      */
     createRedirect({
         fromPath: "/",
-        toPath: "pt_br/pessoa/henrique-godinho/",
+        toPath: "/pt_br/pessoa/henrique-godinho/",
         isPermanent: true,
         redirectInBrowser: true,
     });
-}
+};

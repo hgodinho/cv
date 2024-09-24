@@ -1,8 +1,10 @@
 import React, { useCallback, useReducer } from "react";
 
-import { NetworkSettingsType } from "#root/types";
-import { NetworkSettingsContext } from "./Context";
-import { defaultSettings } from "./defaultContext";
+import {
+    defaultSettings,
+    NetworkSettingsType,
+    NetworkSettingsContext,
+} from "./";
 
 export function NetworkSettingsProvider({
     children,

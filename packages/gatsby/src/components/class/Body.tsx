@@ -3,33 +3,19 @@ import type { NodeObject, LinkObject } from "react-force-graph-3d";
 
 import { Scroll, Field, Link } from "#root/components";
 import { tw } from "#root/lib";
-import { useFilterContext } from "#root/provider";
+import { useFilterContext, useI18nContext, useCVContext } from "#root/provider";
 
 export function Description() {
-    const { properties, selected } = useFilterContext();
+    const { properties } = useCVContext();
+    const { selected } = useFilterContext();
 
     return (
         <section className={tw("px-4", "pt-2", "flex", "flex-col")}>
-            <h2
-                className={tw(
-                    "sticky",
-                    "top-0",
-                    "text-2xl",
-                    "font-medium",
-                    "italic",
-                    "bg-black/90",
-                    "pb-2",
-                    "mb-2"
-                )}
-            >
-                Descrição
-            </h2>
-            {properties.map((property) => {
+            {Object.entries(properties).map(([property, label]) => {
+                if (!selected) return;
+
                 const value = selected[property];
-                if (
-                    selected.hasOwnProperty(property) &&
-                    typeof value !== "undefined"
-                ) {
+                if (selected.hasOwnProperty(property) && value) {
                     if ("name" === property) {
                         return null;
                     }
@@ -76,21 +62,8 @@ export function Connections() {
 
     return connections ? (
         <section className={tw("px-4", "pt-2", "flex", "flex-col")}>
-            <h2
-                className={tw(
-                    "sticky",
-                    "top-0",
-                    "text-2xl",
-                    "font-medium",
-                    "italic",
-                    "bg-black/90",
-                    "pb-2",
-                    "mb-2"
-                )}
-            >
-                Conexões
-            </h2>
             {Object.entries(connections).map(([key, links]) => {
+                if (!selected) return null;
                 return (
                     <Field
                         key={key}
@@ -101,9 +74,9 @@ export function Connections() {
                         value={links.map((link: NodeObject, index: number) => {
                             return typeof link.source !== "string" ? (
                                 <React.Fragment key={index}>
-                                    {link.source.type}{" "}
-                                    <Link href={link.source.id}>
-                                        {link.source.name}
+                                    {link.source?._type}{" "}
+                                    <Link href={link.source?.id}>
+                                        {link.source?.name}
                                     </Link>
                                 </React.Fragment>
                             ) : null;

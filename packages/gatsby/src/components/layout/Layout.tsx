@@ -4,6 +4,7 @@ import { tw } from "#root/lib";
 
 export function Layout({
     children,
+    className,
     ...props
 }: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) {
     return (
@@ -22,7 +23,8 @@ export function Layout({
 
                 // desktop
                 "lg:grid-cols-layout-lg",
-                "lg:grid-rows-layout-lg"
+                "lg:grid-rows-layout-lg",
+                className
             )}
         >
             {children}

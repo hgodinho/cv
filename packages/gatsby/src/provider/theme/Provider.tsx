@@ -1,9 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useViewPortSize } from "#root/lib";
-import { ThemeContextState } from "#root/types";
-import { themeDefault, themeStateDefault } from "./defaultContext";
-import { ThemeContext } from "./Context";
+import {
+    ThemeContextState,
+    ThemeContext,
+    themeDefault,
+    themeStateDefault,
+} from "./";
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     const viewPort = useViewPortSize();
@@ -73,7 +76,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         } else if (height && isTablet) {
             return `${height - 64}px`;
         } else if (height && isDesktop) {
-            return `${height - 112}px`;
+            return `${height - 128}px`;
         }
         return "auto";
     }, [viewPort]);

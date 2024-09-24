@@ -1,37 +1,43 @@
+import { usePageContext } from "#root/provider";
 import { useCallback, useMemo } from "react";
 
-export function useLink(value: string | undefined) {
-    // const {
-    //     api: { base },
-    //     urlPathname,
-    // } = usePageContext();
+export function useLink(value: string) {
+    const {
+        location,
+        pageContext: {
+            site: { siteUrl },
+        },
+    } = usePageContext();
 
-    // const filterValue = useCallback(
-    //     (value: string | undefined) => {
-    //         if (value && value.includes(base)) {
-    //             return value.replace(base, "");
-    //         }
-    //         return value;
-    //     },
-    //     [base]
-    // );
-
-    const target = useCallback(
-        (value: string | undefined) =>
-            typeof value !== "undefined" && value.startsWith("http")
-                ? "_blank"
-                : "_self",
-        []
+    const filterValue = useCallback(
+        (value: string) => {
+            if (value && value.includes(siteUrl)) {
+                return value.replace(siteUrl, "");
+            }
+            return value;
+        },
+        [siteUrl]
     );
 
     const props = useMemo(() => {
-        // const location = filterValue(value);
+        const internal = value?.includes(siteUrl);
+
+        const target = internal
+            ? {}
+            : {
+                target: "_blank",
+                rel: "noopener noreferrer",
+            };
+
+        const to = filterValue(value);
+
         return {
-            location,
-            target: target(value),
-            // isActive: location === urlPathname,
+            to,
+            internal,
+            isActive: to ? location.pathname.includes(to) : false,
+            ...target,
         };
-    }, []);
+    }, [location, value]);
 
     return props;
 }

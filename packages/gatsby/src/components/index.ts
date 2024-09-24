@@ -11,5 +11,7 @@ export * from "./tree";
 export * from "./settings";
 export * from "./scroll";
 export * from "./loading";
+export * from "./select";
+export * from "./l10nSelect";
 
 export * from "./debug";

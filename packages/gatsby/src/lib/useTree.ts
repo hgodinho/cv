@@ -1,17 +1,27 @@
-import { useCallback, useMemo, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import {
-    ITreeViewOnNodeSelectProps,
     flattenTree,
+    ITreeViewOnNodeSelectProps,
     NodeId,
 } from "react-accessible-treeview";
 
-import { useFilterContext, useTheme } from "#root/provider";
-import { alphaHex } from ".";
 import type { TreeViewProps } from "#root/components";
+import { useFilterContext, useI18nContext, useTheme } from "#root/provider";
+import { getType } from "@hgod-in-cv/data/dist/utils";
+import { NodeObject } from "react-force-graph-3d";
+import { alphaHex } from ".";
 
 export function useTree() {
-    const { nodes, filteredNodes, setSelected, filterNodes, filterLinks } =
-        useFilterContext();
+    const {
+        graph: { nodes },
+        selected,
+        filteredNodes,
+        setSelected,
+        filterNodes,
+        filterLinks,
+    } = useFilterContext();
+
+    const { locale } = useI18nContext();
 
     const { colors } = useTheme();
 
@@ -21,39 +31,105 @@ export function useTree() {
             two: (type: string) => alphaHex(colors[type], 0.6),
         };
 
-        const childrenObject = nodes?.reduce((acc, cur) => {
-            if (!acc.hasOwnProperty(cur.type)) {
-                acc[cur.type] = {
-                    name: cur.type,
-                    id: cur.type,
-                    metadata: {
-                        color: lvls.one(cur.type),
-                    },
-                    children: [
-                        {
+        const childrenObject = nodes[locale].reduce((acc, cur) => {
+            const type = getType(cur);
+
+            if (!acc.hasOwnProperty(type)) {
+                if (type === cur._type) {
+                    acc[type] = {
+                        name: type,
+                        id: type,
+                        metadata: {
+                            color: lvls.one(type),
+                        },
+                        children: [
+                            {
+                                name: cur.name,
+                                id: cur.id,
+                                metadata: {
+                                    ...cur,
+                                    color: lvls.two(type),
+                                },
+                            },
+                        ],
+                    };
+                } else {
+                    acc[type] = {
+                        name: type,
+                        id: type,
+                        metadata: {
+                            color: lvls.one(type),
+                        },
+                        children: [
+                            {
+                                name: cur._type,
+                                id: cur._type,
+                                metadata: {
+                                    color: lvls.two(type),
+                                },
+                                children: [
+                                    {
+                                        name: cur.name,
+                                        id: cur.id,
+                                        metadata: {
+                                            ...cur,
+                                            color: lvls.two(type),
+                                        },
+                                    },
+                                ],
+                            },
+                        ],
+                    };
+                }
+            } else {
+                if (type === cur._type) {
+                    acc[type].children.push({
+                        name: cur.name,
+                        id: cur.id,
+                        metadata: {
+                            ...cur,
+                            color: lvls.two(type),
+                        },
+                    });
+                } else {
+                    const found = acc[type].children.find(
+                        (child: NodeObject) => child.id === cur._type
+                    );
+                    if (found) {
+                        found.children.push({
                             name: cur.name,
                             id: cur.id,
                             metadata: {
                                 ...cur,
-                                color: lvls.two(cur.type),
+                                color: lvls.two(type),
                             },
-                        },
-                    ],
-                };
-            } else {
-                acc[cur.type].children.push({
-                    name: cur.name,
-                    id: cur.id,
-                    metadata: {
-                        ...cur,
-                        color: lvls.two(cur.type),
-                    },
-                });
+                        });
+                    } else {
+                        acc[type].children.push({
+                            name: cur._type,
+                            id: cur._type,
+                            metadata: {
+                                color: lvls.two(type),
+                            },
+                            children: [
+                                {
+                                    name: cur.name,
+                                    id: cur.id,
+                                    metadata: {
+                                        ...cur,
+                                        color: lvls.two(type),
+                                    },
+                                },
+                            ],
+                        });
+                    }
+                }
             }
+
             return acc;
         }, {});
 
-        const initialSelectedIds = nodes?.reduce((acc, cur) => {
+        const initialSelectedIds = nodes[locale].reduce((acc, cur) => {
             if (cur.type && !acc.includes(cur.type)) {
                 acc.push(cur.type);
             }

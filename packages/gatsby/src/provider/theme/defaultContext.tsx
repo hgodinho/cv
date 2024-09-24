@@ -1,8 +1,4 @@
-import {
-    ThemeContextCallbacks,
-    ThemeContextState,
-    ThemeContextType,
-} from "#root/types";
+import { ThemeContextCallbacks, ThemeContextState, ThemeContextType } from "./";
 
 export const themeStateDefault: ThemeContextState & ThemeContextCallbacks = {
     viewPort: {

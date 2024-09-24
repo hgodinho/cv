@@ -13,6 +13,7 @@ import { PageContext } from "@hgod-in-cv/data/src/types";
 import {
     ClassView,
     Debug,
+    L10NSelect,
     Layout,
     NetworkView,
     OptionsView,
@@ -26,13 +27,11 @@ export type ProviderProps = WrapPageElementBrowserArgs<
 };
 
 export function Template({ element, ...props }: ProviderProps) {
-    console.log("Template", { props });
-
     return (
         <ThemeProvider>
             <PageProvider {...props}>
-                <CVProvider>
-                    <I18nProvider>
+                <I18nProvider>
+                    <CVProvider>
                         <FilterProvider>
                             <NetworkSettingsProvider>
                                 <NetworkView />
@@ -40,12 +39,13 @@ export function Template({ element, ...props }: ProviderProps) {
                                     <OptionsView />
                                     <ClassView />
                                     <Debug debug={false} />
+                                    <L10NSelect />
                                     {element}
                                 </Layout>
                             </NetworkSettingsProvider>
                         </FilterProvider>
-                    </I18nProvider>
-                </CVProvider>
+                    </CVProvider>
+                </I18nProvider>
             </PageProvider>
         </ThemeProvider>
     );

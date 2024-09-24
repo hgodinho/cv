@@ -2,8 +2,13 @@ import { useCallback, useEffect, useState, createRef, useRef } from "react";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
 
-import { useFilterContext, useNetworkSettings, useTheme } from "#root/provider";
-import { navigate } from "gatsby";
+import {
+    useFilterContext,
+    useI18nContext,
+    useNetworkSettings,
+    usePageContext,
+    useTheme,
+} from "#root/provider";
 
 export type UseNetworkProps = {
     w?: number;
@@ -13,9 +18,13 @@ export type UseNetworkProps = {
 
 export function useNetwork() {
     const ref = useRef();
+    const { navigate } = usePageContext();
 
-    const { nodes, filteredNodes, links, filteredLinks, setSelected } =
+    const { locale } = useI18nContext();
+    const { filteredNodes, filteredLinks, selected, setSelected } =
         useFilterContext();
+
+    const [loaded, setLoaded] = useState(false);
 
     const settings = useNetworkSettings();
 
@@ -50,9 +59,11 @@ export function useNetwork() {
                 node,
                 2500
             );
-            navigate(`/${node._id}`);
+            if (selected && selected.path !== node.path) {
+                navigate(`/${locale}/${node.path}`);
+            }
         },
-        [ref, setSelected]
+        [ref, selected, isMobile, isTablet]
     );
 
     const nodeLabel = useCallback((node: NodeObject) => {
@@ -79,54 +90,43 @@ export function useNetwork() {
 
     const color = useCallback(
         (node: NodeObject) => {
-            return colors[node.type];
+            return colors[node._type];
         },
         [colors]
     );
 
-    // const mountRef = useCallback((node: any) => {
-    //     if (!ref.current && node) {
-    //         console.log("Setting ref")
-    //         setRef({ current: node });
-    //         setLoaded(true);
-    //     }
-    // }, [ref]);
+    useEffect(() => {
+        const found = filteredNodes.find((node) => {
+            return node._id === selected?._id;
+        });
 
-    // useEffect(() => {
-    //     const found = filteredNodes.find((node) => {
-    //         const search = `${type}/${id}`;
-    //         return node._id === search;
-    //     });
+        if (found) {
+            focusOnClick(found);
+        }
+    }, [selected]);
 
-    //     if (found) {
-    //         focusOnClick(found);
-    //     }
-    // }, [id, type]);
+    useEffect(() => {
+        if (ref.current) {
+            setLoaded(true);
+        }
+    }, [ref]);
 
-    // useEffect(() => {
-    //     const moveTo = () => {
-    //         const found = filteredNodes.find((node) => {
-    //             const search = `${type}/${id}`;
-    //             return node._id === search;
-    //         });
-
-    //         if (found) {
-    //             focusOnClick(found);
-    //         }
-    //     }
-    //     if (loaded) {
-    //         setTimeout(() => {
-    //             moveTo();
-    //         }, 1000);
-    //     }
-    // }, [loaded]);
+    useEffect(() => {
+        if (selected && loaded) {
+            const found = filteredNodes.find((node) => {
+                return node._id === selected._id;
+            });
+            if (found) {
+                setTimeout(() => focusOnClick(found), 2000);
+                setLoaded(false);
+            }
+        }
+    }, [loaded]);
 
     return {
         ref,
-        nodes,
         filteredNodes,
         filteredLinks,
-        links,
         colors,
         width,
         height,

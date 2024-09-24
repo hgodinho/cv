@@ -1,4 +1,4 @@
-import { FilterContextType } from "#root/types";
+import { FilterContextType } from "./";
 import { createContext } from "react";
 import { defaultCVContext } from "../cv";
 

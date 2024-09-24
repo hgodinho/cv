@@ -1,7 +1,7 @@
 import React, { Key, ReactNode, useCallback } from "react";
 
 import { Link, Label, type LabelProps } from "#root/components";
-import { useFilterContext } from "#root/provider";
+import { useCVContext, useFilterContext, useI18nContext } from "#root/provider";
 import { tw } from "#root/lib";
 
 export type FieldLabelProps = {
@@ -36,7 +36,7 @@ export type FieldProps = {
 };
 
 export function Field({ label, value, find, className }: FieldProps) {
-    const { nodes } = useFilterContext();
+    const { nodes } = useCVContext();
 
     find = typeof find !== "undefined" ? find : true;
 
@@ -50,6 +50,7 @@ export function Field({ label, value, find, className }: FieldProps) {
                     value = <Link href={url}>{found["name"]}</Link>;
                 }
             }
+
             const LinkOrValue = (value: ReactNode) =>
                 value ? (
                     value.toString().startsWith("http") ? (
