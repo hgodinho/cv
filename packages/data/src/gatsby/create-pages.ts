@@ -117,7 +117,7 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
                         slug: node.path,
                         name: node.name,
                         type: node.type,
-                        locale,
+                        // locale,
                         locales,
                         properties,
                         graph,

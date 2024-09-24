@@ -12,8 +12,8 @@ import {
     NodeType,
 } from "../types";
 
-import { fetchData, getJsonLD } from "../api";
 import jsonld from "jsonld";
+import { fetchData, getJsonLD } from "../api";
 import { getType } from "../utils";
 
 let isFirstSource = true;

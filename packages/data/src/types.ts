@@ -4,6 +4,8 @@ import { NODE_TYPES } from "./constants";
 import { JsonLdArray } from "jsonld/jsonld-spec";
 import jsonld from "jsonld";
 
+export { NodeObject, LinkObject };
+
 export type Locale = {
     lang: string;
     name: string;
@@ -13,7 +15,7 @@ export type Locale = {
 
 export type LOCALES = "en" | "pt_br" | "es";
 
-export type Locales = Record<LOCALES, Locale[]>;
+export type Locales = Record<LOCALES, Locale>;
 
 export type JsonLD = {
     raw: jsonld.JsonLdDocument;
@@ -23,12 +25,16 @@ export type JsonLD = {
     nquads: Awaited<ReturnType<typeof jsonld.toRDF>>;
 };
 
+export type Nodes = Record<LOCALES, NodeObject[]>;
+
+export type Links = Record<LOCALES, LinkObject[]>;
+
 export type Graph = {
-    nodes: Record<LOCALES, NodeObject[]>;
-    links: Record<LOCALES, LinkObject[]>;
+    nodes: Nodes;
+    links: Links;
 };
 
-export type Properties = Record<LOCALES, string[]>;
+export type Properties = Record<LOCALES, [string, string]>;
 
 export type Base = {
     "@context": string;
@@ -94,7 +100,7 @@ export type PageContext = {
     type: string;
     properties: Properties;
     graph: Graph;
-    locale: LOCALES;
+    // locale: LOCALES;
     locales: Locales;
     site: {
         title: string;
