@@ -154,6 +154,22 @@ function test_Api() {
         expect("response data is array", response.data).toBeArray();
     });
 
+    test("Api.getResponse classes endpoint en locale", () => {
+        mock = mockRequest("cv/v1/en/classes");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response data is array", response.data).toBeArray();
+    });
+
+    test("Api.getResponse classes endpoint pt_br locale", () => {
+        mock = mockRequest("cv/v1/pt_br/classes");
+        api = new Api(mock);
+
+        const response = api.getResponse();
+        expect("response data is array", response.data).toBeArray();
+    });
+
     test("Api.getResponse ld-graph endpoint en locale", () => {
         mock = mockRequest("cv/v1/en/ld-graph");
         api = new Api(mock);

@@ -18,7 +18,14 @@ class Api {
     }
 
     _defaultEndpoints() {
-        return ["schema", "properties", "about", "ld-graph", "locales"];
+        return [
+            "schema",
+            "properties",
+            "classes",
+            "about",
+            "ld-graph",
+            "locales",
+        ];
     }
 
     setup(e) {
@@ -173,6 +180,13 @@ class Api {
                     return this.createResponse({
                         status: 200,
                         data: this.app.getProperties(),
+                    });
+
+                // return the classes from all endpoints
+                case "classes":
+                    return this.createResponse({
+                        status: 200,
+                        data: this.app.getClasses(),
                     });
 
                 // return the linked data graph
@@ -348,7 +362,24 @@ class Api {
                             {
                                 type: "array",
                                 items: {
-                                    type: "string",
+                                    type: "array",
+                                    items: {
+                                        type: "string",
+                                    },
+                                },
+                            },
+                        ];
+
+                    case "classes":
+                        return [
+                            e,
+                            {
+                                type: "array",
+                                items: {
+                                    type: "array",
+                                    items: {
+                                        type: "string",
+                                    },
                                 },
                             },
                         ];

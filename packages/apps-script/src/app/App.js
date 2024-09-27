@@ -102,6 +102,10 @@ class App {
         return this.i18n?.getLabels("properties");
     }
 
+    getClasses() {
+        return this.i18n?.getLabels("classes");
+    }
+
     getRawPropertiesMeta(endpoint) {
         const { values } = this.configSheet.findValuesFromSheet(
             "meta",
