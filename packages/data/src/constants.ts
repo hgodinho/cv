@@ -24,5 +24,6 @@ export const NODE_TYPES = {
     Locales: "Locales",
     Graph: "Graph",
     Properties: "Properties",
+    Classes: "Classes",
     ...ENDPOINTS,
 } as const;

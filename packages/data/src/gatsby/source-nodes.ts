@@ -145,14 +145,58 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
             )
         ) as Record<LOCALES, string[]>;
 
+        const classes = Object.fromEntries(
+            await Promise.all(
+                locales.map(async (locale) => {
+                    return [
+                        locale.lang,
+                        await fetchData(
+                            `${locale.lang}/classes`,
+                            () => {
+                                reporter.info(
+                                    `[@hgod-in/data] Fetching classes for "${locale.name}"`
+                                );
+                            },
+                            (response) => {
+                                reporter.success(
+                                    `[@hgod-in/data] Found ${response.data.length} classes for "${locale.name}"`
+                                );
+                            }
+                        ),
+                    ];
+                })
+            )
+        ) as Record<LOCALES, string[]>;
+
         const nodes = Object.entries(graph).reduce((acc, [locale, ld]) => {
             acc[locale] = (ld.compacted["@graph"] as NodeObject<Base>[]).map(
                 (node) => {
-                    return {
-                        "@context": ld.compacted["@context"],
+                    const formatted = {
+                        _context: ld.compacted["@context"],
                         "@type": node.type,
-                        ...node,
+                        ...Object.fromEntries(
+                            Object.entries(node).map(([key, value]) => {
+                                if (
+                                    [
+                                        "type",
+                                        "_id",
+                                        "id",
+                                        "path",
+                                        "name",
+                                    ].includes(key)
+                                ) {
+                                    return [key, value];
+                                }
+                                return [
+                                    key,
+                                    Array.isArray(value)
+                                        ? value
+                                        : [value.toString()],
+                                ];
+                            })
+                        ),
                     };
+                    return formatted;
                 }
             );
             return acc;
@@ -247,6 +291,16 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
             input: {
                 type: NODE_TYPES.Properties,
                 data: properties,
+            },
+        });
+
+        sourcingTimer.setStatus(`Processing ${classes.en.length} classes`);
+        nodeBuilder({
+            gatsbyApi,
+            id: "Classes",
+            input: {
+                type: NODE_TYPES.Classes,
+                data: classes,
             },
         });
 

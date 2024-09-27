@@ -35,6 +35,7 @@ export type Graph = {
 };
 
 export type Properties = Record<LOCALES, [string, string]>;
+export type Classes = Record<LOCALES, [string, string]>;
 
 export type Base = {
     "@context": string;
@@ -84,6 +85,7 @@ export interface NodeBuilderArgs {
 export type PageQueryResponse = {
     graph: Graph;
     properties: Properties;
+    classes: Classes;
     locales: Locales;
     site: {
         siteMetadata: {
@@ -99,6 +101,7 @@ export type PageContext = {
     name: string;
     type: string;
     properties: Properties;
+    classes: Classes;
     graph: Graph;
     // locale: LOCALES;
     locales: Locales;

@@ -90,6 +90,11 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
             es
             pt_br
         }
+        classes {
+            en
+            es
+            pt_br
+        }
         site {
             siteMetadata {
                 description
@@ -102,6 +107,7 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
     const site = result.data?.site.siteMetadata;
     const locales = result.data?.locales;
     const properties = result.data?.properties;
+    const classes = result.data?.classes;
     const graph = result.data?.graph;
 
     Object.entries(graph.nodes).forEach(([locale, nodes]) => {
@@ -117,9 +123,10 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
                         slug: node.path,
                         name: node.name,
                         type: node.type,
-                        // locale,
+                        locale,
                         locales,
                         properties,
+                        classes,
                         graph,
                     },
                 });
