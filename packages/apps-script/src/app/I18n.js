@@ -28,23 +28,29 @@ class I18n {
     }
 
     getEntityById(sheetName, id, recursive = true) {
-        const entity = new Entity({
-            header: this.sheets[this.locale].getHeader(sheetName),
-            defaultValues: this.sheets[this.defaultLocale].getRowById(
-                sheetName,
-                id
-            ),
-            values: this.sheets[this.locale].getRowById(sheetName, id),
-            endpoints: this.sheets[this.defaultLocale].findValuesFromSheet(
-                "config",
-                "endpoints",
-                2
-            ).values,
-            i18n: this,
-            recursive,
-        });
+        try {
+            const entity = new Entity({
+                header: this.sheets[this.locale].getHeader(sheetName),
+                defaultValues: this.sheets[this.defaultLocale].getRowById(
+                    sheetName,
+                    id
+                ),
+                values: this.sheets[this.locale].getRowById(sheetName, id),
+                endpoints: this.sheets[this.defaultLocale].findValuesFromSheet(
+                    "config",
+                    "endpoints",
+                    2
+                ).values,
+                i18n: this,
+                recursive,
+            });
 
-        return entity.getEntity();
+            return entity.getEntity();
+        } catch (error) {
+            throw new Error(
+                `No entity found with id "${id}" at sheet "${sheetName}" - ${error.message}`
+            );
+        }
     }
 
     getEntityByQuery(sheetName, query) {
@@ -62,24 +68,32 @@ class I18n {
             sheetName
         );
 
-        const entities = values.map((row) => {
-            return new Entity({
-                header,
-                defaultValues: this.sheets[this.defaultLocale].getRowById(
-                    sheetName,
-                    row[0]
-                ),
-                values: row,
-                endpoints: this.sheets[this.defaultLocale].findValuesFromSheet(
-                    "config",
-                    "endpoints",
-                    2
-                ).values,
-                i18n: this,
-            }).getEntity();
-        });
+        try {
+            const entities = values
+                .map((row) => {
+                    if (!row[0]) {
+                        return false;
+                    }
+                    return new Entity({
+                        header,
+                        defaultValues: this.sheets[
+                            this.defaultLocale
+                        ].getRowById(sheetName, row[0]),
+                        values: row,
+                        endpoints: this.sheets[
+                            this.defaultLocale
+                        ].findValuesFromSheet("config", "endpoints", 2).values,
+                        i18n: this,
+                    }).getEntity();
+                })
+                .filter(Boolean);
 
-        return entities;
+            return entities;
+        } catch (error) {
+            throw new Error(
+                `No entities found at sheet "${sheetName}" - ${error.message}`
+            );
+        }
     }
 
     getLabels(labels) {

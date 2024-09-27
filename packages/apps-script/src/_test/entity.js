@@ -80,9 +80,9 @@ function test_Entity() {
 
         const arrayPath = entity.parseString("#cdt-2 | #cdt-3 | #cdt-4");
         expect("array<path>", arrayPath).toEqual([
-            "https://hgod.in/cv/en/educational-occupational-credential/pos-graduacao-em-comunicacao-e-design-digital",
-            "https://hgod.in/cv/en/educational-occupational-credential/bacharelado-em-artes-visuais-pintura-gravura-e-escultura",
-            "https://hgod.in/cv/en/educational-occupational-credential/extensao-universitaria-em-transmedia-storytelling",
+            "https://hgod.in/cv/en/educational-occupational-credential/postgraduate-in-communication-and-digital-design",
+            "https://hgod.in/cv/en/educational-occupational-credential/bachelor-of-visual-arts-painting-engraving-and-sculpture",
+            "https://hgod.in/cv/en/educational-occupational-credential/university-extension-in-transmedia-storytelling",
         ]);
 
         expect(

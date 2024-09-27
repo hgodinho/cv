@@ -244,7 +244,7 @@ function test_Api() {
 
     test("Api.getResponse credential get endpoint", () => {
         mock = mockRequest(
-            "cv/v1/en/educational-occupational-credential/mestrado-profissional-em-ciencia-da-informacao"
+            "cv/v1/en/educational-occupational-credential/professional-masters-degree-in-information-science"
         );
         api = new Api(mock);
 

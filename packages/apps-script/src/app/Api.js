@@ -251,10 +251,18 @@ class Api {
             return data.map((item) => this.prepareResponse(item, endpoint));
         } else if (typeof data === "object") {
             const schema = this.getClassSchema(endpoint);
-            return Object.keys(schema).reduce(
-                (acc, key) => {
+            return Object.entries(schema).reduce(
+                (acc, [key, schema]) => {
                     if (data[key]) {
-                        acc[key] = data[key];
+                        if (
+                            Object.keys(this.getInternalSchema()).includes(key)
+                        ) {
+                            acc[key] = data[key];
+                            return acc;
+                        }
+                        acc[key] = Array.isArray(data[key])
+                            ? data[key]
+                            : data[key].toString();
                     }
                     return acc;
                 },
@@ -300,13 +308,16 @@ class Api {
             _id: {
                 type: "string",
             },
-            path: {
+            id: {
                 type: "string",
             },
             "@id": {
                 type: "string",
             },
             "@type": {
+                type: "string",
+            },
+            path: {
                 type: "string",
             },
         };
@@ -425,6 +436,13 @@ class Api {
         );
     }
 
+    isDateSchema(schema) {
+        if (schema.hasOwnProperty("oneOf")) {
+            return schema.oneOf[0].format === "date-time";
+        }
+        return schema.format === "date-time";
+    }
+
     getClassSchema(className) {
         const values = this.app.getRawPropertiesMeta(className);
 
@@ -434,6 +452,22 @@ class Api {
                 { type: "number" },
                 { type: "object" },
                 { type: "array" },
+            ],
+        };
+
+        const date = {
+            oneOf: [
+                {
+                    type: "string",
+                    format: "date-time",
+                },
+                {
+                    type: "array",
+                    items: {
+                        type: "string",
+                        format: "date-time",
+                    },
+                },
             ],
         };
 
@@ -452,7 +486,13 @@ class Api {
                 if (Object.keys(this.getInternalSchema()).includes(property)) {
                     return acc; // skip internalSchema properties
                 }
-                acc[property] = oneOf;
+
+                if (type.includes("Date")) {
+                    acc[property] = date;
+                } else {
+                    acc[property] = oneOf;
+                }
+
                 return acc;
             },
             this.getInternalSchema()

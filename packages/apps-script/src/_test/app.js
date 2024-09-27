@@ -1,5 +1,5 @@
 function test_App() {
-    const app = new App(["person", "place", "intangible", "credential"]);
+    const app = new App(["person", "place", "intangible", "credential"], "en");
 
     test("App.configSheet must be object", () => {
         expect("object", app.configSheet).toBeObject();
