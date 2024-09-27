@@ -169,13 +169,25 @@ class Sheet {
         const range = sheet.getRange(offset + 1, 2, total);
 
         let row;
+
+        id = id.trim().toString();
+        id = id ? id : false;
+
+        if (!id) {
+            throw new Error(
+                `No id provided for sheet "${sheetName}", id received was "${id}"`
+            );
+        }
+
         range.getValues().forEach((data, i) => {
             if (data[0] === id) {
                 row = i + offset + 1;
             }
         });
         if (!row) {
-            throw new Error(`No row found with id ${id} at sheet ${sheetName}`);
+            throw new Error(
+                `No row found with id "${id}" at sheet "${sheetName}"`
+            );
         }
         const rangeRow = sheet.getRange(row, 2, 1, sheet.getLastColumn() - 1);
         const valuesRow = rangeRow.getValues();
