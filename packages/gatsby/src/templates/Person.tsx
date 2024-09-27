@@ -15,6 +15,7 @@ export const query = graphql`
         person(locale: { eq: $locale }, path: { eq: $slug }) {
             id
             _id
+            _context
             path
             type
             locale

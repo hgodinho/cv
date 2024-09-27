@@ -15,6 +15,7 @@ export const query = graphql`
         intangible(locale: { eq: $locale }, path: { eq: $slug }) {
             _id
             path
+            _context
             type
             locale
             name

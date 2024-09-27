@@ -14,6 +14,7 @@ export const query = graphql`
     query byId($locale: String, $slug: String) {
         event(locale: { eq: $locale }, path: { eq: $slug }) {
             _id
+            _context
             path
             type
             name
