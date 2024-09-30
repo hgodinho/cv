@@ -1,7 +1,14 @@
 class Entity {
-    constructor(header, values, config) {
-        if (!header || !values)
-            throw new Error("Entity requires header and values");
+    constructor({
+        header, // english header
+        defaultValues, // english values
+        values, // current locale values
+        endpoints, // endpoints for the entity
+        i18n, // i18n class
+        recursive = true, // recursive flag
+    }) {
+        if (!header || !values || !defaultValues)
+            throw new Error("Entity requires header, defaultValues and values");
         if (!Array.isArray(header))
             throw new Error("Entity requires header to be an array");
         if (!Array.isArray(values))
@@ -10,16 +17,34 @@ class Entity {
             throw new Error(
                 "Entity requires header and values to be the same length"
             );
-        if (!config) throw new Error("Entity requires a config");
+        if (!endpoints) throw new Error("Entity requires endpoints");
+        if (!i18n)
+            throw new Error("Entity requires an instantiated I18n class");
 
+        this.i18n = i18n;
         this._header = header;
+        this._defaultValues = defaultValues;
         this._values = values;
-        this._config = config;
+        this._endpoints = endpoints;
+        this.recursive = recursive;
+
+        const excluded = ["_id", "path"];
 
         header.forEach((key, index) => {
-            const value = this.parseValue(values[index]);
-            if (value !== undefined && key !== "number") {
+            let value = values[index];
+            if (!excluded.includes(key)) {
+                value = this.parseValue(values[index]);
+            }
+            if (typeof value !== "undefined") {
                 this[key] = value;
+                if (key === "type") {
+                    this.type = defaultValues[index].includes(" ")
+                        ? defaultValues[index]
+                              .split(" ")
+                              .map((s) => s.trim())
+                              .join("")
+                        : defaultValues[index];
+                }
             }
         });
     }
@@ -39,12 +64,6 @@ class Entity {
      *
      * @param {string} str | String to be parsed.
      * @returns String | Object | Array | Parsed string, object or array.
-     * @example
-     * const entity = new Entity(["name", "age"], ["John", "25"]);
-     * console.log(entity.parseString("name=John; age=25")); // { name: "John", age: 25 }
-     *
-     * const entity = new Entity(["name", "age"], ["John", "25"]);
-     * console.log(entity.parseString("name=John; age=25 | name=Jane; age=30")); // [{ name: "John", age: 25 }, { name: "Jane", age: 30 }]
      */
     parseString(str) {
         // return early if the string is URL
@@ -52,9 +71,16 @@ class Entity {
             return str;
         }
 
-        const operators = ["=", "/", "|"];
+        const operators = ["=", "/", "|", ["#", "-"]];
 
-        if (!operators.some((op) => str.includes(op))) {
+        if (
+            !operators.some((op) => {
+                if (Array.isArray(op)) {
+                    return op.every((subOp) => str.includes(subOp));
+                }
+                return str.includes(op);
+            })
+        ) {
             return str; // No operators found, return the string as is.
         }
 
@@ -83,18 +109,20 @@ class Entity {
                 return acc;
             }, {});
         } else if (
-            str.includes("/") &&
+            str.includes("#") &&
+            str.includes("-") &&
             !str.includes(";") &&
             !str.includes("|")
         ) {
-            // this is a single path pair
+            // this is a single id
             data = str.trim();
         } else if (
             str.includes("|") &&
-            str.includes("/") &&
+            str.includes("#") &&
+            str.includes("-") &&
             !str.includes(";")
         ) {
-            // this is a list of path pairs
+            // this is probably list of ids
             data = str.split("|").map((pair) => pair.trim());
         } else if (
             str.includes("|") &&
@@ -106,11 +134,27 @@ class Entity {
         }
 
         if (typeof data === "string") {
-            return this._config.query + data;
+            if (this.getRecursive()) {
+                const entity = this.i18n.getEntityById(
+                    this.getTypeById(data),
+                    data,
+                    false
+                );
+                return entity["@id"];
+            }
+            return data;
         } else if (Array.isArray(data)) {
             return data.map((item) => {
                 if (typeof item === "string") {
-                    return this._config.query + item;
+                    if (this.getRecursive()) {
+                        const entity = this.i18n.getEntityById(
+                            this.getTypeById(item),
+                            item,
+                            false
+                        );
+                        return entity["@id"];
+                    }
+                    return item;
                 } else if (typeof item === "object") {
                     return item;
                 }
@@ -123,19 +167,31 @@ class Entity {
         return str;
     }
 
-    toJsonLd() {
-        if (!this.type) throw new Error("Entity requires a type");
-        if (!this.id) throw new Error("Entity requires a id");
-        const json = {
-            "@context": "https://schema.org/",
-            "@type": this.type,
-            "@id": this.id,
-        };
-        this._header.forEach((key, index) => {
-            if (this[key] && key !== "id" && key !== "type") {
-                json[key] = this[key];
-            }
+    getEntity() {
+        const entity = {};
+        this._header.forEach((key) => {
+            if (this[key] !== undefined) entity[key] = this[key];
         });
-        return json;
+        return entity;
+    }
+
+    getTypeById(id) {
+        const idType = this._endpoints.find(([name, slug]) => {
+            return id.includes(slug);
+        });
+        if (!idType) return false;
+        return idType[0];
+    }
+
+    getRecursive() {
+        return this.recursive;
+    }
+
+    setProperty(key, value) {
+        this[key] = value;
+    }
+
+    setI18n(i18n) {
+        this.i18n = i18n;
     }
 }

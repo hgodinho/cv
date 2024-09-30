@@ -18,19 +18,20 @@
         }
     },
     "dependencies": {
-        "lerna": "^8.1.2"
+        "lerna": "^8.1.8"
     },
     "devDependencies": {
-        "@nx/eslint": "18.2.1",
-        "@nx/jest": "18.2.1",
-        "@nx/vite": "18.2.1",
-        "@nx/web": "18.2.1",
-        "@vitest/ui": "^1.4.0",
+        "@nx/eslint": "19.6.2",
+        "@nx/jest": "19.6.2",
+        "@nx/vite": "19.6.2",
+        "@nx/web": "19.6.2",
+        "@vitest/ui": "^2.0.5",
         "commitizen": "^4.3.0",
-        "conventional-changelog": "^5.1.0",
-        "eslint": "~8.57.0",
-        "nx": "18.2.1",
-        "vite": "~5.0.13",
-        "vitest": "^1.4.0"
-    }
+        "conventional-changelog": "^6.0.0",
+        "eslint": "~9.9.0",
+        "nx": "19.6.2",
+        "vite": "~5.4.2",
+        "vitest": "^2.0.5"
+    },
+    "packageManager": "pnpm@9.3.0+sha512.ee7b93e0c2bd11409c6424f92b866f31d3ea1bef5fbe47d3c7500cdc3c9668833d2e55681ad66df5b640c61fa9dc25d546efa54d76d7f8bf54b13614ac293631"
 }
