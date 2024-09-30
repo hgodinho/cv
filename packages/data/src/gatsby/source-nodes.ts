@@ -171,7 +171,7 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
         const nodes = Object.entries(graph).reduce((acc, [locale, ld]) => {
             acc[locale] = (ld.compacted["@graph"] as NodeObject<Base>[]).map(
                 (node) => {
-                    const formatted = {
+                    return {
                         _context: ld.compacted["@context"],
                         "@type": node.type,
                         ...Object.fromEntries(
@@ -187,16 +187,26 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
                                 ) {
                                     return [key, value];
                                 }
+                                if (
+                                    [
+                                        "birthDate",
+                                        "endDate",
+                                        "startDate",
+                                        "datePublished",
+                                    ].includes(key)
+                                ) {
+                                    return [
+                                        key,
+                                        new Date(value).toLocaleDateString(),
+                                    ];
+                                }
                                 return [
                                     key,
-                                    Array.isArray(value)
-                                        ? value
-                                        : [value.toString()],
+                                    Array.isArray(value) ? value : [value],
                                 ];
                             })
                         ),
                     };
-                    return formatted;
                 }
             );
             return acc;
