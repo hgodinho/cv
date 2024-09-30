@@ -2,7 +2,9 @@
  * Get the access token
  */
 function getToken() {
-    console.log("access_token:", ScriptApp.getOAuthToken());
+    const token = ScriptApp.getOAuthToken();
+    console.log("access_token:", token);
+    return token;
 }
 
 function stripTrailingSlash(str) {
@@ -26,12 +28,28 @@ function getEntityMap() {
     };
 }
 
-/**
- * Escape HTML entities.
- * @param {string} str | String to be escaped.
- * @returns | Escaped string.
- */
-function sanitize(str) {
-    const entityMap = getEntityMap();
-    return String(str).replace(/[&<>"'`=\/]/g, (s) => entityMap[s]);
-}
+const utils = {
+    /**
+     * Escape HTML entities.
+     * @param {string} str | String to be escaped.
+     * @returns | Escaped string.
+     */
+    sanitize: (str) => {
+        const entityMap = getEntityMap();
+        return String(str).replace(/[&<>"'`=\/]/g, (s) => entityMap[s]);
+    },
+    /**
+     * Find a key by its value in an object.
+     * @param {object} obj | Object to be searched.
+     * @param {string} value | Value to be searched.
+     * @returns | Key of the value.
+     */
+    findKeyByValue: (obj, value) => {
+        for (const key in obj) {
+            if (obj[key].includes(value)) {
+                return key;
+            }
+        }
+        return false; // Retorna false se a chave não for encontrada
+    },
+};

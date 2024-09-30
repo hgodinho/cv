@@ -1,5 +1,7 @@
 class Api {
     constructor(e) {
+        // Set the slash character
+        this.slashChar = "&#x2F;";
         this.setup(e);
     }
 
@@ -7,23 +9,33 @@ class Api {
         return [
             "person",
             "place",
-            "role",
-            "certification",
+            "intangible",
+            "credential",
             "creativeWork",
-            "article",
-            "chapter",
             "event",
             "organization",
         ];
     }
 
     _defaultEndpoints() {
-        return ["schema", "properties", "about", "ld-graph"];
+        return [
+            "schema",
+            "properties",
+            "classes",
+            "about",
+            "ld-graph",
+            "locales",
+        ];
     }
 
     setup(e) {
         // Set the request object
         this.request = e;
+
+        // Set the endpoints
+        this.defaultEndpoints = this._defaultEndpoints();
+
+        this.endpoints = [...this.defaultEndpoints, ...this._endpoints()];
 
         // Set the app object
         this.app = new App(this._endpoints());
@@ -31,6 +43,16 @@ class Api {
         // Set the config object
         this.config = this.app.getApiConfig();
 
+        this.parsePath(e);
+
+        this.parameter = e.parameter;
+
+        this.parameters = e.parameters;
+
+        this.queryString = e.queryString;
+    }
+
+    parsePath(e) {
         if (
             typeof e.pathInfo === "undefined" ||
             !e.pathInfo.startsWith(this.getBase(false))
@@ -39,28 +61,83 @@ class Api {
                 status: 400,
                 error: `The path must have namespace and version [cv/v1].`,
             });
+            throw new Error(this.error.message);
+        }
+
+        let prePath = utils.sanitize(
+            e.pathInfo.replace(this.getBase(false), "")
+        );
+
+        // Set the path, parameter, and query string
+        if (prePath.startsWith(this.slashChar)) {
+            prePath = prePath.slice(this.slashChar.length);
+        }
+
+        prePath = prePath.split(this.slashChar).filter(Boolean);
+
+        if (prePath.length === 0 || prePath[0] === "schema") {
+            this.endpoint = "schema";
             return;
         }
 
-        // Set the slash character
-        this.slashChar = "&#x2F;";
+        if (prePath[0] === "locales") {
+            this.endpoint = "locales";
+            return;
+        }
 
-        // Set the endpoints
-        this.defaultEndpoints = this._defaultEndpoints();
-        this.endpoints = [...this.defaultEndpoints, ...this._endpoints()];
+        const [locale, endpoint, slug] = prePath;
 
-        // Set the path, parameter, and query string
-        const prePath = sanitize(e.pathInfo.replace(this.getBase(false), ""));
-        this.path = prePath.startsWith(this.slashChar)
-            ? prePath.slice(this.slashChar.length)
-            : prePath;
+        const l10n = this.app.getL10nConfig().map((l) => l.lang);
 
-        this.parameter = e.parameter;
+        if (!l10n.includes(locale)) {
+            this.error = this.createResponse({
+                status: 400,
+                error: `The locale ${locale} is not supported.`,
+            });
+            throw new Error(this.error.message);
+        }
 
-        this.queryString = e.queryString;
+        this.locale = locale;
 
-        // Set the known paths
-        this.knownPaths = ["schema", ...Object.keys(this.getSchema())];
+        this.app.setupI18n(locale);
+
+        // Set the i18n object
+        this.i18n = new I18n(this.app.getL10nConfig(), locale);
+
+        if (!this.defaultEndpoints.includes(endpoint)) {
+            this.endpoint = this.i18n.getAliasedTranslatedEndpoint(endpoint);
+        } else {
+            this.endpoint = endpoint;
+        }
+
+        if (!this.endpoint) {
+            this.error = this.createResponse({
+                status: 400,
+                error: `The endpoint ${endpoint} is not supported.`,
+            });
+            throw new Error(this.error.message);
+        }
+        this.endpointAlias = endpoint;
+
+        if (slug) {
+            this.slug = slug;
+        }
+    }
+
+    getParameters() {
+        return this.parameters;
+    }
+
+    getParameter() {
+        return this.parameter;
+    }
+
+    getParametersByName(name) {
+        return this.parameters[name];
+    }
+
+    getParameterByName(name) {
+        return this.parameter[name];
     }
 
     getResponse() {
@@ -69,22 +146,18 @@ class Api {
             return this.error;
         }
 
-        const path = this.path;
+        const endpoint = this.endpoint
+            ? this.endpoint.toLowerCase()
+            : undefined;
 
-        // return schema if no path is provided
-        if (path === "" || path === this.slashChar) {
-            return this.createResponse({ status: 200, data: this.getSchema() });
-        }
-
-        const [endpoint, slug] = path.split(this.slashChar);
-
-        // return 404 if the endpoint is unknown
-        if (!this.endpoints.includes(endpoint)) {
+        if (!endpoint) {
             return this.createResponse({
-                status: 404,
-                error: `Unknown endpoint: ${endpoint}`,
+                status: 200,
+                data: this.getSchema(),
             });
         }
+
+        const slug = this.slug;
 
         if (typeof slug === "undefined" || slug === null || slug === "") {
             switch (endpoint) {
@@ -109,6 +182,13 @@ class Api {
                         data: this.app.getProperties(),
                     });
 
+                // return the classes from all endpoints
+                case "classes":
+                    return this.createResponse({
+                        status: 200,
+                        data: this.app.getClasses(),
+                    });
+
                 // return the linked data graph
                 case "ld-graph":
                     return this.createResponse({
@@ -116,12 +196,19 @@ class Api {
                         data: this.getGraphData(),
                     });
 
+                case "locales":
+                    return this.createResponse({
+                        status: 200,
+                        data: this.app.getL10nConfig(),
+                    });
+
                 // return list for the endpoint
+                // TODO add pagination support
                 default:
                     return this.createResponse({
                         status: 200,
                         data: this.prepareResponse(
-                            this.app.getEntityList(endpoint),
+                            this.i18n.getEntities(endpoint),
                             endpoint
                         ),
                     });
@@ -130,9 +217,16 @@ class Api {
 
         // return data for the endpoint based on the slug
         try {
-            const data = this.app.getEntityById(
+            if ("meta" === slug) {
+                return this.createResponse({
+                    status: 200,
+                    data: this.i18n.getEntitiesMeta(endpoint),
+                });
+            }
+
+            const data = this.app.getRowByQuery(
                 endpoint,
-                `${endpoint}/${slug}`
+                `${this.endpointAlias}/${slug}`
             );
             return this.createResponse({
                 status: 200,
@@ -140,8 +234,8 @@ class Api {
             });
         } catch (error) {
             return this.createResponse({
-                status: 404,
-                error: error.message,
+                status: 400,
+                error: `Error: ${error.message}`,
             });
         }
     }
@@ -157,16 +251,25 @@ class Api {
             return data.map((item) => this.prepareResponse(item, endpoint));
         } else if (typeof data === "object") {
             const schema = this.getClassSchema(endpoint);
-            return Object.keys(schema).reduce(
-                (acc, key) => {
+            return Object.entries(schema).reduce(
+                (acc, [key, schema]) => {
                     if (data[key]) {
-                        acc[key] = data[key];
+                        if (
+                            Object.keys(this.getInternalSchema()).includes(key)
+                        ) {
+                            acc[key] = data[key];
+                            return acc;
+                        }
+                        acc[key] = Array.isArray(data[key])
+                            ? data[key]
+                            : data[key].toString();
                     }
                     return acc;
                 },
                 {
                     "@context": "https://schema.org",
                     "@type": data["type"],
+                    "@id": data["id"],
                 }
             );
         }
@@ -178,7 +281,7 @@ class Api {
             response["data"] = data;
         }
         if (error) {
-            response["error"] = error;
+            response["message"] = error;
         }
         return response;
     }
@@ -192,19 +295,32 @@ class Api {
             "@graph": [],
         };
 
-        Object.entries(this.app.rawData).forEach(
-            ([key, { header, values, sheetName }]) => {
-                values.forEach((row) => {
-                    const data = this.prepareResponse(
-                        new Entity(header, row, this.config),
-                        sheetName
-                    );
-                    json["@graph"].push(data);
-                });
-            }
-        );
+        this._endpoints().forEach((endpoint) => {
+            const entities = this.i18n.getEntities(endpoint);
+            json["@graph"].push(...entities);
+        });
 
         return json;
+    }
+
+    getInternalSchema() {
+        return {
+            _id: {
+                type: "string",
+            },
+            id: {
+                type: "string",
+            },
+            "@id": {
+                type: "string",
+            },
+            "@type": {
+                type: "string",
+            },
+            path: {
+                type: "string",
+            },
+        };
     }
 
     getSchema() {
@@ -257,7 +373,52 @@ class Api {
                             {
                                 type: "array",
                                 items: {
-                                    type: "string",
+                                    type: "array",
+                                    items: {
+                                        type: "string",
+                                    },
+                                },
+                            },
+                        ];
+
+                    case "classes":
+                        return [
+                            e,
+                            {
+                                type: "array",
+                                items: {
+                                    type: "array",
+                                    items: {
+                                        type: "string",
+                                    },
+                                },
+                            },
+                        ];
+
+                    case "locales":
+                        return [
+                            e,
+                            {
+                                type: "array",
+                                items: {
+                                    type: "object",
+                                    properties: {
+                                        lang: {
+                                            type: "string",
+                                        },
+                                        name: {
+                                            type: "string",
+                                        },
+                                        id: {
+                                            type: "string",
+                                        },
+                                        icon: {
+                                            type: "string",
+                                        },
+                                        principal: {
+                                            type: "string",
+                                        },
+                                    },
                                 },
                             },
                         ];
@@ -275,12 +436,15 @@ class Api {
         );
     }
 
+    isDateSchema(schema) {
+        if (schema.hasOwnProperty("oneOf")) {
+            return schema.oneOf[0].format === "date-time";
+        }
+        return schema.format === "date-time";
+    }
+
     getClassSchema(className) {
-        const { values } = this.app.findValuesFromSheet(
-            "meta",
-            `[${className}]`,
-            5
-        );
+        const values = this.app.getRawPropertiesMeta(className);
 
         const oneOf = {
             oneOf: [
@@ -291,8 +455,24 @@ class Api {
             ],
         };
 
+        const date = {
+            oneOf: [
+                {
+                    type: "string",
+                    format: "date-time",
+                },
+                {
+                    type: "array",
+                    items: {
+                        type: "string",
+                        format: "date-time",
+                    },
+                },
+            ],
+        };
+
         const properties = values.reduce(
-            (acc, [cName, property, type, uri, obs], i) => {
+            (acc, [cName, property, type, i18n, uri, obs], i) => {
                 if (i === 0) {
                     if (obs) {
                         if (obs.trim().startsWith("+")) {
@@ -303,20 +483,19 @@ class Api {
                     }
                     return acc; // skip class name
                 }
-                acc[property] = oneOf;
+                if (Object.keys(this.getInternalSchema()).includes(property)) {
+                    return acc; // skip internalSchema properties
+                }
+
+                if (type.includes("Date")) {
+                    acc[property] = date;
+                } else {
+                    acc[property] = oneOf;
+                }
+
                 return acc;
             },
-            {
-                _id: {
-                    type: "string",
-                },
-                "@id": {
-                    type: "string",
-                },
-                "@type": {
-                    type: "string",
-                },
-            }
+            this.getInternalSchema()
         );
 
         return properties;

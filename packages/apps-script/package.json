@@ -8,7 +8,9 @@
         "open": "clasp open",
         "pull": "clasp pull",
         "push": "clasp push",
-        "dev": "clasp open && clasp push --watch"
+        "dev": "clasp open && clasp push --watch",
+        "cred": "clasp login --creds creds.json",
+        "token": "clasp run getToken"
     },
     "keywords": [],
     "license": "ISC"

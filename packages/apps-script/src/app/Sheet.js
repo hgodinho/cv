@@ -1,91 +1,6 @@
 class Sheet {
-    constructor(id, sheets) {
-        this.setupSpreadsheet(id, sheets);
-    }
-
-    /**
-     *                                     d8b  .d888 d8b
-     *                                     Y8P d88P"  Y8P
-     *                                         888
-     * .d8888b  88888b.   .d88b.   .d8888b 888 888888 888  .d8888b
-     * 88K      888 "88b d8P  Y8b d88P"    888 888    888 d88P"
-     * "Y8888b. 888  888 88888888 888      888 888    888 888
-     *      X88 888 d88P Y8b.     Y88b.    888 888    888 Y88b.
-     *  88888P' 88888P"   "Y8888   "Y8888P 888 888    888  "Y8888P
-     *          888
-     *          888
-     *          888
-     */
-    getApiConfig() {
-        return this.findValuesFromSheet("config", "[api]", 2).values.reduce(
-            (acc, [key, value]) => {
-                acc[key] = value;
-                return acc;
-            },
-            {}
-        );
-    }
-
-    getAbout() {
-        return this.findValuesFromSheet("config", "[about]", 2).values.reduce(
-            (acc, [key, value]) => {
-                acc[key] = value;
-                return acc;
-            },
-            {}
-        );
-    }
-
-    getProperties() {
-        return this.findValuesFromSheet("config", "[properties]", 2).values.map(
-            ([name, order]) => name
-        );
-    }
-
-    getMetaHeader(sheetName) {
-        return this.findValuesFromSheet(
-            sheetName,
-            `[${sheetName}]`,
-            this.sheets[sheetName].metadata
-        ).header;
-    }
-
-    getEntityById(sheetName, id) {
-        const sheet = this.getSpreadsheet().getSheetByName(sheetName);
-
-        const finder = sheet.createTextFinder(id);
-        const ranges = finder.findAll();
-
-        let data;
-        for (const range of ranges) {
-            const value = range.getValue();
-            if (value === id) {
-                const row = range.getRow();
-                const header = this.getMetaHeader(sheetName);
-                const values = sheet
-                    .getRange(row, 2, 1, sheet.getLastColumn() - 1)
-                    .getValues()[0];
-                data = new Entity(header, values, this.getApiConfig());
-            }
-        }
-
-        if (!data) {
-            throw new Error(`No row found with id ${id}`);
-        }
-
-        return data;
-    }
-
-    getEntityList(sheetName) {
-        const { header, values } = this.findValuesFromSheet(
-            sheetName,
-            `[${sheetName}]`,
-            this.sheets[sheetName].metadata
-        );
-
-        return values.map(
-            (row) => new Entity(header, row, this.getApiConfig())
-        );
+    constructor(id) {
+        this.setupSpreadsheet(id);
     }
 
     /**
@@ -138,30 +53,58 @@ class Sheet {
         return { header, values, sheetName, key };
     }
 
-    findValuesFromSheet(sheetName, key, columns, rows = "auto") {
-        const { header, values, ...rest } = this.findRangeFromSheet({
+    findValuesFromSheet(
+        sheetName,
+        key,
+        columns = undefined,
+        rows = "auto",
+        header
+    ) {
+        const {
+            header: headerValues,
+            values,
+            ...rest
+        } = this.findRangeFromSheet({
             sheetName,
             key,
             columns,
             rows,
+            header,
         });
 
         return {
-            header: header ? header.getValues()[0] : [],
+            header: headerValues ? headerValues.getValues()[0] : [],
             values: typeof values !== "undefined" ? values.getValues() : [],
             ...rest,
         };
     }
 
-    findRangeFromSheet({ sheetName, key, rows = "auto", columns }) {
-        const sheet = this.getSpreadsheet().getSheetByName(sheetName);
+    findRangeFromSheet({
+        sheetName,
+        key,
+        rows = "auto",
+        columns = undefined,
+        header,
+    }) {
+        key = `[${key}]`; // add brackets to key
+        if (typeof header === "undefined") header = true;
+
+        const sheet = this.getSheet(sheetName);
+
         const finder = sheet.createTextFinder(key);
 
         const range = finder.findNext();
         if (!range)
-            throw new Error(`No row found with key ${key} in ${sheetName}`);
+            throw new Error(
+                `No row found with key=${key} in sheetName=${sheetName}`
+            );
         const dataColumn = range.getColumn();
         let dataRow = range.getRow();
+
+        columns =
+            typeof columns === "undefined"
+                ? sheet.getLastColumn() - 1
+                : columns;
 
         const sheetTotalRows = sheet
             .getRange(dataRow, dataColumn + columns - 1)
@@ -178,19 +121,100 @@ class Sheet {
             totalRows = rows || 1;
         }
 
-        const header = sheet.getRange(dataRow + 1, dataColumn, 1, columns);
+        let head = null;
+        let offset = 1;
+        if (header) {
+            head = sheet.getRange(dataRow + offset, dataColumn, 1, columns);
+        } else {
+            offset = 0;
+        }
 
         let values = undefined;
-
         if (totalRows > 0)
             values = sheet.getRange(
-                dataRow + 2,
+                dataRow + offset + 1,
                 dataColumn,
                 totalRows,
                 columns
             );
 
-        return { header, values, sheetName, key };
+        return { header: head, values, sheetName, key, total: totalRows };
+    }
+
+    getValueFromSheet(sheetName, range) {
+        const sheet = this.getSheet(sheetName);
+        return sheet.getRange(range).getValue();
+    }
+
+    getOffset(sheetName) {
+        const sheet = this.getSheet(sheetName);
+        const finder = sheet.createTextFinder("offset");
+        const range = finder.findNext();
+        const offset = sheet.getRange(range.getRow(), range.getColumn() + 1);
+        return offset.getValue();
+    }
+
+    getTotalRows(sheetName) {
+        const { total } = this.findRangeFromSheet({
+            sheetName,
+            key: sheetName,
+        });
+        return total;
+    }
+
+    getRowById(sheetName, id) {
+        const sheet = this.getSheet(sheetName);
+        const offset = this.getOffset(sheetName);
+        const total = this.getTotalRows(sheetName);
+        const range = sheet.getRange(offset + 1, 2, total);
+
+        let row;
+
+        id = id.trim().toString();
+        id = id ? id : false;
+
+        if (!id) {
+            throw new Error(
+                `No id provided for sheet "${sheetName}", id received was "${id}"`
+            );
+        }
+
+        range.getValues().forEach((data, i) => {
+            if (data[0] === id) {
+                row = i + offset + 1;
+            }
+        });
+        if (!row) {
+            throw new Error(
+                `No row found with id "${id}" at sheet "${sheetName}"`
+            );
+        }
+        const rangeRow = sheet.getRange(row, 2, 1, sheet.getLastColumn() - 1);
+        const valuesRow = rangeRow.getValues();
+
+        return valuesRow[0];
+    }
+
+    getRowByQuery(sheetName, query) {
+        const sheet = this.getSheet(sheetName);
+        const finder = sheet.createTextFinder(query);
+        const ranges = finder.findAll();
+
+        for (const range of ranges) {
+            const value = range.getValue();
+            if (value === query) {
+                const row = range.getRow();
+                const values = sheet
+                    .getRange(row, 2, 1, sheet.getLastColumn() - 1)
+                    .getValues()[0];
+                return values;
+            }
+        }
+    }
+
+    getHeader(sheetName) {
+        const { header } = this.findValuesFromSheet(sheetName, sheetName);
+        return header;
     }
 
     /**
@@ -201,24 +225,10 @@ class Sheet {
      * Y88b.   Y88..88P 888    Y8b.
      *  "Y8888P "Y88P"  888     "Y8888
      */
-    setupSpreadsheet(id, sheets) {
+    setupSpreadsheet(id) {
         if (id) {
             this.id = id;
             this.spreadsheet = SpreadsheetApp.openById(id);
-        }
-        if (sheets) {
-            this.sheets = sheets.reduce((acc, endpoint) => {
-                const { values, header } = this.findValuesFromSheet(
-                    "dashboard",
-                    `[${endpoint}]`,
-                    2
-                );
-                acc[endpoint] = values.reduce((acc, row) => {
-                    acc[row[0]] = row[1];
-                    return acc;
-                }, {});
-                return acc;
-            }, {});
         }
     }
 
@@ -226,6 +236,10 @@ class Sheet {
         const sheet = this.getSpreadsheet().getSheetByName(name);
         if (!sheet) return false;
         return true;
+    }
+
+    createSheet(name) {
+        return this.getSpreadsheet().insertSheet(name);
     }
 
     getSpreadsheet() {
