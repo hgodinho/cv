@@ -243,6 +243,62 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
             return acc;
         }, {} as Record<LOCALES, LinkObject[]>);
 
+        const endpoints = {
+            en: [
+                ["Person", "person"],
+                ["Place", "place"],
+                ["Intangible", "intangible"],
+                ["Credential", "credential"],
+                ["CreativeWork", "creative-work"],
+                ["Event", "event"],
+                ["Organization", "organization"],
+            ],
+            pt_br: [
+                ["Person", "pessoa"],
+                ["Place", "lugar"],
+                ["Intangible", "intangivel"],
+                ["Credential", "credencial"],
+                ["CreativeWork", "trabalho-criativo"],
+                ["Event", "evento"],
+                ["Organization", "organizacao"],
+            ],
+            es: [
+                ["Person", "persona"],
+                ["Place", "lugar"],
+                ["Intangible", "intangible"],
+                ["Credential", "credencial"],
+                ["CreativeWork", "trabajo-creativo"],
+                ["Event", "evento"],
+                ["Organization", "organizacion"],
+            ],
+        };
+
+        const meta = {};
+
+        for (const [locale, localeEndpoints] of Object.entries(
+            endpoints
+        )) {
+            meta[locale] = await Promise.all(
+                localeEndpoints.map(async ([type, endpoint]) => {
+                    const response = await fetchData(
+                        `${locale}/${endpoint}/meta`,
+                        () => {
+                            reporter.info(
+                                `[@hgod-in/data] Fetching ${endpoint}/meta for "${locale}"`
+                            );
+                        },
+                        (response) => {
+                            reporter.success(
+                                `[@hgod-in/data] Found "${response.data.title}" at "${endpoint}/meta" for "${locale}"`
+                            );
+                        }
+                    );
+
+                    return { endpoint, type, meta: response };
+                })
+            );
+        }
+
         /**
          * Gatsby's cache API uses LMDB to store data inside the .cache/caches folder.
          *
@@ -277,6 +333,19 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
         sourcingTimer.setStatus(
             `Processing ${nodes.en.length} nodes and ${links.en.length} links for ${locales.length} locales`
         );
+
+        /**
+         * Create nodes
+         */
+        nodeBuilder({
+            gatsbyApi,
+            id: "Meta",
+            input: {
+                type: NODE_TYPES.Meta,
+                data: meta,
+            },
+        });
+
         /**
          * Create nodes
          */

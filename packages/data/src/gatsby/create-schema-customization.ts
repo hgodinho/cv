@@ -1,6 +1,25 @@
 export const createSchemaCustomization = ({ actions }) => {
     const { createTypes } = actions;
     const typeDefs = `
+        type MetaResponse {
+            title: String
+            type: String
+            description: String
+            allowed_types: [String]
+        }
+
+        type MetaEndpoint {
+            endpoint: String
+            type: String
+            meta: MetaResponse
+        }
+
+        type Meta implements Node {
+            es: [MetaEndpoint]
+            pt_br: [MetaEndpoint]
+            es: [MetaEndpoint]
+        }
+
         type Person implements Node {
             _context: String
             _id: String!

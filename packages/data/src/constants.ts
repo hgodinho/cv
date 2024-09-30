@@ -21,6 +21,7 @@ export const ENDPOINTS = {
 } as const;
 
 export const NODE_TYPES = {
+    Meta: "Meta",
     Locales: "Locales",
     Graph: "Graph",
     Properties: "Properties",

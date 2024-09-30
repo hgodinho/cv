@@ -82,11 +82,25 @@ export interface NodeBuilderArgs {
     input: NodeInput;
 }
 
+export type Meta = {
+    title: string;
+    type: string;
+    description: string;
+    allowed_types: string[];
+};
+
+export type MetaEndpoint = {
+    endpoint: string;
+    type: string;
+    meta: Meta;
+};
+
 export type PageQueryResponse = {
     graph: Graph;
     properties: Properties;
     classes: Classes;
     locales: Locales;
+    meta: Record<LOCALES, MetaEndpoint[]>;
     site: {
         siteMetadata: {
             title: string;
@@ -96,6 +110,7 @@ export type PageQueryResponse = {
     };
 };
 
+
 export type PageContext = {
     id: string;
     name: string;
@@ -103,7 +118,8 @@ export type PageContext = {
     properties: Properties;
     classes: Classes;
     graph: Graph;
-    // locale: LOCALES;
+    meta: Record<LOCALES, MetaEndpoint[]>;
+    locale: LOCALES;
     locales: Locales;
     site: {
         title: string;

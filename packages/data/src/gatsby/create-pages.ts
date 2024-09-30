@@ -68,6 +68,38 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
                 }
             }
         }
+        meta {
+            en {
+                endpoint
+                type
+                meta {
+                    allowed_types
+                    description
+                    title
+                    type
+                }
+            }
+            es {
+                endpoint
+                type
+                meta {
+                    allowed_types
+                    description
+                    title
+                    type
+                }
+            }
+            pt_br {
+                endpoint
+                type
+                meta {
+                    allowed_types
+                    description
+                    title
+                    type
+                }
+            }
+        }
         locales {
             en {
                 lang
@@ -109,6 +141,7 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
     const properties = result.data?.properties;
     const classes = result.data?.classes;
     const graph = result.data?.graph;
+    const meta = result.data?.meta;
 
     Object.entries(graph.nodes).forEach(([locale, nodes]) => {
         for (const node of nodes) {
@@ -128,6 +161,7 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
                         properties,
                         classes,
                         graph,
+                        meta
                     },
                 });
             }
