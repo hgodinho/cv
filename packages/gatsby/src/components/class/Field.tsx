@@ -1,11 +1,21 @@
 import React, { Key, ReactNode, useCallback } from "react";
 
-import { Link, Label, type LabelProps } from "#root/components";
-import { useCVContext, useFilterContext, useI18nContext } from "#root/provider";
+import {
+    Link,
+    Label,
+    type LabelProps,
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from "#root/components";
+import { useCVContext } from "#root/provider";
 import { tw } from "#root/lib";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { Info, Hash, AtSign } from "lucide-react";
 
 export type FieldLabelProps = {
     url?: string;
+    name: string;
     value: string;
 } & LabelProps;
 
@@ -14,23 +24,72 @@ export function FieldLabel({
     value,
     children,
     className,
+    name,
     ...rest
 }: React.PropsWithChildren<FieldLabelProps>) {
     return (
         <Label
             as="div"
-            className={tw("flex", "flex-col", "mb-6", "gap-2", className)}
+            className={tw(
+                "flex",
+                "flex-col",
+                "mb-6",
+                "gap-2",
+                "font-bold",
+                className
+            )}
             {...rest}
         >
-            {url ? <Link href={url}>{value}</Link> : value}
+            {url ? (
+                <span className={tw("flex", "flex-row", "gap-2")}>
+                    {value}
+                    <TooltipProvider delayDuration={300}>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Info className={tw("w-4", "h-4")} />
+                            </TooltipTrigger>
+                            <TooltipContent
+                                className={tw("flex", "flex-col", "text-xs")}
+                            >
+                                <span
+                                    className={tw(
+                                        "flex",
+                                        "flex-row",
+                                        "items-center",
+                                        "gap-1"
+                                    )}
+                                >
+                                    <Hash className={tw("w-4", "w-4")} />
+                                    {name}
+                                </span>
+                                <span
+                                    className={tw(
+                                        "flex",
+                                        "flex-row",
+                                        "items-center",
+                                        "gap-1"
+                                    )}
+                                >
+                                    <AtSign className={tw("w-4", "w-4")} />
+                                    <Link href={url} className={tw()}>
+                                        schema.org
+                                    </Link>
+                                </span>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </span>
+            ) : (
+                value
+            )}
             {children}
         </Label>
     );
 }
 
 export type FieldProps = {
-    label: FieldLabelProps;
     value: ReactNode;
+    label?: FieldLabelProps;
     find?: boolean;
     className?: string;
 };
@@ -45,7 +104,7 @@ export function Field({ label, value, find, className }: FieldProps) {
             const url = value ? value.toString() : "";
 
             if (value?.toString().startsWith("http") && find) {
-                const found = nodes.find((node) => node["id"] === value);
+                const found = nodes?.find((node) => node["id"] === value);
                 if (found) {
                     value = <Link href={url}>{found["name"]}</Link>;
                 }
@@ -76,7 +135,12 @@ export function Field({ label, value, find, className }: FieldProps) {
     );
 
     return (
-        <FieldLabel className={tw("field", className)} {...label}>
+        <FieldLabel
+            className={tw("field", className)}
+            {...label}
+            name={label?.name || ""}
+            value={label?.value || ""}
+        >
             {Array.isArray(value) ? (
                 <ul className={tw("list-[square]", "list-inside", "ml-4")}>
                     {value.map((value: ReactNode, i: Key) => (

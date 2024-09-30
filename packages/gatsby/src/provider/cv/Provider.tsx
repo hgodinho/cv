@@ -6,35 +6,44 @@ import React, {
     useReducer,
     useRef,
 } from "react";
-import { LinkObject, NodeObject } from "react-force-graph-3d";
+import { NodeObject } from "react-force-graph-3d";
 import { CVContext } from "./Context";
 import { defaultCVContext } from "./defaultContext";
 
-import { navigate } from "gatsby";
-import { FilterProvider } from "../filter";
 import { usePageContext } from "../page";
-import { LOCALES, Properties } from "@hgod-in-cv/data/src/types";
-import { I18nProviderType, useI18nContext } from "../i18n";
+import { useI18nContext } from "../i18n";
 
 export function CVProvider({ children }: React.PropsWithChildren<{}>) {
-    const {
-        pageContext: { graph, properties: pageProperties },
-        location: { pathname },
-        data,
-    } = usePageContext();
+    const context = usePageContext();
 
-    const { locale } = useI18nContext();
+    const { locale, setLocale } = useI18nContext();
 
-    const { nodes, links, properties } = useMemo(() => {
+    const { nodes, links, properties, classes, meta } = useMemo(() => {
         return {
-            nodes: graph.nodes[locale],
-            links: graph.links[locale],
-            properties: pageProperties[locale].reduce((acc, [key, label]) => {
-                acc[key] = label;
-                return acc;
-            }, {} as Record<string, string>),
+            nodes: context.pageContext?.graph.nodes[locale],
+            links: context.pageContext?.graph.links[locale],
+            meta: context.pageContext?.meta[locale],
+            properties: context.pageContext?.properties[locale].reduce(
+                (acc, [key, label]) => {
+                    acc[key] = label;
+                    return acc;
+                },
+                {} as Record<string, string>
+            ),
+            classes: context.pageContext?.classes[locale].reduce(
+                (acc, [key, label]) => {
+                    acc[key] = label;
+                    return acc;
+                },
+                {} as Record<string, string>
+            ),
         };
-    }, [locale, graph, pageProperties]);
+    }, [
+        locale,
+        context.pageContext?.graph,
+        context.pageContext?.properties,
+        context.pageContext?.classes,
+    ]);
 
     // Reference to the header element
     const headerRef = useRef<HTMLHeadingElement>(null);
@@ -44,17 +53,9 @@ export function CVProvider({ children }: React.PropsWithChildren<{}>) {
             return { ...state, ...partial };
         },
         {
-            selected: Object.values(data)[0] as NodeObject,
+            selected: Object.values(context.data || {})[0] as NodeObject,
             connectedTo: [],
         }
-    );
-
-    const getNodeByID = useCallback(
-        (id: string, locale: LOCALES = "en") =>
-            graph.nodes[locale].find((node) => {
-                return id === node._id;
-            }),
-        [graph.nodes]
     );
 
     const setSelected = useCallback(
@@ -66,76 +67,47 @@ export function CVProvider({ children }: React.PropsWithChildren<{}>) {
         [state.selected]
     );
 
-    const setConnectedTo = useCallback((connectedTo: LinkObject[]) => {
-        setState({ connectedTo });
-    }, []);
-
     useEffect(() => {
-        const selected = Object.values(data)[0] as NodeObject;
-        if (selected) {
-            const connectedTo = links.filter((link) => {
+        const selected = Object.values(context.data || {})[0] as NodeObject;
+        if (
+            (selected && selected.id !== state.selected?.id) ||
+            selected._id !== state.selected?._id
+        ) {
+            const connectedTo = links?.filter((link) => {
                 // @ts-ignore
                 return link.target?._id === selected._id;
             });
-            // setSelected(selected);
-            // setConnectedTo(connectedTo);
             setState({ selected, connectedTo });
+            setLocale(selected.locale);
         }
-    }, [data]);
+        context.setNavigating(false);
+    }, [context.data, links]);
 
     useEffect(() => {
         if (state.selected && state.selected.locale !== locale) {
-            const found = nodes.find(
+            const found = nodes?.find(
                 (node) => node._id === state.selected?._id
             );
-            if (found) {
+            if (found && !context.navigating) {
                 const url = `/${locale}/${found.path}`;
-                if (!pathname.includes(url)) {
-                    console.log("I18nProvider found", {
-                        url,
-                        locale,
-                        pathname,
-                        found,
-                    });
-                    navigate(url);
+                if (!context.location?.pathname.includes(url)) {
+                    context.setNavigating(true);
+                    context.navigate(url);
+                    headerRef.current?.focus();
                 }
             }
         }
-    }, [locale, nodes, state.selected]);
-
-    useEffect(() => {
-        console.log({ selected: state.selected });
-    }, [state.selected]);
-
-    // useEffect(() => {
-    //     const found = filterNodes(`${type}/${id}`);
-    //     if (found) {
-    //         const connectedTo = links.filter((link) => {
-    //             return link.object === found.id;
-    //         });
-    //         setState({ selected: found, connectedTo });
-    //     }
-    // }, [type, id]);
-
-    /**
-     * Navigate to the selected node
-     */
-    // useEffect(() => {
-    //     const path = state.selected ? `/${state.selected._id}` : false;
-    //     console.log({ selected: state.selected, path });
-    //     if (path) {
-    //         navigate(path);
-    //         headerRef.current?.focus();
-    //     }
-    // }, [state.selected, navigate]);
+    }, [locale, nodes, state.selected, context.navigating]);
 
     const cv: CVContextType = {
         ...defaultCVContext,
         headerRef,
-        graph,
+        graph: context.pageContext?.graph,
         properties,
+        classes,
         nodes,
         links,
+        meta,
         selected: state.selected,
         connectedTo: state.connectedTo,
         setSelected,

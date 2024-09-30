@@ -64,41 +64,6 @@ export function L10NSelect() {
             }}
         >
             <Trigger locale={locale} locales={locales} />
-            {/* <SelectTrigger
-                className={tw(
-                    "col-start-2",
-                    "col-span-1",
-                    "row-start-5",
-                    "row-span-1",
-                    "z-10",
-                    // "pl-1",
-                    // "justify-center",
-                    // "items-center",
-                    "focus:outline-none",
-                    "focus:ring-4",
-                    "focus:ring-inset",
-                    // "text-black",
-                    // "disabled:bg-black/40",
-                    // "focus:ring-gray-500",
-                    // "bg-gray-300",
-                    // "hover:bg-gray-100",
-                    // "focus:bg-gray-300",
-                    "disabled:cursor-not-allowed",
-                    "ring-offset-0",
-                    "border-0",
-                    "rounded-none"
-                )}
-            >
-                <SelectValue>
-                    <span
-                        className={tw(
-                            "fi",
-                            `fi-${locales[locale].icon}`,
-                            "text-xs"
-                        )}
-                    ></span>
-                </SelectValue>
-            </SelectTrigger> */}
             <SelectContent
                 className={tw("rounded-none", "min-w-0", "bg-black/90")}
             >

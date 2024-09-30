@@ -1,14 +1,16 @@
-import type { PageProviderType } from "./";
-import React, { useCallback } from "react";
+import type { PageProviderType, PageActions } from "./";
+import React, { useCallback, useEffect } from "react";
 import { PageContext } from "./Context";
 import { navigate, withPrefix } from "gatsby";
 
 export function PageProvider({
     children,
     ...props
-}: React.PropsWithChildren<PageProviderType>) {
-    const navigateTo = useCallback<PageProviderType["navigate"]>(
-        (route, options) => {
+}: React.PropsWithChildren<PageProviderType & PageActions>) {
+    const [navigating, setNavigating] = React.useState(false);
+
+    const navigateTo = useCallback<PageActions["navigate"]>(
+        async (route, options) => {
             return navigate(
                 typeof route === "number"
                     ? route.toString()
@@ -21,7 +23,15 @@ export function PageProvider({
 
     return (
         <PageContext.Provider
-            value={{ ...props, navigate: navigateTo, children }}
+            value={
+                {
+                    ...props,
+                    navigating,
+                    navigate: navigateTo,
+                    setNavigating,
+                    children,
+                } as PageProviderType & PageActions
+            }
         >
             {children}
         </PageContext.Provider>

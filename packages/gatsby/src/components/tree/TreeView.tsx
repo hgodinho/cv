@@ -10,7 +10,7 @@ import * as RATree from "#root/components/accessible-tree";
 
 import { Checkbox } from ".";
 import { tw, useTree } from "#root/lib";
-import { useTheme } from "#root/provider";
+import { useCVContext, useFilterContext, useTheme } from "#root/provider";
 import { Scroll, Link } from "#root/components";
 
 export type TreeTypeEnum = "filter" | "link";
@@ -54,17 +54,19 @@ export function Tree({ mode = "link" }: TreeProps) {
         };
         if (mode === "filter") {
             filterProps = {
+                ...filterProps,
                 multiSelect: true,
                 propagateSelect: true,
                 propagateSelectUpwards: true,
                 togglableSelect: true,
-                onSelect: (props) => onCheck(props, mode),
             };
         }
         return {
             filterProps,
         };
     }, [mode]);
+
+    const { meta } = useCVContext();
 
     return (
         <nav className={tw("cv", "mr-4", "mt-2", "flex", "flex-col")}>
@@ -75,12 +77,24 @@ export function Tree({ mode = "link" }: TreeProps) {
                 className={tw(
                     "*:outline-none",
                     "focus:*:bg-gray-900",
-                    "focus:*:font-bold"
+                    // "focus:*:font-bold"
                 )}
                 defaultSelectedIds={initialSelectedIds}
                 expandOnKeyboardSelect={true}
                 nodeRenderer={(props) => {
-                    return <Branch mode={mode} {...props} />;
+                    const metaEndpoint = meta?.find(
+                        (endpoint) => endpoint.type === props.element.id
+                    );
+                    return (
+                        <>
+                            <Branch mode={mode} {...props} />
+                            {(props.isExpanded && metaEndpoint) && (
+                                <p className={tw("text-sm", "py-1", "pl-4")}>
+                                    {metaEndpoint?.meta.description}
+                                </p>
+                            )}
+                        </>
+                    );
                 }}
             />
         </nav>
@@ -121,9 +135,9 @@ export function Branch({
                 "gap-1",
                 "py-2",
                 "cursor-pointer",
-                "hover:text-blue-300",
+                // "hover:text-blue-300",
                 "focus:outline-none",
-                "focus:font-bold",
+                // "focus:font-bold",
                 "focus:decoration-dotted",
                 "focus:underline-offset-4",
                 "focus:underline",
@@ -133,6 +147,10 @@ export function Branch({
             style={{
                 marginLeft: 32 * (level - 1),
                 borderColor:
+                    typeof element.metadata?.color !== "undefined"
+                        ? (element.metadata.color as string)
+                        : undefined,
+                color:
                     typeof element.metadata?.color !== "undefined"
                         ? (element.metadata.color as string)
                         : undefined,
@@ -173,16 +191,37 @@ export function Branch({
 }
 
 export function BranchLabel({ element }: { element: INode }) {
+    const { classes } = useFilterContext();
+
+    const label = useMemo(() => {
+        if (classes?.hasOwnProperty(element.name)) {
+            return classes[element.name];
+        }
+        return element.name;
+    }, [classes]);
+
+    const style = useMemo(() => {
+        return {
+            color:
+                typeof element.metadata?.color !== "undefined"
+                    ? (element.metadata.color as string)
+                    : undefined,
+        };
+    }, [element.metadata]);
+
     const isLink = typeof element.metadata?.id !== "undefined";
     return isLink ? (
         <Link
             href={element.metadata?.id as string}
             tabIndex={-1}
             className={tw("mr-2")}
+            style={style}
         >
-            {element.name}
+            {label}
         </Link>
     ) : (
-        <span className={tw("mr-2")}>{element.name}</span>
+        <span className={tw("mr-2")} style={style}>
+            {label}
+        </span>
     );
 }

@@ -41,6 +41,7 @@ export const query = graphql`
             hasCertification
             hasOccupation
             knowsAbout
+            knowsLanguage
             memberOf
             performerIn
             seeks

@@ -4,14 +4,18 @@ import { ExternalLink } from "react-feather";
 import { Link as GatsbyLink } from "gatsby";
 
 export type LinkProps = {
-    href: string;
+    iconClass?: string;
 };
 
 export function Link({
     href,
     children,
+    iconClass,
+    style,
     ...props
-}: React.PropsWithChildren<React.AnchorHTMLAttributes<HTMLAnchorElement>>) {
+}: React.PropsWithChildren<
+    React.AnchorHTMLAttributes<HTMLAnchorElement> & LinkProps
+>) {
     const { to, internal, isActive, target, ...rest } = useLink(href || "");
 
     const className = useMemo(() => {
@@ -29,17 +33,27 @@ export function Link({
     }, [isActive, props.className]);
 
     return internal ? (
-        <GatsbyLink to={to} className={className}>{children}</GatsbyLink>
+        <GatsbyLink to={to} className={className} style={style}>
+            {children}
+        </GatsbyLink>
     ) : (
         <a
             className={className}
             {...rest}
             target={props.target || target}
             href={to}
+            style={style}
         >
-            <span className={tw("flex", "gap-2")}>
+            <span className={tw("flex", "gap-1")}>
                 {children}
-                <ExternalLink className={tw("self-center", "w-4", "h-4")} />
+                <ExternalLink
+                    className={tw(
+                        "self-center",
+                        "w-[12px]",
+                        "h-[12px]",
+                        iconClass
+                    )}
+                />
             </span>
         </a>
     );

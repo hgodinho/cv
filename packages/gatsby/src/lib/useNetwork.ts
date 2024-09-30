@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, createRef, useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { NodeObject, LinkObject } from "react-force-graph-3d";
 import SpriteText from "three-spritetext";
 
@@ -21,7 +21,7 @@ export function useNetwork() {
     const { navigate } = usePageContext();
 
     const { locale } = useI18nContext();
-    const { filteredNodes, filteredLinks, selected, setSelected } =
+    const { filteredNodes, filteredLinks, selected, properties, setSelected } =
         useFilterContext();
 
     const [loaded, setLoaded] = useState(false);
@@ -73,10 +73,17 @@ export function useNetwork() {
         return node.id;
     }, []);
 
-    const linkLabel = useCallback((link: LinkObject) => {
-        const sprite = new SpriteText(link.predicate, 1.5, "lightgrey");
-        return sprite;
-    }, []);
+    const linkLabel = useCallback(
+        (link: LinkObject) => {
+            const sprite = new SpriteText(
+                properties?.[link.predicate].toLowerCase(),
+                2,
+                "lightgrey"
+            );
+            return sprite;
+        },
+        [properties]
+    );
 
     // @ts-ignore
     const linkLabelPosition = useCallback((sprite, { start, end }) => {
@@ -96,7 +103,7 @@ export function useNetwork() {
     );
 
     useEffect(() => {
-        const found = filteredNodes.find((node) => {
+        const found = filteredNodes?.find((node) => {
             return node._id === selected?._id;
         });
 
@@ -113,7 +120,7 @@ export function useNetwork() {
 
     useEffect(() => {
         if (selected && loaded) {
-            const found = filteredNodes.find((node) => {
+            const found = filteredNodes?.find((node) => {
                 return node._id === selected._id;
             });
             if (found) {

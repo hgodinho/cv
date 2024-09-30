@@ -9,8 +9,8 @@ export function FilterProvider({ children }: React.PropsWithChildren<{}>) {
     const { locale } = useI18nContext();
     const cv = useCVContext();
 
-    const [filteredNodes, setNodes] = useState<NodeObject[]>(cv.nodes);
-    const [filteredLinks, setLinks] = useState<LinkObject[]>(cv.links);
+    const [filteredNodes, setNodes] = useState<NodeObject[] | undefined>(cv.nodes);
+    const [filteredLinks, setLinks] = useState<LinkObject[] | undefined>(cv.links);
 
     const filterNodes = useCallback(
         (filter: FilterNodesFN) => {

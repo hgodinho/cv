@@ -8,13 +8,13 @@ import {
 import type { TreeViewProps } from "#root/components";
 import { useFilterContext, useI18nContext, useTheme } from "#root/provider";
 import { getType } from "@hgod-in-cv/data/dist/utils";
-import { NodeObject } from "react-force-graph-3d";
-import { alphaHex } from ".";
+import { LinkObject, NodeObject } from "react-force-graph-3d";
 
 export function useTree() {
     const {
-        graph: { nodes },
+        graph,
         selected,
+        classes,
         filteredNodes,
         setSelected,
         filterNodes,
@@ -26,21 +26,16 @@ export function useTree() {
     const { colors } = useTheme();
 
     const { treeData, initialSelectedIds } = useMemo(() => {
-        const lvls = {
-            one: (type: string) => alphaHex(colors[type], 0.9),
-            two: (type: string) => alphaHex(colors[type], 0.6),
-        };
-
-        const childrenObject = nodes[locale].reduce((acc, cur) => {
+        const childrenObject = graph?.nodes[locale].reduce((acc, cur) => {
             const type = getType(cur);
 
             if (!acc.hasOwnProperty(type)) {
                 if (type === cur._type) {
                     acc[type] = {
-                        name: type,
+                        name: classes?.[type],
                         id: type,
                         metadata: {
-                            color: lvls.one(type),
+                            color: colors[cur._type],
                         },
                         children: [
                             {
@@ -48,24 +43,24 @@ export function useTree() {
                                 id: cur.id,
                                 metadata: {
                                     ...cur,
-                                    color: lvls.two(type),
+                                    color: colors[cur._type],
                                 },
                             },
                         ],
                     };
                 } else {
                     acc[type] = {
-                        name: type,
+                        name: classes?.[type],
                         id: type,
                         metadata: {
-                            color: lvls.one(type),
+                            color: colors[cur._type],
                         },
                         children: [
                             {
-                                name: cur._type,
+                                name: classes?.[cur._type],
                                 id: cur._type,
                                 metadata: {
-                                    color: lvls.two(type),
+                                    color: colors[cur._type],
                                 },
                                 children: [
                                     {
@@ -73,7 +68,7 @@ export function useTree() {
                                         id: cur.id,
                                         metadata: {
                                             ...cur,
-                                            color: lvls.two(type),
+                                            color: colors[cur._type],
                                         },
                                     },
                                 ],
@@ -88,7 +83,7 @@ export function useTree() {
                         id: cur.id,
                         metadata: {
                             ...cur,
-                            color: lvls.two(type),
+                            color: colors[cur._type],
                         },
                     });
                 } else {
@@ -101,15 +96,15 @@ export function useTree() {
                             id: cur.id,
                             metadata: {
                                 ...cur,
-                                color: lvls.two(type),
+                                color: colors[cur._type],
                             },
                         });
                     } else {
                         acc[type].children.push({
-                            name: cur._type,
+                            name: classes?.[cur._type],
                             id: cur._type,
                             metadata: {
-                                color: lvls.two(type),
+                                color: colors[cur._type],
                             },
                             children: [
                                 {
@@ -117,7 +112,7 @@ export function useTree() {
                                     id: cur.id,
                                     metadata: {
                                         ...cur,
-                                        color: lvls.two(type),
+                                        color: colors[cur._type],
                                     },
                                 },
                             ],
@@ -129,9 +124,13 @@ export function useTree() {
             return acc;
         }, {});
 
-        const initialSelectedIds = nodes[locale].reduce((acc, cur) => {
-            if (cur.type && !acc.includes(cur.type)) {
-                acc.push(cur.type);
+        const initialSelectedIds = graph?.nodes[locale].reduce((acc, cur) => {
+            const type = getType(cur);
+            if (type && !acc.includes(type)) {
+                acc.push(type);
+            }
+            if (cur._type && !acc.includes(cur._type)) {
+                acc.push(cur._type);
             }
             if (cur.id && !acc.includes(cur.id)) {
                 acc.push(cur.id);
@@ -146,7 +145,7 @@ export function useTree() {
                 children: Object.values(childrenObject || {}),
             }),
         };
-    }, [nodes]);
+    }, [graph?.nodes, locale]);
 
     const onCheck = useCallback(
         (props: ITreeViewOnNodeSelectProps, mode: TreeViewProps["mode"]) => {
@@ -155,17 +154,17 @@ export function useTree() {
                 if (props.element.id !== props.treeState?.lastUserSelect) {
                     return;
                 }
-                const found = filteredNodes.find(
+                const found = filteredNodes?.find(
                     (node) => node.id === props.element.id
                 );
                 if (found) {
-                    setSelected(found);
+                    setSelected && setSelected(found);
                 }
                 return;
             }
 
             filterNodes((filteredNodes, nodes) => {
-                const nodesFiltered = nodes.filter((node) => {
+                const nodesFiltered = nodes?.filter((node) => {
                     // @ts-ignore
                     if (props.treeState?.selectedIds.has(node.id)) {
                         return true;
@@ -173,11 +172,11 @@ export function useTree() {
                         return false;
                     }
                 });
-                return nodesFiltered;
+                return nodesFiltered as NodeObject[];
             });
 
             filterLinks((filteredLinks, links) => {
-                const linksFiltered = links.filter((link) => {
+                const linksFiltered = links?.filter((link) => {
                     if (
                         // @ts-ignore
                         props.treeState?.selectedIds.has(link.source.id) &&
@@ -189,7 +188,7 @@ export function useTree() {
                         return false;
                     }
                 });
-                return linksFiltered;
+                return linksFiltered as LinkObject[];
             });
         },
         [filteredNodes]
@@ -197,10 +196,10 @@ export function useTree() {
 
     useEffect(() => {
         filterNodes((filteredNodes, nodes) => {
-            return nodes;
+            return nodes as NodeObject[];
         });
         filterLinks((filteredLinks, links) => {
-            return links;
+            return links as LinkObject[];
         });
     }, []);
 

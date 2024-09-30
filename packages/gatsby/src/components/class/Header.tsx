@@ -1,7 +1,7 @@
 import React from "react";
 
 import { tw, alphaHex } from "#root/lib";
-import { Field } from "#root/components";
+import { Field, Link } from "#root/components";
 import { useFilterContext, useTheme } from "#root/provider";
 
 export function Header() {
@@ -9,7 +9,7 @@ export function Header() {
 
     const { colors } = useTheme();
 
-    return (
+    return selected && (
         <header
             className={tw(
                 "header",
@@ -32,16 +32,27 @@ export function Header() {
             <div className={tw("flex", "flex-row", "justify-between", "gap-4")}>
                 {selected["type"] && (
                     <Field
-                        label={{ value: "@type" }}
-                        value={selected["type"]}
+                        label={{
+                            value: "@type",
+                            name: selected["type"],
+                        }}
+                        value={
+                            <Link
+                                href={`${selected["_context"]}${selected["type"]}`}
+                                children={selected["type"]}
+                            />
+                        }
                         find={false}
                         className={tw("text-sm")}
                     />
                 )}
-                {selected["id"] && (
+                {selected["_id"] && (
                     <Field
-                        label={{ value: "@id" }}
-                        value={selected["id"]}
+                        label={{
+                            value: "id",
+                            name: selected["_id"],
+                        }}
+                        value={selected["_id"]}
                         find={false}
                         className={tw("text-sm", "break-all")}
                     />
