@@ -201,7 +201,7 @@ export const createSchemaCustomization = ({ actions }) => {
             copyrightHolder: [String]
             copyrightNotice: [String]
             copyrightYear: [String]
-            creativeWorkStatus: String
+            creativeWorkStatus: [String]
             dateCreated: String
             dateModified: String
             datePublished: String
