@@ -192,7 +192,10 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
                                         "birthDate",
                                         "endDate",
                                         "startDate",
+                                        "dateCreated",
+                                        "dateModified",
                                         "datePublished",
+                                        "auditDate",
                                     ].includes(key)
                                 ) {
                                     return [
