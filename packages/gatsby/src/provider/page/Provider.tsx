@@ -14,7 +14,7 @@ export function PageProvider({
             return navigate(
                 typeof route === "number"
                     ? route.toString()
-                    : withPrefix(route),
+                    : route,
                 options
             );
         },
