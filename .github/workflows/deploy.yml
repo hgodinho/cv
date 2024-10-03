@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      API_BASE: ${{ vars.API_BASE }}
+      API_BASE: ${{ secrets.API_BASE }}
       API_ID: ${{ secrets.API_ID }}
       API_TOKEN: ${{ secrets.API_TOKEN }}
 
