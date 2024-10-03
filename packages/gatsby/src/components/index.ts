@@ -14,5 +14,6 @@ export * from "./loading";
 export * from "./select";
 export * from "./l10nSelect";
 export * from "./tooltip";
+export * from "./seo";
 
 export * from "./debug";
