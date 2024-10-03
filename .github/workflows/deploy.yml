@@ -23,6 +23,11 @@ jobs:
         run: pnpm install
 
       - name: Build
+        env:
+          API_BASE: ${{ env.API_BASE }}
+          API_ID: ${{ secrets.API_ID }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+
         run: pnpm build
 
       - uses: peaceiris/actions-gh-pages@v4
