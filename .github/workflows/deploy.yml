@@ -9,6 +9,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    env:
+      API_BASE: ${{ vars.API_BASE }}
+      API_ID: ${{ secrets.API_ID }}
+      API_TOKEN: ${{ secrets.API_TOKEN }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -23,10 +28,6 @@ jobs:
         run: pnpm install
 
       - name: Build
-        env:
-          API_BASE: ${{ vars.API_BASE }}
-          API_ID: ${{ secrets.API_ID }}
-          API_TOKEN: ${{ secrets.API_TOKEN }}
 
         run: pnpm build
 
