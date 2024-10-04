@@ -53,6 +53,8 @@ export const Head = ({ pageContext, data }: PersonPage) => {
     return (
         <PrimitiveHead
             title={`${data.person.name} @${pageContext.site.title}`}
+            pageContext={pageContext}
+            data={data.person}
         />
     );
 };

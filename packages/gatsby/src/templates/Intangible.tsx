@@ -48,6 +48,8 @@ export const Head = ({ pageContext, data }: ChapterPage) => {
     return (
         <PrimitiveHead
             title={`${data.intangible.name} @${pageContext.site.title}`}
+            pageContext={pageContext}
+            data={data.intangible}
         />
     );
 };

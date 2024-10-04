@@ -40,8 +40,9 @@ export type Classes = Record<LOCALES, [string, string]>;
 export type Base = {
     "@context": string;
     "@id": string;
-    type: string;
     _id: string;
+    _context: string;
+    type: string;
     name: string;
     [x: string]: unknown;
 };

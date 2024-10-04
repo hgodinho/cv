@@ -84,6 +84,8 @@ export function Head({ data, pageContext }: CredentialPage) {
     return (
         <PrimitiveHead
             title={`${data.credential.name} @${pageContext.site.title}`}
+            pageContext={pageContext}
+            data={data.credential}
         />
     );
 }
