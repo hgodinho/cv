@@ -46,6 +46,8 @@ export const Head = ({ pageContext, data }: EventPage) => {
     return (
         <PrimitiveHead
             title={`${data.event.name} @${pageContext.site.title}`}
+            pageContext={pageContext}
+            data={data.event}
         />
     );
 };

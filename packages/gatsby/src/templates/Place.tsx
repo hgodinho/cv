@@ -39,6 +39,8 @@ export const Head = ({ pageContext, data }: PlacePage) => {
     return (
         <PrimitiveHead
             title={`${data.place.name} @${pageContext.site.title}`}
+            pageContext={pageContext}
+            data={data.place}
         />
     );
 };

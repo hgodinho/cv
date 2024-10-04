@@ -1,16 +1,19 @@
 import { tw } from "#root/lib";
 import React from "react";
 import { Seo } from "../seo";
+import { PageContext, UnionSchemaType } from "@hgod-in-cv/data/src/types";
 
 export type HeadProps = {
     title: string;
+    pageContext: PageContext;
+    data: UnionSchemaType;
 };
 
-export function Head({ title }: HeadProps) {
+export function Head({ title, data, pageContext }: HeadProps) {
     return (
         <>
             <title>{title}</title>
-            <Seo />
+            <Seo data={data} pageContext={pageContext} />
             <body
                 className={tw(
                     // background

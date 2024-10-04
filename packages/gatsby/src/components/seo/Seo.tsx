@@ -1,25 +1,32 @@
-import { useCVContext } from "#root/provider";
+import { PageContext, UnionSchemaType } from "@hgod-in-cv/data/src/types";
 import React, { useMemo } from "react";
 
-export function Seo() {
-    const { selected } = useCVContext();
-
-    const data = useMemo(() => {
+export function Seo({
+    data,
+    pageContext,
+}: {
+    data: UnionSchemaType;
+    pageContext: PageContext;
+}) {
+    const json = useMemo(() => {
+        console.log({ data, pageContext });
         return {
-            "@context": selected?._context || "https://schema.org",
+            "@context": data._context || "https://schema.org",
+            "@id": `${pageContext?.site.siteUrl}/${data.locale}/${data.path}`,
             ...Object.fromEntries(
-                Object.entries(selected || {}).filter(
+                Object.entries(data || {}).filter(
                     ([key, value]) => value !== null
                 )
             ),
         };
-    }, [selected]);
+    }, [data, pageContext]);
 
     return (
         <script
+            id="json-ld"
             type="application/ld+json"
             dangerouslySetInnerHTML={{
-                __html: JSON.stringify(data, null, 2),
+                __html: JSON.stringify(json, null, 2),
             }}
         />
     );
