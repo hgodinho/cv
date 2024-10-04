@@ -1,5 +1,6 @@
 import { tw } from "#root/lib";
 import React from "react";
+import { Seo } from "../seo";
 
 export type HeadProps = {
     title: string;
@@ -9,6 +10,7 @@ export function Head({ title }: HeadProps) {
     return (
         <>
             <title>{title}</title>
+            <Seo />
             <body
                 className={tw(
                     // background
