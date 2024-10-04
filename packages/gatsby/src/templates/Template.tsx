@@ -17,7 +17,6 @@ import {
     Layout,
     NetworkView,
     OptionsView,
-    Seo,
 } from "#root/components";
 
 export type ProviderProps = WrapPageElementBrowserArgs<
@@ -44,7 +43,6 @@ export function Template({ element, ...props }: ProviderProps) {
                                     {element}
                                 </Layout>
                             </NetworkSettingsProvider>
-                            <Seo />
                         </FilterProvider>
                     </CVProvider>
                 </I18nProvider>
