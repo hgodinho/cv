@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_hgod_in_cv_gatsby=self.webpackChunk_hgod_in_cv_gatsby||[]).push([[815],{3839:function(t,e,n){n.r(e),n.d(e,{Head:function(){return c},default:function(){return r}});var a=n(2155),u=n(851);function r(t){let{data:e,pageContext:n}=t;return null}function c(t){let{data:e,pageContext:n}=t;return a.createElement(u.p3,{title:`${e.credential.name} @${n.site.title}`,pageContext:n,data:e.credential})}}}]);
+//# sourceMappingURL=component---src-templates-credential-tsx-ed3018618582bc9efbf6.js.map

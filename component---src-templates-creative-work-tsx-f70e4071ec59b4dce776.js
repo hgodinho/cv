@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_hgod_in_cv_gatsby=self.webpackChunk_hgod_in_cv_gatsby||[]).push([[55],{5192:function(t,e,n){n.r(e),n.d(e,{Head:function(){return c},default:function(){return u}});var a=n(2155),r=n(851);function u(t){let{data:e,pageContext:n}=t;return null}const c=t=>{let{pageContext:e,data:n}=t;return a.createElement(r.p3,{title:`${n.creativeWork.name} @${e.site.title}`})}}}]);
-//# sourceMappingURL=component---src-templates-creative-work-tsx-f70e4071ec59b4dce776.js.map
