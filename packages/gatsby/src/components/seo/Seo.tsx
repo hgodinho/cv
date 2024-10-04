@@ -9,14 +9,20 @@ export function Seo({
     pageContext: PageContext;
 }) {
     const json = useMemo(() => {
-        console.log({ data, pageContext });
         return {
             "@context": data._context || "https://schema.org",
             "@id": `${pageContext?.site.siteUrl}/${data.locale}/${data.path}`,
             ...Object.fromEntries(
-                Object.entries(data || {}).filter(
-                    ([key, value]) => value !== null
-                )
+                Object.entries(data || {}).filter(([key, value]) => {
+                    if (
+                        ["_id", "_context", "id", "path", "locale"].includes(
+                            key
+                        )
+                    ) {
+                        return false;
+                    }
+                    return value !== null;
+                })
             ),
         };
     }, [data, pageContext]);
