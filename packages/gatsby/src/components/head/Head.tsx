@@ -12,6 +12,7 @@ export function Head({ title }: HeadProps) {
             <body
                 className={tw(
                     // background
+                    "dark",
                     "bg-zinc-50",
                     "dark:bg-zinc-950",
 
