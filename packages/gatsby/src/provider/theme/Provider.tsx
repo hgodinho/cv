@@ -72,9 +72,9 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     const middleHeight = useMemo(() => {
         const { isMobile, isTablet, isDesktop, height } = viewPort;
         if (height && isMobile) {
-            return `${height - 64}px`;
+            return `${height - 116}px`;
         } else if (height && isTablet) {
-            return `${height - 64}px`;
+            return `${height - 116}px`;
         } else if (height && isDesktop) {
             return `${height - 128}px`;
         }

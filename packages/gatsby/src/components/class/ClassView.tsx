@@ -32,21 +32,21 @@ export function ClassView() {
                     "grid-cols-subgrid",
                     "grid-rows-subgrid",
 
-                    "col-start-5",
-                    "col-span-2",
+                    "col-start-4",
+                    "col-span-3",
+                    "md:col-start-5",
+                    "md:col-span-2",
+
                     "row-start-2",
                     "row-span-2",
 
                     "data-[state=closed]:col-end-7",
                     "data-[state=closed]:col-span-1",
                     "data-[state=closed]:w-min",
-
-                    // tablet
-                    // "md:col-start-4",
-                    // "md:data-[state=closed]:col-start-5"
                 ),
                 trigger: tw(
-                    "col-start-2",
+                    "col-start-3",
+                    "md:col-start-2",
                     "col-span-1",
                     "row-start-1",
                     "row-span-1",
@@ -57,7 +57,8 @@ export function ClassView() {
                 motion: tw(
                     "overflow-auto",
                     "col-start-1",
-                    "col-span-2",
+                    "col-span-3",
+                    "md:col-span-2",
                     "row-start-3",
                     "flex",
                     "flex-col"
@@ -69,7 +70,7 @@ export function ClassView() {
                     "border-2",
 
                     // responsive
-                    !open ? "w-0" : tw("w-4/5", "md:w-full")
+                    !open ? "w-0" : tw("w-full")
                 ),
             }}
             isOpen={open}

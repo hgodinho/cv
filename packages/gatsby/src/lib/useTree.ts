@@ -53,7 +53,7 @@ export function useTree() {
                         name: classes?.[type],
                         id: type,
                         metadata: {
-                            color: colors[cur._type],
+                            color: colors[type],
                         },
                         children: [
                             {

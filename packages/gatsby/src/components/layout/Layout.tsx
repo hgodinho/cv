@@ -11,7 +11,7 @@ export function Layout({
         <div
             {...props}
             className={tw(
-                "layout-view3",
+                "layout",
                 "grid",
                 "grid-cols-layout",
                 "grid-rows-layout",

@@ -31,25 +31,34 @@ export function OptionsView() {
                     "grid-rows-subgrid",
 
                     "col-start-2",
-                    "col-span-2",
+                    "md:col-start-2",
+                    "col-span-3",
+                    "md:col-span-2",
+                    "data-[state=closed]:col-end-2",
+
                     "row-start-2",
                     "row-span-2",
-
-                    "data-[state=closed]:col-end-2",
                     "data-[state=closed]:row-end-2",
+
                     "data-[state=closed]:w-min"
                 ),
                 trigger: tw(
                     "col-start-1",
                     "col-span-1",
+
                     "row-start-1",
                     "row-span-1"
                 ),
                 motion: tw(
                     "overflow-auto",
+
                     "col-start-1",
-                    "col-span-2",
+                    "col-span-3",
+                    "md:col-span-2",
+                    "lg:col-span-2",
+
                     "row-start-3",
+
                     "flex",
                     "flex-col",
 
