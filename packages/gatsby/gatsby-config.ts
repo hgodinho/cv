@@ -37,7 +37,14 @@ const config: GatsbyConfig = {
         "gatsby-plugin-mdx",
         "gatsby-plugin-sharp",
         "gatsby-transformer-sharp",
-        "@hgod-in-cv/data",
+        {
+            resolve: "@hgod-in-cv/data",
+            options: {
+                apiBase: process.env.API_BASE,
+                apiId: process.env.API_ID,
+                apiToken: process.env.API_TOKEN,
+            },
+        },
         {
             resolve: "gatsby-source-filesystem",
             options: {

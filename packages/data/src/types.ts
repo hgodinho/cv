@@ -6,6 +6,13 @@ import jsonld from "jsonld";
 
 export { NodeObject, LinkObject };
 
+export type FetchProps = {
+    apiBase: string;
+    apiId: string;
+    apiToken: string;
+    route?: string;
+}
+
 export type Locale = {
     lang: string;
     name: string;
