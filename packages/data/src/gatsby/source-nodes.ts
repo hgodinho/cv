@@ -1,4 +1,4 @@
-import { GatsbyNode, NodeInput } from "gatsby";
+import { GatsbyNode, NodeInput, PluginOptions } from "gatsby";
 
 import { LinkObject, NodeObject } from "react-force-graph-3d";
 import { CACHE_KEYS, NODE_TYPES } from "../constants";
@@ -19,11 +19,17 @@ import { getType } from "../utils";
 let isFirstSource = true;
 
 export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
-    gatsbyApi
-    // pluginOptions: PluginOptions
+    gatsbyApi,
+    pluginOptions: PluginOptions
 ) => {
     const { actions, reporter, cache, getNodes } = gatsbyApi;
     const { touchNode } = actions;
+
+    const api = {
+        apiBase: pluginOptions.apiBase as string,
+        apiId: pluginOptions.apiId as string,
+        apiToken: pluginOptions.apiToken as string,
+    };
 
     /**
      * It's good practice to give your users some feedback on progress and status. Instead of printing individual lines, use the activityTimer API.
@@ -86,7 +92,10 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
      */
     try {
         const locales = (await fetchData(
-            "locales",
+            {
+                route: "locales",
+                ...api,
+            },
             () => {
                 reporter.info("[@hgod-in/data] Fetching locales");
             },
@@ -104,7 +113,7 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
             await Promise.all(
                 locales.map(async (locale) => {
                     const data = (await fetchData(
-                        `${locale.lang}/ld-graph`,
+                        { route: `${locale.lang}/ld-graph`, ...api },
                         () => {
                             reporter.info(
                                 `[@hgod-in/data] Fetching graph for "${locale.name}"`
@@ -128,7 +137,7 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
                     return [
                         locale.lang,
                         await fetchData(
-                            `${locale.lang}/properties`,
+                            { route: `${locale.lang}/properties`, ...api },
                             () => {
                                 reporter.info(
                                     `[@hgod-in/data] Fetching properties for "${locale.name}"`
@@ -151,7 +160,7 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
                     return [
                         locale.lang,
                         await fetchData(
-                            `${locale.lang}/classes`,
+                            { route: `${locale.lang}/classes`, ...api },
                             () => {
                                 reporter.info(
                                     `[@hgod-in/data] Fetching classes for "${locale.name}"`
@@ -278,13 +287,11 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
 
         const meta = {};
 
-        for (const [locale, localeEndpoints] of Object.entries(
-            endpoints
-        )) {
+        for (const [locale, localeEndpoints] of Object.entries(endpoints)) {
             meta[locale] = await Promise.all(
                 localeEndpoints.map(async ([type, endpoint]) => {
                     const response = await fetchData(
-                        `${locale}/${endpoint}/meta`,
+                        { route: `${locale}/${endpoint}/meta`, ...api },
                         () => {
                             reporter.info(
                                 `[@hgod-in/data] Fetching ${endpoint}/meta for "${locale}"`

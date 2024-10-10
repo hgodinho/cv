@@ -1,8 +1,10 @@
-async function fetchData(route?: string, pre?: () => void, after?: (data: any) => void) {
-    const base = process.env.API_BASE;
-    const id = process.env.API_ID;
-    const token = process.env.API_TOKEN;
+import { FetchProps } from "../types";
 
+async function fetchData(
+    { route, apiBase, apiId, apiToken }: FetchProps,
+    pre?: () => void,
+    after?: (data: any) => void
+) {
     const parseData = (response: any) => {
         switch (response.status) {
             case 200:
@@ -14,9 +16,9 @@ async function fetchData(route?: string, pre?: () => void, after?: (data: any) =
 
     try {
         if (pre) pre();
-        return await fetch(`${base}/${id}/exec/cv/v1/${route ? route : ""}`, {
+        return await fetch(`${apiBase}/${apiId}/exec/cv/v1/${route ? route : ""}`, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${apiToken}`,
                 "Content-Type": "text/plain; charset=utf-8",
             },
             method: "GET",

@@ -25,19 +25,32 @@ const config: GatsbyConfig = {
             },
         },
         "gatsby-plugin-postcss",
-        // "gatsby-plugin-google-gtag",
+        {
+            resolve: "gatsby-plugin-google-gtag",
+            options: {
+                trackingIds: [process.env.GA_TRACKING_ID],
+                gtagConfig: {
+                    anonymize_ip: true,
+                },
+                pluginConfig: {
+                    head: false,
+                    respectDNT: true,
+                },
+            }
+        },
         "gatsby-plugin-image",
         "gatsby-plugin-sitemap",
-        // {
-        //     resolve: "gatsby-plugin-manifest",
-        //     options: {
-        //         icon: "src/images/icon.png",
-        //     },
-        // },
         "gatsby-plugin-mdx",
         "gatsby-plugin-sharp",
         "gatsby-transformer-sharp",
-        "@hgod-in-cv/data",
+        {
+            resolve: "@hgod-in-cv/data",
+            options: {
+                apiBase: process.env.API_BASE,
+                apiId: process.env.API_ID,
+                apiToken: process.env.API_TOKEN,
+            },
+        },
         {
             resolve: "gatsby-source-filesystem",
             options: {
