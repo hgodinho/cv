@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_hgod_in_cv_gatsby=self.webpackChunk_hgod_in_cv_gatsby||[]).push([[877],{1633:function(t,e,n){n.r(e),n.d(e,{Head:function(){return r},default:function(){return o}});var a=n(2155),i=n(4491);function o(t){let{data:e,pageContext:n}=t;return null}const r=t=>{let{pageContext:e,data:n}=t;return a.createElement(i.p3,{title:`${n.organization.name} @${e.site.title}`,pageContext:e,data:n.organization})}}}]);
+//# sourceMappingURL=component---src-templates-organization-tsx-6de60bcde6516a87efc5.js.map
