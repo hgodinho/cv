@@ -1,6 +1,6 @@
-> /packages/apps-script/README.md
+> /packages/api/README.md
 
-# `@hgod-in-cv/apps-script`
+# `@hgod-in-cv/api`
 
 Simple back-end made with Google Apps Script.
 

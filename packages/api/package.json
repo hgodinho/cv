@@ -1,5 +1,5 @@
 {
-    "name": "@hgod-in-cv/apps-script",
+    "name": "@hgod-in-cv/api",
     "version": "0.2.0-alpha.0",
     "description": "Simple back-end service made with Google Apps Script",
     "main": "index.js",
