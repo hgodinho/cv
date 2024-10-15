@@ -71,7 +71,7 @@ export function CVProvider({ children }: React.PropsWithChildren<{}>) {
         const selected = Object.values(context.data || {})[0] as NodeObject;
         if (
             (selected && selected.id !== state.selected?.id) ||
-            selected._id !== state.selected?._id
+            (selected && selected._id !== state.selected?._id)
         ) {
             const connectedTo = links?.filter((link) => {
                 // @ts-ignore

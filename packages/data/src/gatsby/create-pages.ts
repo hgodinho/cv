@@ -143,6 +143,22 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
     const graph = result.data?.graph;
     const meta = result.data?.meta;
 
+    Object.keys(locales).forEach((key) => {
+        createPage({
+            path: `/${key}`,
+            component: path.resolve(`./src/templates/Home.tsx`),
+            context: {
+                site,
+                locale: key,
+                locales,
+                properties,
+                classes,
+                graph,
+                meta
+            }
+        })
+    });
+
     Object.entries(graph.nodes).forEach(([locale, nodes]) => {
         for (const node of nodes) {
             let type = getType(node);

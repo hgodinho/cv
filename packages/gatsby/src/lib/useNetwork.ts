@@ -59,7 +59,7 @@ export function useNetwork() {
                 node,
                 2500
             );
-            if (selected && selected.path !== node.path) {
+            if (selected?.path !== node.path) {
                 navigate(`/${locale}/${node.path}`);
             }
         },
