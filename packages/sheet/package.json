@@ -1,0 +1,15 @@
+{
+    "name": "@hgod-in-cv/sheet",
+    "version": "0.1.0",
+    "description": "Sheet scripts for the CV App",
+    "main": "index.js",
+    "author": "Henrique Godinho <ola@hgod.in>",
+    "scripts": {
+        "open": "clasp open",
+        "pull": "clasp pull",
+        "push": "clasp push",
+        "dev": "clasp open && clasp push --watch"
+    },
+    "keywords": [],
+    "license": "ISC"
+}
