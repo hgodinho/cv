@@ -6,7 +6,7 @@ import { PageContext, UnionSchemaType } from "@hgod-in-cv/data/src/types";
 export type HeadProps = {
     title: string;
     pageContext: PageContext;
-    data: UnionSchemaType;
+    data?: UnionSchemaType;
 };
 
 export function Head({ title, data, pageContext }: HeadProps) {
