@@ -63,7 +63,7 @@ export function useNetwork() {
                 navigate(`/${locale}/${node.path}`);
             }
         },
-        [ref, selected, isMobile, isTablet]
+        [ref, selected, isMobile, isTablet, locale]
     );
 
     const nodeLabel = useCallback((node: NodeObject) => {
