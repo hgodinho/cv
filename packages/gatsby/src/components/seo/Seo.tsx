@@ -1,17 +1,18 @@
 import { PageContext, UnionSchemaType } from "@hgod-in-cv/data/src/types";
-import React, { useMemo } from "react";
+import { graphql, useStaticQuery } from "gatsby";
+import React, { useCallback, useMemo } from "react";
 
 export function Seo({
     data,
     pageContext,
 }: {
-    data: UnionSchemaType;
+    data?: UnionSchemaType;
     pageContext: PageContext;
 }) {
-    const json = useMemo(() => {
+    const processJsonLd = useCallback((data: UnionSchemaType) => {
         return {
             "@context": data._context || "https://schema.org",
-            "@id": `${pageContext?.site.siteUrl}/${data.locale}/${data.path}`,
+            "@id": `${pageContext?.site.siteUrl}/`,
             ...Object.fromEntries(
                 Object.entries(data || {}).filter(([key, value]) => {
                     if (
@@ -25,15 +26,56 @@ export function Seo({
                 })
             ),
         };
+    }, []);
+
+    const json = useMemo(() => {
+        if (data) return processJsonLd(data);
+        return false;
     }, [data, pageContext]);
 
+    // #ctw-6
+    const site = useStaticQuery(graphql`
+        query Site {
+            creativeWork(_id: { eq: "#ctw-6" }) {
+                _context
+                _id
+                _type
+                author
+                dateCreated
+                description
+                inLanguage
+                keywords
+                locale
+                name
+                path
+                sameAs
+                type
+            }
+        }
+    `);
+
     return (
-        <script
-            id="json-ld"
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-                __html: JSON.stringify(json, null, 2),
-            }}
-        />
+        <>
+            <script
+                id="site-metadata"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(
+                        processJsonLd(site.creativeWork),
+                        null,
+                        2
+                    ),
+                }}
+            />
+            {json && (
+                <script
+                    id="page-metadata"
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(json, null, 2),
+                    }}
+                />
+            )}
+        </>
     );
 }

@@ -137,7 +137,7 @@ export function Branch({
                 "cursor-pointer",
                 // "hover:text-blue-300",
                 "focus:outline-none",
-                // "focus:font-bold",
+                "focus:font-bold",
                 "focus:decoration-dotted",
                 "focus:underline-offset-4",
                 "focus:underline",
