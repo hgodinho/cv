@@ -143,6 +143,19 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
     const graph = result.data?.graph;
     const meta = result.data?.meta;
 
+    createPage({
+        path: `/`,
+        component: path.resolve(`./src/templates/Home.tsx`),
+        context: {
+            site,
+            locales,
+            properties,
+            classes,
+            graph,
+            meta,
+        },
+    });
+
     Object.keys(locales).forEach((key) => {
         createPage({
             path: `/${key}`,
@@ -154,9 +167,9 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
                 properties,
                 classes,
                 graph,
-                meta
-            }
-        })
+                meta,
+            },
+        });
     });
 
     Object.entries(graph.nodes).forEach(([locale, nodes]) => {
@@ -177,7 +190,7 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
                         properties,
                         classes,
                         graph,
-                        meta
+                        meta,
                     },
                 });
             }
