@@ -22,7 +22,7 @@ export function CVProvider({ children }: React.PropsWithChildren<{}>) {
         return {
             nodes: context.pageContext?.graph.nodes[locale],
             links: context.pageContext?.graph.links[locale],
-            meta: context.pageContext?.meta[locale],
+            meta: context.pageContext?.meta?.[locale],
             properties: context.pageContext?.properties[locale].reduce(
                 (acc, [key, label]) => {
                     acc[key] = label;
@@ -84,6 +84,10 @@ export function CVProvider({ children }: React.PropsWithChildren<{}>) {
     }, [context.data, links]);
 
     useEffect(() => {
+        if (context.path?.includes("print")) {
+            context.setNavigating(true);
+            context.navigate(`/${locale}/print`);
+        }
         if (state.selected && state.selected.locale !== locale) {
             const found = nodes?.find(
                 (node) => node._id === state.selected?._id
@@ -97,7 +101,7 @@ export function CVProvider({ children }: React.PropsWithChildren<{}>) {
                 }
             }
         }
-    }, [locale, nodes, state.selected, context.navigating]);
+    }, [locale, nodes, state.selected, context.path, context.navigating]);
 
     const cv: CVContextType = {
         ...defaultCVContext,

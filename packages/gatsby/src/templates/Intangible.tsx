@@ -50,6 +50,7 @@ export const Head = ({ pageContext, data }: ChapterPage) => {
             title={`${data.intangible.name} @${pageContext.site.title}`}
             pageContext={pageContext}
             data={data.intangible}
+            variant="default"
         />
     );
 };

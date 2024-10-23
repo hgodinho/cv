@@ -29,12 +29,11 @@ export const Trigger: React.FC<TriggerProps> = ({ locale, locales }) => {
                 "z-10",
 
                 "disabled:cursor-not-allowed",
-                "border-0",
                 "rounded-none",
 
                 "items-center",
                 "justify-between",
-                "border",
+
 
                 "ring-offset-background",
 
