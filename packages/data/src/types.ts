@@ -11,7 +11,7 @@ export type FetchProps = {
     apiId: string;
     apiToken: string;
     route?: string;
-}
+};
 
 export type Locale = {
     lang: string;
@@ -44,29 +44,30 @@ export type Graph = {
 export type Properties = Record<LOCALES, [string, string]>;
 export type Classes = Record<LOCALES, [string, string]>;
 
-export type Base = {
-    "@context": string;
-    "@id": string;
-    _id: string;
-    _context: string;
-    type: string;
-    name: string;
-    [x: string]: unknown;
-};
+export type Base<T = UnionSchemaType | UnionSchemaType[] | string | string[]> =
+    {
+        "@context": string;
+        "@id": string;
+        _id: string;
+        _context: string;
+        type: string;
+        name: string;
+        [x: string]: T | string;
+    };
 
-export type Person = Base;
+export type Person<T = unknown> = Base<T>;
 
-export type Place = Base;
+export type Place<T = unknown> = Base<T>;
 
-export type Credential = Base;
+export type Credential<T = unknown> = Base<T>;
 
-export type Intangible = Base;
+export type Intangible<T = unknown> = Base<T>;
 
-export type CreativeWork = Base;
+export type CreativeWork<T = unknown> = Base<T>;
 
-export type Organization = Base;
+export type Organization<T = unknown> = Base<T>;
 
-export type Event = Base;
+export type Event<T = unknown> = Base<T>;
 
 export type UnionSchemaType =
     | Person
@@ -117,7 +118,6 @@ export type PageQueryResponse = {
         };
     };
 };
-
 
 export type PageContext = {
     id: string;

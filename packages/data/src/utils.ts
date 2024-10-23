@@ -21,6 +21,7 @@ export function getType(node: NodeObject) {
     if (
         [
             "intangible",
+            "thing",
             "language",
             "computerlanguage",
             "educationaloccupationalprogram",

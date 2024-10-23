@@ -157,18 +157,23 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
     });
 
     Object.keys(locales).forEach((key) => {
+        const context = {
+            site,
+            locale: key,
+            locales,
+            properties,
+            classes,
+            graph,
+        };
         createPage({
             path: `/${key}`,
             component: path.resolve(`./src/templates/Home.tsx`),
-            context: {
-                site,
-                locale: key,
-                locales,
-                properties,
-                classes,
-                graph,
-                meta,
-            },
+            context,
+        });
+        createPage({
+            path: `/${key}/print`,
+            component: path.resolve(`./src/templates/Pdf.tsx`),
+            context,
         });
     });
 
