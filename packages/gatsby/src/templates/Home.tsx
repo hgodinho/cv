@@ -15,6 +15,7 @@ export const Head = ({ pageContext, data }: CreativeWorkPage) => {
         <PrimitiveHead
             title={`@${pageContext.site.title}`}
             pageContext={pageContext}
+            variant="default"
         />
     );
 };

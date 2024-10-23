@@ -41,6 +41,7 @@ export const Head = ({ pageContext, data }: PlacePage) => {
             title={`${data.place.name} @${pageContext.site.title}`}
             pageContext={pageContext}
             data={data.place}
+            variant="default"
         />
     );
 };

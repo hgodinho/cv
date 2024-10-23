@@ -23,10 +23,11 @@ export type ProviderProps = WrapPageElementBrowserArgs<
     Record<string, unknown>,
     PageContext
 >["props"] & {
+    variant: "default" | "pdf";
     element: React.ReactNode;
 };
 
-export function Template({ element, ...props }: ProviderProps) {
+export function Template({ element, variant, ...props }: ProviderProps) {
     return (
         <ThemeProvider>
             <PageProvider {...props}>
@@ -34,13 +35,17 @@ export function Template({ element, ...props }: ProviderProps) {
                     <CVProvider>
                         <FilterProvider>
                             <NetworkSettingsProvider>
-                                <NetworkView />
-                                <Layout>
-                                    <OptionsView />
-                                    <ClassView />
+                                <Layout variant={variant}>
+                                    <NetworkView variant={variant} />
+                                    {variant === "default" && (
+                                        <>
+                                            <OptionsView />
+                                            <ClassView />
+                                        </>
+                                    )}
+                                    {element}
                                     <Debug debug={false} />
                                     <L10NSelect />
-                                    {element}
                                 </Layout>
                             </NetworkSettingsProvider>
                         </FilterProvider>

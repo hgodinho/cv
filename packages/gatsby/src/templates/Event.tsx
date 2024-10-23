@@ -48,6 +48,7 @@ export const Head = ({ pageContext, data }: EventPage) => {
             title={`${data.event.name} @${pageContext.site.title}`}
             pageContext={pageContext}
             data={data.event}
+            variant="default"
         />
     );
 };
