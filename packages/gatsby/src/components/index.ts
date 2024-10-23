@@ -1,4 +1,5 @@
 export * from "./head";
+export * from "./typography";
 export * from "./accessible-tree";
 export * from "./class";
 export * from "./layout";
