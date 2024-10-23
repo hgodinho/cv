@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_hgod_in_cv_gatsby=self.webpackChunk_hgod_in_cv_gatsby||[]).push([[647],{203:function(t,e,n){n.r(e),n.d(e,{Head:function(){return o},default:function(){return u}});var a=n(2155),r=n(4491);function u(t){let{data:e,pageContext:n}=t;return null}const o=t=>{let{pageContext:e,data:n}=t;return a.createElement(r.p3,{title:`${n.person.name} @${e.site.title}`,pageContext:e,data:n.person})}}}]);
-//# sourceMappingURL=component---src-templates-person-tsx-992df2d1bc4a01771a1a.js.map
