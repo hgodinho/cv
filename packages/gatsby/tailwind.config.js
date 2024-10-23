@@ -6,6 +6,10 @@ module.exports = {
         `./src/components/**/*.{js,jsx,ts,tsx}`,
     ],
     theme: {
+        fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"],
+        },
         screens: {
             sm: "480px",
             md: "752px",
