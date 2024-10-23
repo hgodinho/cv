@@ -86,6 +86,7 @@ export function Head({ data, pageContext }: CredentialPage) {
             title={`${data.credential.name} @${pageContext.site.title}`}
             pageContext={pageContext}
             data={data.credential}
+            variant="default"
         />
     );
 }

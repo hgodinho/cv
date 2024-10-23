@@ -1,4 +1,6 @@
 export * from "./head";
+export * from "./typography";
+export * from "./slider";
 export * from "./accessible-tree";
 export * from "./class";
 export * from "./layout";

@@ -28,6 +28,7 @@ export const themeDefault: ThemeContextType = {
         City: "#609fa6",
 
         Intangible: "#f4b9ee",
+        Thing: "#deaeda",
         Language: "#ceb4cc",
         ComputerLanguage: "#c68ec0",
         EducationalOccupationalProgram: "#db7fd2",

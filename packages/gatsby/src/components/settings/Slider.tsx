@@ -9,7 +9,7 @@ export type SliderProps = {
     label: string;
 };
 
-const Slider = React.forwardRef<
+const SliderSettings = React.forwardRef<
     React.ElementRef<typeof SliderPrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & SliderProps
 >(({ className, label, ...props }, ref) => {
@@ -151,6 +151,6 @@ const Slider = React.forwardRef<
     );
 });
 
-Slider.displayName = SliderPrimitive.Root.displayName;
+SliderSettings.displayName = SliderPrimitive.Root.displayName;
 
-export { Slider };
+export { SliderSettings };
