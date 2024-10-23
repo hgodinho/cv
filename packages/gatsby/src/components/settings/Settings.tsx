@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Label, Slider, Switch, Scroll } from "#root/components";
+import { Label, SliderSettings, Switch, Scroll } from "#root/components";
 import { tw } from "#root/lib";
 import { useNetworkSettings } from "#root/provider";
 
@@ -41,7 +41,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                         Nós
                     </Label>
                     <div className={tw("ml-4")}>
-                        <Slider
+                        <SliderSettings
                             id="nodeOpacity"
                             label="Opacidade dos nós"
                             min={0.1}
@@ -53,7 +53,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                                 changeValue("nodeOpacity", value[0]);
                             }}
                         />
-                        <Slider
+                        <SliderSettings
                             id="nodeRelSize"
                             label="Tamanho dos nós"
                             min={2}
@@ -65,7 +65,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                                 changeValue("nodeRelSize", value[0]);
                             }}
                         />
-                        <Slider
+                        <SliderSettings
                             id="nodeResolution"
                             label="Resolução dos nós"
                             min={1}
@@ -89,7 +89,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                         />
                         {!particles ? null : (
                             <div className={tw("ml-4")}>
-                                <Slider
+                                <SliderSettings
                                     id="linkDirectionalParticleSpeed"
                                     label="Velocidade da partícula"
                                     min={0}
@@ -110,7 +110,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                                         );
                                     }}
                                 />
-                                <Slider
+                                <SliderSettings
                                     id="linkDirectionalParticleWidth"
                                     label="Tamanho da partícula"
                                     min={1}
@@ -131,7 +131,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                                         );
                                     }}
                                 />
-                                <Slider
+                                <SliderSettings
                                     id="linkDirectionalParticleResolution"
                                     label="Resolução da partícula"
                                     min={2}
@@ -154,7 +154,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                                 />
                             </div>
                         )}
-                        <Slider
+                        <SliderSettings
                             id="linkWidth"
                             label="Espessura do link"
                             min={0.1}
@@ -166,7 +166,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                                 changeValue("linkWidth", value[0]);
                             }}
                         />
-                        <Slider
+                        <SliderSettings
                             id="linkDirectionalArrowLength"
                             label="Indicador de direção do link"
                             min={0}
@@ -181,7 +181,7 @@ export function Settings({ hidden = false }: SettingsProps) {
                                 );
                             }}
                         />
-                        <Slider
+                        <SliderSettings
                             id="linkOpacity"
                             label="Opacidade do link"
                             min={0.1}
