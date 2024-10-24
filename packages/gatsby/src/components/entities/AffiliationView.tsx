@@ -45,7 +45,7 @@ export function AffiliationView({
             <p className={tw("font-bold")}>
                 {`${data.startDate} - ${data.endDate}`} | {data.name}
             </p>
-            <Link href={`/${locale}/${affiliatedTo?.path}`}>
+            <Link href={data.id as string}>
                 {affiliatedTo?.name}
             </Link>
         </div>

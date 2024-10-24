@@ -34,7 +34,7 @@ export function EventView({
                 {data.startDate ? `${data.startDate} | ` : null}
                 {classes?.[data.type]}
             </p>
-            <Link href={`/${locale}/${data.path}`}>{data.name}</Link>
+            <Link href={data.id as string}>{data.name}</Link>
         </div>
     );
 }
