@@ -18,7 +18,14 @@ const layoutVariant = cva(["layout", "grid", ,], {
                 "lg:grid-cols-layout-lg",
                 "lg:grid-rows-layout-lg",
             ],
-            pdf: ["pdf", "grid-cols-pdf", "grid-rows-pdf"],
+            pdf: [
+                "pdf",
+                "grid-cols-pdf",
+                "grid-rows-pdf",
+                "md:grid-cols-pdf-md",
+                "lg:grid-cols-pdf-lg",
+                // "sm:grid-cols-pdf-sm",
+            ],
         },
         defaultVariants: {
             variant: "default",
@@ -37,7 +44,10 @@ export function Layout({
     }
 >) {
     return (
-        <article {...props} className={tw(layoutVariant({ variant, className }))}>
+        <article
+            {...props}
+            className={tw(layoutVariant({ variant, className }))}
+        >
             {children}
         </article>
     );

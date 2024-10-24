@@ -22,7 +22,9 @@ module.exports = {
                 layout: "16px 32px 16px 1fr 16px 32px 16px",
                 "layout-md": "16px 32px 256px 32px 1fr 32px 16px", //ok
                 "layout-lg": "32px 32px 256px auto 384px 32px 32px", // ok
-                pdf: "32px 0.2fr 0.4fr 16px 0.6fr 0.2fr 32px",
+                pdf: "32px 1fr 32px",
+                "pdf-lg": "32px 0.2fr 0.4fr 16px 0.6fr 0.2fr 32px",
+                "pdf-md": "32px 0.4fr 16px 0.6fr 32px",
             },
             gridTemplateRows: {
                 layout: "16px 32px var(--middle-height) 16px 32px 16px",
