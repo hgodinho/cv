@@ -4,23 +4,21 @@ import { useCallback, useMemo } from "react";
 export function useLink(value: string) {
     const {
         location,
-        pageContext: {
-            site: { siteUrl },
-        },
+        pageContext,
     } = usePageContext();
 
     const filterValue = useCallback(
         (value: string) => {
-            if (value && value.includes(siteUrl)) {
-                return value.replace(siteUrl, "");
+            if (value && value.includes(pageContext?.site.siteUrl as string)) {
+                return value.replace(pageContext?.site.siteUrl as string, "");
             }
             return value;
         },
-        [siteUrl]
+        [pageContext?.site.siteUrl]
     );
 
     const props = useMemo(() => {
-        const internal = value?.includes(siteUrl);
+        const internal = value?.includes(pageContext?.site.siteUrl as string);
 
         const target = internal
             ? {}

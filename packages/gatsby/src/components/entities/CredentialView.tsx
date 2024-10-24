@@ -37,7 +37,7 @@ export function CredentialView({
             <p className={tw("font-bold")}>
                 {data.datePublished} | {issuedBy?.name}
             </p>
-            <Link href={`/${locale}/${data.path}`}>{data.name}</Link>
+            <Link href={data.id as string}>{data.name}</Link>
         </div>
     );
 }
