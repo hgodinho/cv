@@ -30,6 +30,8 @@ export function ContactBar({ data }: ContactBarProps) {
                             "focus:underline-offset-4",
                             "focus:font-bold"
                         )}
+                        target={"_blank"}
+                        rel={"noopener noreferrer"}
                     >
                         {sameAs.target.name === "Lattes" ? (
                             "lattes"
