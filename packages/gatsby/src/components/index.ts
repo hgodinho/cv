@@ -16,6 +16,11 @@ export * from "./loading";
 export * from "./select";
 export * from "./l10nSelect";
 export * from "./tooltip";
+export * from "./contact-bar";
+export * from "./skill";
+export * from "./entry-list";
 export * from "./seo";
+export * from "./connections";
+export * from "./entities";
 
 export * from "./debug";

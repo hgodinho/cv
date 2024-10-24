@@ -41,8 +41,8 @@ export type Graph = {
     links: Links;
 };
 
-export type Properties = Record<LOCALES, [string, string]>;
-export type Classes = Record<LOCALES, [string, string]>;
+export type Properties = Record<LOCALES, [string, string][]>;
+export type Classes = Record<LOCALES, [string, string][]>;
 
 export type Base<T = UnionSchemaType | UnionSchemaType[] | string | string[]> =
     {
@@ -134,4 +134,10 @@ export type PageContext = {
         siteUrl: string;
         description: string;
     };
+};
+
+export type Connection = {
+    source: UnionSchemaType;
+    target: UnionSchemaType;
+    predicate: string;
 };
