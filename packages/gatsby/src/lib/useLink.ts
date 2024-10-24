@@ -34,7 +34,7 @@ export function useLink(value: string) {
         return {
             to,
             internal,
-            isActive: to ? location.pathname.includes(to) : false,
+            isActive: to ? location?.pathname.includes(to) : false,
             ...target,
         };
     }, [location, value]);
