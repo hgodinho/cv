@@ -35,9 +35,9 @@ export function CredentialView({
     return (
         <div className={tw(credentialViewVariants({ variant, className }))}>
             <p className={tw("font-bold")}>
-                {data.datePublished} | {issuedBy?.name}
+                {data.datePublished as React.ReactNode} | {data.name}
             </p>
-            <Link href={data.id as string}>{data.name}</Link>
+            <Link href={issuedBy?.id as string}>{issuedBy?.name}</Link>
         </div>
     );
 }
