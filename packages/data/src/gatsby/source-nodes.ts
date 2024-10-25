@@ -209,7 +209,10 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
                                 ) {
                                     return [
                                         key,
-                                        new Date(value).toLocaleDateString(),
+                                        new Date(value).toLocaleDateString(
+                                            locale.replace("_", "-"),
+                                            { timeZone: "UTC" }
+                                        ),
                                     ];
                                 }
                                 return [
