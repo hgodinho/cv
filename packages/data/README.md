@@ -1,3 +1,5 @@
-# Data
+> /packages/data/README.md
 
-referência: <https://github.com/gatsbyjs/creating-source-plugin-tutorial/tree/main>
+# `@hgod-in-cv/data`
+
+Gatsby plugin to fetch data from Google Sheets.
