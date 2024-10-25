@@ -57,6 +57,7 @@ export function L10NSelect() {
     const { locale, locales, setLocale } = useI18nContext();
     return (
         <Select
+            name="locale-select"
             value={locale}
             onValueChange={(value) => {
                 setLocale(value as any);

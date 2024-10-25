@@ -12,7 +12,7 @@ export type SkillSetProps = {
 export function SkillSet({ title, data, links, nodes }: SkillSetProps) {
     return (
         <>
-            <Heading level={3}>{title}</Heading>
+            <Heading level={2}>{title}</Heading>
             {data.map((item) => {
                 const link = links.find((link) => {
                     return link.object === item.target.id;

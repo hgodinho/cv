@@ -21,6 +21,7 @@ export function Skill({ label, value, bestRating }: SkillProps) {
         >
             {label}
             <Slider
+                name={label as string}
                 value={value}
                 max={bestRating}
                 step={1}

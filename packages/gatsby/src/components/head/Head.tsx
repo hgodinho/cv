@@ -31,6 +31,7 @@ const bodyVariant = cva(["font-sans"], {
 export function Head({ title, data, variant, pageContext }: HeadProps) {
     return (
         <>
+            <html lang={pageContext.locale} />
             <title>{title}</title>
             <Seo data={data} pageContext={pageContext} />
             <body className={tw(bodyVariant({ variant }))} />
