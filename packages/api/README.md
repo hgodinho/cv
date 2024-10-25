@@ -2,7 +2,7 @@
 
 # `@hgod-in-cv/api`
 
-Simple back-end made with Google Apps Script.
+Simple back-end created with Google Apps Script.
 
 ## Description
 
