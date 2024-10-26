@@ -1,7 +1,6 @@
 import { tw } from "#root/lib";
 import { UnionSchemaType } from "@hgod-in-cv/data/src/types";
 import React from "react";
-import { Link } from "#root/components";
 
 export type ContactBarProps = {
     data: {
@@ -13,7 +12,16 @@ export type ContactBarProps = {
 
 export function ContactBar({ data }: ContactBarProps) {
     return (
-        <aside className={tw("flex", "gap-2", "my-2", "items-center")}>
+        <aside
+            className={tw(
+                "flex",
+                "print:flex-col",
+                "gap-2",
+                "my-2",
+                "items-center",
+                "print:items-start"
+            )}
+        >
             {data.map((sameAs) => {
                 return (
                     <a
@@ -23,6 +31,7 @@ export function ContactBar({ data }: ContactBarProps) {
                             "dark:text-blue-300",
                             "dark:hover:text-blue-500",
                             "text-blue-800",
+                            "print:text-black",
                             "hover:text-blue-700",
                             "focus:outline-none",
                             "focus:underline",
@@ -34,14 +43,24 @@ export function ContactBar({ data }: ContactBarProps) {
                         rel={"noopener noreferrer"}
                     >
                         {sameAs.target.name === "Lattes" ? (
-                            "lattes"
+                            <>
+                                {"lattes"}
+                                <span className={tw("hidden", "print:block")}>
+                                    {(sameAs.target.identifier as string[])[0]}
+                                </span>
+                            </>
                         ) : (
-                            <img
-                                height="16"
-                                width="16"
-                                alt={sameAs.target.name}
-                                src={`https://cdn.simpleicons.org/${sameAs.target.name}/black`}
-                            />
+                            <>
+                                <img
+                                    height="16"
+                                    width="16"
+                                    alt={sameAs.target.name}
+                                    src={`https://cdn.simpleicons.org/${sameAs.target.name}/black`}
+                                />
+                                <span className={tw("hidden", "print:block")}>
+                                    {(sameAs.target.identifier as string[])[0]}
+                                </span>
+                            </>
                         )}
                     </a>
                 );
@@ -52,6 +71,7 @@ export function ContactBar({ data }: ContactBarProps) {
                     "dark:text-blue-300",
                     "dark:hover:text-blue-500",
                     "text-blue-800",
+                    "print:text-black",
                     "hover:text-blue-700",
                     "focus:outline-none",
                     "focus:underline",
@@ -66,6 +86,9 @@ export function ContactBar({ data }: ContactBarProps) {
                     alt="Gmail"
                     src="https://cdn.simpleicons.org/gmail/black"
                 />
+                <span className={tw("hidden", "print:block")}>
+                    {"ola@hgod.in"}
+                </span>
             </a>
         </aside>
     );
