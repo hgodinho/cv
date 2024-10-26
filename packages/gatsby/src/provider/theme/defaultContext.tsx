@@ -2,9 +2,16 @@ import { ThemeContextCallbacks, ThemeContextState, ThemeContextType } from "./";
 
 export const themeStateDefault: ThemeContextState & ThemeContextCallbacks = {
     viewPort: {
-        isMobile: false,
-        isTablet: false,
-        isDesktop: false,
+        windowDimensions: {
+            width: 480,
+            height: 800,
+            isMobile: false,
+            isTablet: false,
+            isDesktop: false,
+            isPrint: false,
+        },
+        handlePrint: () => { },
+        setWindowDimensions: () => { }
     },
     collapsibles: {
         options: false,

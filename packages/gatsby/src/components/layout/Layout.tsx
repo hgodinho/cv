@@ -25,6 +25,8 @@ const layoutVariant = cva(["layout", "grid", ,], {
                 "md:grid-cols-pdf-md",
                 "lg:grid-cols-pdf-lg",
                 // "sm:grid-cols-pdf-sm",
+                "print:grid-cols-pdf",
+                "print:grid-rows-pdf",
             ],
         },
         defaultVariants: {
