@@ -4,6 +4,7 @@ import { tw } from "#root/lib";
 import { FileText, Waypoints } from "lucide-react";
 import { useI18nContext, useTheme } from "#root/provider";
 import { cva } from "class-variance-authority";
+import { Link } from "gatsby";
 
 export const variantSwitchVariant = cva(
     ["flex", "justify-end", "print:hidden", "z-10"],
@@ -36,19 +37,19 @@ export function VariantSwitch({
             className={tw(variantSwitchVariant({ variant, className }))}
         >
             {variant === "default" ? (
-                <a
+                <Link
                     className={tw(buttonVariants(), "flex", "p-2", "w-max")}
-                    href={`/${locale}/print`}
+                    to={`/${locale}/print`}
                 >
                     <FileText className={tw("w-6", "h-6")} />
-                </a>
+                </Link>
             ) : (
-                <a
+                <Link
                     className={tw(buttonVariants(), "flex", "p-2", "w-max")}
-                    href={`/${locale}`}
+                    to={`/${locale}`}
                 >
                     <Waypoints className={tw("w-6", "h-6")} />
-                </a>
+                </Link>
             )}
         </div>
     );
