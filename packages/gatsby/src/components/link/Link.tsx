@@ -23,6 +23,7 @@ export function Link({
             className: tw(
                 "inline-flex",
                 "gap-1",
+                "print:text-black",
                 "dark:text-blue-300",
                 "dark:hover:text-blue-500",
                 "text-blue-800",

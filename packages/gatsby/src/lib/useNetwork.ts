@@ -30,7 +30,9 @@ export function useNetwork() {
 
     const {
         state: {
-            viewPort: { isTablet, isMobile, width, height },
+            viewPort: {
+                windowDimensions: { isTablet, isMobile, width, height },
+            },
         },
         colors,
     } = useTheme();

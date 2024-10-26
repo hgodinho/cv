@@ -7,8 +7,14 @@ import {
     themeDefault,
     themeStateDefault,
 } from "./";
+import { Variant } from "#root/types";
 
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+export type ThemeProviderProps = Variant & {};
+
+export const ThemeProvider = ({
+    children,
+    variant,
+}: React.PropsWithChildren<ThemeProviderProps>) => {
     const viewPort = useViewPortSize();
 
     const [collapsibles, setCollapsibles] = useState<
@@ -21,7 +27,10 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
                 ...prev,
                 [key]: !prev[key],
             }));
-            if (viewPort.isMobile || viewPort.isTablet) {
+            if (
+                viewPort.windowDimensions.isMobile ||
+                viewPort.windowDimensions.isTablet
+            ) {
                 const other = key === "class" ? "options" : "class";
                 setCollapsibles((prev) => ({
                     ...prev,
@@ -34,7 +43,10 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
     const collapsibleOn = useCallback(
         (key: keyof ThemeContextState["collapsibles"]) => {
-            if (viewPort.isTablet || viewPort.isMobile) {
+            if (
+                viewPort.windowDimensions.isTablet ||
+                viewPort.windowDimensions.isMobile
+            ) {
                 const other = key === "class" ? "options" : "class";
                 setCollapsibles((prev) => ({
                     ...prev,
@@ -70,16 +82,17 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     const middleHeight = useMemo(() => {
-        const { isMobile, isTablet, isDesktop, height } = viewPort;
+        const { isMobile, isTablet, isDesktop, height } =
+            viewPort.windowDimensions;
         if (height && isMobile) {
-            return `${height - 116}px`;
+            return `${height - (variant === "default" ? 116 : 96)}px`;
         } else if (height && isTablet) {
-            return `${height - 116}px`;
+            return `${height - (variant === "default" ? 116 : 96)}px`;
         } else if (height && isDesktop) {
-            return `${height - 128}px`;
+            return `${height - (variant === "default" ? 116 : 96)}px`;
         }
         return "auto";
-    }, [viewPort]);
+    }, [viewPort, variant]);
 
     useEffect(() => {
         document.documentElement.style.setProperty(
