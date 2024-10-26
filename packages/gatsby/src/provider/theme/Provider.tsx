@@ -108,6 +108,7 @@ export const ThemeProvider = ({
                 state: {
                     viewPort,
                     collapsibles,
+                    variant,
                     toggleCollapsible,
                     collapsibleOn,
                     collapsibleOff,

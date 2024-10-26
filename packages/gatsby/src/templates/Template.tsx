@@ -17,6 +17,7 @@ import {
     Layout,
     NetworkView,
     OptionsView,
+    VariantSwitch,
 } from "#root/components";
 
 export type ProviderProps = WrapPageElementBrowserArgs<
@@ -29,7 +30,7 @@ export type ProviderProps = WrapPageElementBrowserArgs<
 
 export function Template({ element, variant, ...props }: ProviderProps) {
     return (
-        <ThemeProvider>
+        <ThemeProvider variant={variant}>
             <PageProvider {...props}>
                 <I18nProvider>
                     <CVProvider>
@@ -45,7 +46,8 @@ export function Template({ element, variant, ...props }: ProviderProps) {
                                     )}
                                     {element}
                                     <Debug debug={false} />
-                                    <L10NSelect />
+                                    <L10NSelect variant={variant} />
+                                    <VariantSwitch variant={variant} />
                                 </Layout>
                             </NetworkSettingsProvider>
                         </FilterProvider>

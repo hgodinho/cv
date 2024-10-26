@@ -1,7 +1,9 @@
+import { Variant } from "#root/types";
+
 export type ThemeContextType = {
     sizes: Record<string, number>;
     colors: Record<string, string>;
-    state: ThemeContextState & ThemeContextCallbacks;
+    state: ThemeContextState & ThemeContextCallbacks & Variant;
 };
 
 export type ThemeContextState = {
@@ -15,7 +17,11 @@ export type ThemeContextState = {
             isPrint: boolean;
         };
         handlePrint: (trueForPrint: boolean) => void;
-        setWindowDimensions: React.Dispatch<React.SetStateAction<ThemeContextState["viewPort"]["windowDimensions"]>>;
+        setWindowDimensions: React.Dispatch<
+            React.SetStateAction<
+                ThemeContextState["viewPort"]["windowDimensions"]
+            >
+        >;
     };
     collapsibles: {
         options: boolean;
