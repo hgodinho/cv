@@ -5,6 +5,7 @@ import {
     Scroll,
     ConnectionsView,
     MeView,
+    PrintButton,
 } from "#root/components";
 import {
     PageContext,
@@ -51,7 +52,9 @@ export default function ({ data, pageContext }: PdfPage) {
 
     const {
         state: {
-            viewPort: { isMobile },
+            viewPort: {
+                windowDimensions: { isMobile, isPrint },
+            },
         },
     } = useTheme();
 
@@ -95,16 +98,16 @@ export default function ({ data, pageContext }: PdfPage) {
         return { me: parsedMe, pageContext, connections };
     }, [data]);
 
-    return !isMobile ? (
+    return !isMobile || !isPrint ? (
         <>
+            <PrintButton />
             <section
                 className={tw(
                     "col-start-2",
                     "lg:col-start-3",
                     "md:col-start-2",
                     "col-span-1",
-                    "row-start-2",
-                    "row-span-2",
+                    "row-start-3",
                     "flex",
                     "flex-col",
                     "w-full"
@@ -128,8 +131,7 @@ export default function ({ data, pageContext }: PdfPage) {
                     "lg:col-start-5",
                     "md:col-start-4",
                     "col-span-1",
-                    "row-start-2",
-                    "row-span-2",
+                    "row-start-3",
                     "flex",
                     "w-full"
                 )}
@@ -153,28 +155,45 @@ export default function ({ data, pageContext }: PdfPage) {
                 "lg:col-start-3",
                 "md:col-start-2",
                 "col-span-1",
-                "row-start-2",
-                "row-span-2",
+                "row-start-3",
                 "flex",
                 "flex-col",
                 "w-full"
             )}
         >
-            <Scroll root={{ className: tw("flex", "w-full", "pr-6") }}>
-                <MeView
-                    me={me}
-                    connections={connections}
-                    locale={pageContext.locale}
-                    links={data.graph.links[pageContext.locale]}
-                    nodes={data.graph.nodes[pageContext.locale]}
-                />
-                <ConnectionsView
-                    connections={connections}
-                    nodes={data.graph.nodes[pageContext.locale]}
-                    links={data.graph.links[pageContext.locale]}
-                    locale={pageContext.locale}
-                />
-            </Scroll>
+            {!isPrint ? (
+                <Scroll root={{ className: tw("flex", "w-full", "pr-6") }}>
+                    <MeView
+                        me={me}
+                        connections={connections}
+                        locale={pageContext.locale}
+                        links={data.graph.links[pageContext.locale]}
+                        nodes={data.graph.nodes[pageContext.locale]}
+                    />
+                    <ConnectionsView
+                        connections={connections}
+                        nodes={data.graph.nodes[pageContext.locale]}
+                        links={data.graph.links[pageContext.locale]}
+                        locale={pageContext.locale}
+                    />
+                </Scroll>
+            ) : (
+                <>
+                    <MeView
+                        me={me}
+                        connections={connections}
+                        locale={pageContext.locale}
+                        links={data.graph.links[pageContext.locale]}
+                        nodes={data.graph.nodes[pageContext.locale]}
+                    />
+                    <ConnectionsView
+                        connections={connections}
+                        nodes={data.graph.nodes[pageContext.locale]}
+                        links={data.graph.links[pageContext.locale]}
+                        locale={pageContext.locale}
+                    />
+                </>
+            )}
         </section>
     );
 }

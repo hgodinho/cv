@@ -22,5 +22,7 @@ export * from "./entry-list";
 export * from "./seo";
 export * from "./connections";
 export * from "./entities";
+export * from "./button";
+export * from "./print-button";
 
 export * from "./debug";

@@ -1,18 +1,16 @@
 import { PageProviderType } from "./";
-import { PageContext } from "@hgod-in-cv/data/src/types";
-
 
 export const defaultPageContext: Partial<PageProviderType> = {
     pageContext: {
         properties: {
-            en: ["", ""],
-            pt_br: ["", ""],
-            es: ["", ""],
+            en: [["", ""]],
+            pt_br: [["", ""]],
+            es: [["", ""]],
         },
         classes: {
-            en: ["", ""],
-            pt_br: ["", ""],
-            es: ["", ""],
+            en: [["", ""]],
+            pt_br: [["", ""]],
+            es: [["", ""]],
         },
         graph: {
             nodes: {
@@ -26,6 +24,11 @@ export const defaultPageContext: Partial<PageProviderType> = {
                 es: [],
             },
         },
+        meta: {
+            en: [],
+            es: [],
+            pt_br: [],
+        },
         id: "",
         name: "",
         type: "",
@@ -34,27 +37,27 @@ export const defaultPageContext: Partial<PageProviderType> = {
                 lang: "",
                 name: "",
                 icon: "",
-                principal: false
+                principal: false,
             },
             pt_br: {
                 lang: "",
                 name: "",
                 icon: "",
-                principal: false
+                principal: false,
             },
             es: {
                 lang: "",
                 name: "",
                 icon: "",
-                principal: false
+                principal: false,
             },
         },
         site: {
             title: "",
             siteUrl: "",
-            description: ""
+            description: "",
         },
-        locale: "en"
+        locale: "en",
     },
     path: "",
     uri: "",
