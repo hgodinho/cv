@@ -22,5 +22,6 @@ export * from "./entry-list";
 export * from "./seo";
 export * from "./connections";
 export * from "./entities";
+export * from "./variant-switch";
 
 export * from "./debug";

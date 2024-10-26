@@ -95,6 +95,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
                 state: {
                     viewPort,
                     collapsibles,
+                    variant,
                     toggleCollapsible,
                     collapsibleOn,
                     collapsibleOff,
