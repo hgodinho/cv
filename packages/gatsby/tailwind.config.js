@@ -7,6 +7,7 @@ const config = {
         `./src/pages/**/*.{js,jsx,ts,tsx}`,
         `./src/templates/**/*.{js,jsx,ts,tsx}`,
         `./src/components/**/*.{js,jsx,ts,tsx}`,
+        `./src/styles/**/*.{js,jsx,ts,tsx}`,
     ],
     theme,
     plugins: [],
