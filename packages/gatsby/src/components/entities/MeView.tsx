@@ -27,7 +27,7 @@ export function MeView({ me, connections, links, nodes }: MeViewProps) {
                 {me.name}{" "}
                 <span className={tw("text-sm")}>{`(${me.birthDate})`}</span>
             </Heading>
-            <p>{me.description as React.ReactNode}</p>
+            <p className={tw("mb-4")}>{me.description as React.ReactNode}</p>
 
             <ContactBar data={connections.sameAs} />
 

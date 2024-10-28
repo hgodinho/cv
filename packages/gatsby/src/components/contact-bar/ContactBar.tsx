@@ -17,7 +17,7 @@ export function ContactBar({ data }: ContactBarProps) {
                 "flex",
                 "print:flex-col",
                 "gap-2",
-                "my-2",
+                "mb-4",
                 "items-center",
                 "print:items-start"
             )}

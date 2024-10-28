@@ -6,7 +6,7 @@ export type HeadingProps = {
     level: 1 | 2 | 3 | 4 | 5 | 6;
 } & React.HTMLAttributes<HTMLHeadingElement>;
 
-export const headingVariants = cva(["mt-4", "mb-4", "font-bold", "font-mono"], {
+export const headingVariants = cva(["mb-4", "font-bold", "font-mono"], {
     variants: {
         level: {
             1: ["text-4xl"],
