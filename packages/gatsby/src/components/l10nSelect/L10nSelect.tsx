@@ -11,6 +11,9 @@ import {
 } from "#root/components";
 import { Locales, LOCALES } from "@hgod-in-cv/data/src/types";
 import { cva } from "class-variance-authority";
+import { Variant } from "#root/types";
+
+export type L10NSelectProps = Variant;
 
 interface TriggerProps {
     locale: LOCALES;
@@ -23,39 +26,28 @@ const triggerVariants = cva(
         "l10n-select-trigger",
         "flex",
         "z-10",
+        "w-8",
+        "h-8",
         "disabled:cursor-not-allowed",
         "rounded-none",
         "ring-offset-black",
 
-        "placeholder:text-muted-foreground",
+        "bg-gray-300",
+        "hover:bg-gray-100",
+        "focus:bg-gray-300",
 
         "disabled:cursor-not-allowed",
         "disabled:opacity-50",
         "[&>span]:line-clamp-1",
+
+        "items-center",
+        "justify-center",
     ],
     {
         variants: {
             variant: {
-                default: [
-                    "default",
-                    "col-start-2",
-                    "col-span-1",
-                    "row-start-5",
-                    "row-span-1",
-
-                    "items-center",
-                    "justify-between",
-                ],
-                pdf: [
-                    "pdf",
-                    "col-start-2",
-                    "col-span-1",
-                    "row-start-4",
-                    "row-span-1",
-
-                    "items-center",
-                    "justify-between",
-                ],
+                default: ["default"],
+                pdf: ["pdf"],
             },
         },
         defaultVariants: {
@@ -71,14 +63,16 @@ export const Trigger: React.FC<TriggerProps> = ({
 }) => {
     return (
         <PrimitiveTrigger className={tw(triggerVariants({ variant }))}>
-            <SelectValue>
-                <span className={tw("fi", `fi-${locales[locale].icon}`)}></span>
+            <SelectValue className={tw("w-full", "h-full")}>
+                <span
+                    className={tw("fi", `fi-${locales[locale].icon}`, "fis")}
+                ></span>
             </SelectValue>
         </PrimitiveTrigger>
     );
 };
 
-export function L10NSelect({ variant, ...props }: TriggerProps) {
+export function L10NSelect({ variant }: L10NSelectProps) {
     const { locale, locales, setLocale } = useI18nContext();
     return (
         <Select
@@ -88,14 +82,14 @@ export function L10NSelect({ variant, ...props }: TriggerProps) {
                 setLocale(value as any);
             }}
         >
-            <Trigger
-                {...props}
-                variant={variant}
-                locale={locale}
-                locales={locales}
-            />
+            <Trigger variant={variant} locale={locale} locales={locales} />
             <SelectContent
-                className={tw("rounded-none", "min-w-0", "bg-black/90")}
+                className={tw(
+                    "rounded-none",
+                    "min-w-0",
+                    "bg-slate-300/90",
+                    "text-black"
+                )}
             >
                 {Object.values(locales).map((locale) => (
                     <SelectItem key={locale.lang} value={locale.lang}>

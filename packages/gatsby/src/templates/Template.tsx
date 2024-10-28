@@ -13,11 +13,10 @@ import { PageContext } from "@hgod-in-cv/data/src/types";
 import {
     ClassView,
     Debug,
-    L10NSelect,
     Layout,
     NetworkView,
     OptionsView,
-    VariantSwitch,
+    Footer,
 } from "#root/components";
 
 export type ProviderProps = WrapPageElementBrowserArgs<
@@ -46,8 +45,7 @@ export function Template({ element, variant, ...props }: ProviderProps) {
                                     )}
                                     {element}
                                     <Debug debug={false} />
-                                    <L10NSelect variant={variant} />
-                                    <VariantSwitch variant={variant} />
+                                    <Footer variant={variant} />
                                 </Layout>
                             </NetworkSettingsProvider>
                         </FilterProvider>
