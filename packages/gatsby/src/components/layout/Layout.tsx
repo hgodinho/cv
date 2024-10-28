@@ -20,11 +20,16 @@ const layoutVariant = cva(["layout", "grid", ,], {
             ],
             pdf: [
                 "pdf",
+
                 "grid-cols-pdf",
                 "grid-rows-pdf",
+
                 "md:grid-cols-pdf-md",
+                "md:grid-rows-pdf-md",
+
                 "lg:grid-cols-pdf-lg",
-                // "sm:grid-cols-pdf-sm",
+                "lg:grid-rows-pdf-lg",
+
                 "print:grid-cols-pdf",
                 "print:grid-rows-pdf",
             ],

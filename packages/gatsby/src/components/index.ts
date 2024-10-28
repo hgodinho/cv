@@ -1,5 +1,6 @@
-export * from "./head";
 export * from "./typography";
+export * from "./head";
+export * from "./footer";
 export * from "./slider";
 export * from "./accessible-tree";
 export * from "./class";
