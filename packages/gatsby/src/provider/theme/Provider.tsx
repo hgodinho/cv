@@ -85,9 +85,9 @@ export const ThemeProvider = ({
         const { isMobile, isTablet, isDesktop, height } =
             viewPort.windowDimensions;
         if (height && isMobile) {
-            return `${height - (variant === "default" ? 116 : 96)}px`;
+            return `${height - (variant === "default" ? 116 : 112)}px`;
         } else if (height && isTablet) {
-            return `${height - (variant === "default" ? 116 : 96)}px`;
+            return `${height - (variant === "default" ? 116 : 128)}px`;
         } else if (height && isDesktop) {
             return `${height - (variant === "default" ? 116 : 96)}px`;
         }

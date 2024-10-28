@@ -14,9 +14,13 @@ export function PrintButton() {
     return (
         <Button
             className={tw(
+                "col-start-2",
+                "row-start-2",
                 "lg:col-start-2",
-                "print:hidden",
                 "lg:row-start-2",
+
+                "print:hidden",
+
                 "flex",
                 "p-2",
                 "w-max"

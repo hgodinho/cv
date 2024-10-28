@@ -1,4 +1,5 @@
 import { Heading, Skill } from "#root/components";
+import { tw } from "#root/lib";
 import { Connection, LinkObject, NodeObject } from "@hgod-in-cv/data/src/types";
 import React from "react";
 
@@ -11,7 +12,7 @@ export type SkillSetProps = {
 
 export function SkillSet({ title, data, links, nodes }: SkillSetProps) {
     return (
-        <>
+        <div className={tw("mb-6")}>
             <Heading level={2}>{title}</Heading>
             {data.map((item) => {
                 const link = links.find((link) => {
@@ -32,6 +33,6 @@ export function SkillSet({ title, data, links, nodes }: SkillSetProps) {
                     />
                 );
             })}
-        </>
+        </div>
     );
 }

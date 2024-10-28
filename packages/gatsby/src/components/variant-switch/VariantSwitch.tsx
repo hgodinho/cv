@@ -7,12 +7,12 @@ import { cva } from "class-variance-authority";
 import { Link } from "gatsby";
 
 export const variantSwitchVariant = cva(
-    ["flex", "justify-end", "print:hidden", "z-10"],
+    ["variant-switch", "flex", "justify-end", "print:hidden", "z-10"],
     {
         variants: {
             variant: {
-                default: ["lg:col-start-6", "lg:row-start-5"],
-                pdf: ["lg:col-start-6", "lg:row-start-4"],
+                default: ["default"],
+                pdf: ["pdf"],
             },
         },
         defaultVariants: {

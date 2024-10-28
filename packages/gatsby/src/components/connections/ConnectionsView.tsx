@@ -46,7 +46,7 @@ export function ConnectionsView({
 
     return allowedTypes.map(([key, sourceOrTarget, Component]) => {
         return (
-            <div key={key as string} className={tw()}>
+            <div key={key as string} className={tw("mb-6")}>
                 <Heading level={2} className={tw()}>
                     {properties?.[key]}
                 </Heading>
