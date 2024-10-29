@@ -63,12 +63,15 @@ class I18n {
     }
 
     getEntities(sheetName) {
-        const { header, values } = this.sheets[this.locale].findValuesFromSheet(
-            sheetName,
-            sheetName
-        );
-
         try {
+            const { header, values } = this.sheets[
+                this.locale
+            ].findValuesFromSheet(sheetName, sheetName);
+
+            const endpoints = this.sheets[
+                this.defaultLocale
+            ].findValuesFromSheet("config", "endpoints", 2).values;
+
             const entities = values
                 .map((row) => {
                     if (!row[0]) {
@@ -80,9 +83,7 @@ class I18n {
                             this.defaultLocale
                         ].getRowById(sheetName, row[0]),
                         values: row,
-                        endpoints: this.sheets[
-                            this.defaultLocale
-                        ].findValuesFromSheet("config", "endpoints", 2).values,
+                        endpoints,
                         i18n: this,
                     }).getEntity();
                 })
