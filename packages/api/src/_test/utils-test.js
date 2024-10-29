@@ -9,9 +9,26 @@ function errorTest(title, expected, received = undefined) {
 }
 
 function test(title, callback) {
+    const time = new Date();
     console.log(`${title}`);
     callback();
-    logTest("done", new Date());
+    const elapsed = new Date() - time;
+    if (elapsed > 360000) {
+        errorTest(
+            "done",
+            `${elapsed}ms (${elapsed / 1000}s${
+                elapsed > 60000 ? ` ${elapsed / 60000}m` : ""
+            }) elapsed`
+        );
+        return;
+    }
+
+    logTest(
+        "done",
+        `${elapsed}ms (${elapsed / 1000}s${
+            elapsed > 60000 ? ` ${elapsed / 60000}m` : ""
+        }) elapsed`
+    );
 }
 
 function expect(toBeExpected, actual) {
