@@ -9,4 +9,4 @@ Simple back-end created with Google Apps Script.
 ## Observations
 
 - The data format from sheet must be marked as simple text, otherwise some data may be returned wrong.
-![data format](data-format.png)
+![data format](static/data-format.png)
