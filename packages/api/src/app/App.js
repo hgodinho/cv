@@ -54,37 +54,43 @@ class App {
     }
 
     getL10nConfig() {
-        if (typeof this.l10nConfig === "undefined") {
-            this.l10nConfig = this.configSheet
-                .findValuesFromSheet("config", "l10n", 5)
-                .values.reduce((acc, [lang, name, id, icon, principal]) => {
-                    acc.push({ lang, name, id, icon, principal });
-                    return acc;
-                }, []);
+        if (typeof this.l10nConfig !== "undefined") {
+            return this.l10nConfig;
         }
+
+        this.l10nConfig = this.configSheet
+            .findValuesFromSheet("config", "l10n", 5)
+            .values.reduce((acc, [lang, name, id, icon, principal]) => {
+                acc.push({ lang, name, id, icon, principal });
+                return acc;
+            }, []);
         return this.l10nConfig;
     }
 
     getEndpointsConfig() {
-        if (typeof this.endpointsConfig === "undefined") {
-            this.endpointsConfig = this.configSheet.findValuesFromSheet(
-                "config",
-                "endpoints",
-                2
-            ).values;
+        if (typeof this.endpointsConfig !== "undefined") {
+            return this.endpointsConfig;
         }
+
+        this.endpointsConfig = this.configSheet.findValuesFromSheet(
+            "config",
+            "endpoints",
+            2
+        ).values;
         return this.endpointsConfig;
     }
 
     getApiConfig() {
-        if (typeof this.apiConfig === "undefined") {
-            this.apiConfig = this.configSheet
-                .findValuesFromSheet("config", "api", 2)
-                .values.reduce((acc, [key, value]) => {
-                    acc[key] = value;
-                    return acc;
-                }, {});
+        if (typeof this.apiConfig !== "undefined") {
+            return this.apiConfig;
         }
+
+        this.apiConfig = this.configSheet
+            .findValuesFromSheet("config", "api", 2)
+            .values.reduce((acc, [key, value]) => {
+                acc[key] = value;
+                return acc;
+            }, {});
         return this.apiConfig;
     }
 
