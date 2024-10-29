@@ -40,9 +40,6 @@ class Api {
         // Set the app object
         this.app = new App(this._endpoints());
 
-        // Set the config object
-        this.config = this.app.getApiConfig();
-
         this.parsePath(e);
 
         this.parameter = e.parameter;
@@ -101,11 +98,9 @@ class Api {
 
         this.app.setupI18n(locale);
 
-        // Set the i18n object
-        this.i18n = new I18n(this.app.getL10nConfig(), locale);
-
         if (!this.defaultEndpoints.includes(endpoint)) {
-            this.endpoint = this.i18n.getAliasedTranslatedEndpoint(endpoint);
+            this.endpoint =
+                this.app.i18n.getAliasedTranslatedEndpoint(endpoint);
         } else {
             this.endpoint = endpoint;
         }
@@ -208,7 +203,7 @@ class Api {
                     return this.createResponse({
                         status: 200,
                         data: this.prepareResponse(
-                            this.i18n.getEntities(endpoint),
+                            this.app.i18n.getEntities(endpoint),
                             endpoint
                         ),
                     });
@@ -220,7 +215,7 @@ class Api {
             if ("meta" === slug) {
                 return this.createResponse({
                     status: 200,
-                    data: this.i18n.getEntitiesMeta(endpoint),
+                    data: this.app.i18n.getEntitiesMeta(endpoint),
                 });
             }
 
@@ -287,16 +282,13 @@ class Api {
     }
 
     getGraphData() {
-        if (typeof this.app.rawData === "undefined") {
-            this.app.setupRawData();
-        }
         const json = {
             "@context": "https://schema.org/",
             "@graph": [],
         };
 
         this._endpoints().forEach((endpoint) => {
-            const entities = this.i18n.getEntities(endpoint);
+            const entities = this.app.i18n.getEntities(endpoint);
             json["@graph"].push(...entities);
         });
 
@@ -502,11 +494,11 @@ class Api {
     }
 
     getUrl() {
-        return `${this.config.url}/${this.getBase()}`;
+        return `${this.app.apiConfig.url}/${this.getBase()}`;
     }
 
     getBase(slash = true) {
-        return `${this.config.namespace}/${this.config.version}${
+        return `${this.app.apiConfig.namespace}/${this.app.apiConfig.version}${
             slash ? "/" : ""
         }`;
     }
