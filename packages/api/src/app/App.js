@@ -11,7 +11,6 @@ class App {
 
     setupConfig() {
         this.getApiConfig();
-        this.getProperties();
     }
 
     setupI18n(locale) {
