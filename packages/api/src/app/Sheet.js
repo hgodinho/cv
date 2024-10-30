@@ -96,7 +96,7 @@ class Sheet {
         const range = finder.findNext();
         if (!range)
             throw new Error(
-                `No row found with key=${key} in sheetName=${sheetName}`
+                `No row found with key "${key}" in sheetName "${sheetName}"`
             );
         const dataColumn = range.getColumn();
         let dataRow = range.getRow();
@@ -147,52 +147,116 @@ class Sheet {
     }
 
     getOffset(sheetName) {
-        const sheet = this.getSheet(sheetName);
-        const finder = sheet.createTextFinder("offset");
-        const range = finder.findNext();
-        const offset = sheet.getRange(range.getRow(), range.getColumn() + 1);
-        return offset.getValue();
+        try {
+            if (typeof this.offset !== "undefined" && this.offset[sheetName]) {
+                return this.offset[sheetName];
+            }
+
+            const sheet = this.getSheet(sheetName);
+            const finder = sheet.createTextFinder("offset");
+            const range = finder.findNext();
+            const offset = sheet.getRange(
+                range.getRow(),
+                range.getColumn() + 1
+            );
+            this.offset = {
+                ...(this.offset || {}),
+                [sheetName]: offset.getValue(),
+            };
+            return this.offset[sheetName];
+        } catch (error) {
+            throw new Error(
+                `Error getting offset for sheet ${sheetName}: ${error}`
+            );
+        }
     }
 
     getTotalRows(sheetName) {
-        const { total } = this.findRangeFromSheet({
-            sheetName,
-            key: sheetName,
-        });
-        return total;
+        try {
+            if (typeof this.total !== "undefined" && this.total[sheetName]) {
+                return this.total[sheetName];
+            }
+
+            const { total } = this.findRangeFromSheet({
+                sheetName,
+                key: sheetName,
+            });
+            this.total = {
+                ...(this.total || {}),
+                [sheetName]: total,
+            };
+            return this.total[sheetName];
+        } catch (error) {
+            throw new Error(
+                `Error getting total rows for sheet ${sheetName}: ${error}`
+            );
+        }
     }
 
     getRowById(sheetName, id) {
-        const sheet = this.getSheet(sheetName);
-        const offset = this.getOffset(sheetName);
-        const total = this.getTotalRows(sheetName);
-        const range = sheet.getRange(offset + 1, 2, total);
-
-        let row;
-
-        id = id.trim().toString();
-        id = id ? id : false;
-
-        if (!id) {
-            throw new Error(
-                `No id provided for sheet "${sheetName}", id received was "${id}"`
-            );
-        }
-
-        range.getValues().forEach((data, i) => {
-            if (data[0] === id) {
-                row = i + offset + 1;
+        try {
+            try {
+                if (
+                    typeof this.rows !== "undefined" &&
+                    this.rows.hasOwnProperty(sheetName) &&
+                    this.rows[sheetName].hasOwnProperty(id)
+                ) {
+                    return this.rows[sheetName][id];
+                }
+            } catch (error) {
+                throw new Error(
+                    `Error getting row by id for sheet "${sheetName}" and id "${id} from memory": ${error}`
+                );
             }
-        });
-        if (!row) {
+
+            const sheet = this.getSheet(sheetName);
+            const offset = this.getOffset(sheetName);
+            const total = this.getTotalRows(sheetName);
+            const range = sheet.getRange(offset + 1, 2, total);
+
+            let row;
+
+            id = id.trim().toString();
+            id = id ? id : false;
+
+            if (!id) {
+                throw new Error(
+                    `No id provided for sheet "${sheetName}", id received was "${id}"`
+                );
+            }
+
+            range.getValues().forEach((data, i) => {
+                if (data[0] === id) {
+                    row = i + offset + 1;
+                }
+            });
+            if (!row) {
+                throw new Error(
+                    `No row found with id "${id}" at sheet "${sheetName}"`
+                );
+            }
+            const rangeRow = sheet.getRange(
+                row,
+                2,
+                1,
+                sheet.getLastColumn() - 1
+            );
+            const valuesRow = rangeRow.getValues();
+
+            this.rows = {
+                ...(this.rows || {}),
+                [sheetName]: {
+                    ...(this.rows?.[sheetName] || {}),
+                    [id]: valuesRow[0],
+                },
+            };
+
+            return this.rows[sheetName][id];
+        } catch (error) {
             throw new Error(
-                `No row found with id "${id}" at sheet "${sheetName}"`
+                `Error getting row by id for sheet "${sheetName}" and id "${id}": ${error}`
             );
         }
-        const rangeRow = sheet.getRange(row, 2, 1, sheet.getLastColumn() - 1);
-        const valuesRow = rangeRow.getValues();
-
-        return valuesRow[0];
     }
 
     getRowByQuery(sheetName, query) {
@@ -213,8 +277,22 @@ class Sheet {
     }
 
     getHeader(sheetName) {
-        const { header } = this.findValuesFromSheet(sheetName, sheetName);
-        return header;
+        try {
+            if (typeof this.header !== "undefined" && this.header[sheetName]) {
+                return this.header[sheetName];
+            }
+
+            const { header } = this.findValuesFromSheet(sheetName, sheetName);
+            this.header = {
+                ...(this.header || {}),
+                [sheetName]: header,
+            };
+            return this.header[sheetName];
+        } catch (error) {
+            throw new Error(
+                `Error getting header for sheet ${sheetName}: ${error}`
+            );
+        }
     }
 
     /**
@@ -226,6 +304,9 @@ class Sheet {
      *  "Y8888P "Y88P"  888     "Y8888
      */
     setupSpreadsheet(id) {
+        if (typeof this.spreadsheet !== "undefined") {
+            return this.spreadsheet;
+        }
         if (id) {
             this.id = id;
             this.spreadsheet = SpreadsheetApp.openById(id);
@@ -250,7 +331,14 @@ class Sheet {
     }
 
     getSheet(sheetName) {
-        return this.getSpreadsheet().getSheetByName(sheetName);
+        if (
+            typeof this.sheet !== "undefined" &&
+            this.sheet.getName() === sheetName
+        ) {
+            return this.sheet;
+        }
+        this.sheet = this.getSpreadsheet().getSheetByName(sheetName);
+        return this.sheet;
     }
 
     getId() {
