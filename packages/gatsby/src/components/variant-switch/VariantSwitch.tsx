@@ -7,7 +7,7 @@ import { cva } from "class-variance-authority";
 import { Link } from "gatsby";
 
 export const variantSwitchVariant = cva(
-    ["variant-switch", "flex", "justify-end", "print:hidden", "z-10"],
+    ["variant-switch", "flex", "justify-end", "z-10", "print:hidden"],
     {
         variants: {
             variant: {
