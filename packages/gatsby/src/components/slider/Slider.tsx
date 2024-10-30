@@ -25,7 +25,7 @@ const Slider = React.forwardRef<
                         "h-full",
                         "border-2",
                         "bg-black",
-                        "border-slate-700"
+                        "border-black",
                     )}
                 />
             </SliderPrimitive.Track>
@@ -36,7 +36,7 @@ const Slider = React.forwardRef<
                     "w-5",
                     "rounded-full",
                     "border-2",
-                    "border-slate-700",
+                    "border-black",
                     "bg-black",
                     "ring-offset-black",
                     "transition-colors",
