@@ -31,7 +31,6 @@ const triggerVariants = cva(
         "disabled:cursor-not-allowed",
         "rounded-none",
         "ring-offset-black",
-
         "bg-gray-300",
         "hover:bg-gray-100",
         "focus:bg-gray-300",
@@ -42,6 +41,7 @@ const triggerVariants = cva(
 
         "items-center",
         "justify-center",
+        "print:hidden",
     ],
     {
         variants: {

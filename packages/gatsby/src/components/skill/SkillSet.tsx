@@ -8,11 +8,18 @@ export type SkillSetProps = {
     data: Connection[];
     links: LinkObject[];
     nodes: NodeObject[];
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
-export function SkillSet({ title, data, links, nodes }: SkillSetProps) {
+export function SkillSet({
+    title,
+    data,
+    links,
+    nodes,
+    className,
+    ...props
+}: SkillSetProps) {
     return (
-        <div className={tw("mb-6")}>
+        <div {...props} className={tw("mb-6", className)}>
             <Heading level={2}>{title}</Heading>
             {data.map((item) => {
                 const link = links.find((link) => {

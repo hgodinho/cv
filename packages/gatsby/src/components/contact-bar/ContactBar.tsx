@@ -1,5 +1,6 @@
 import { tw } from "#root/lib";
 import { UnionSchemaType } from "@hgod-in-cv/data/src/types";
+import { Phone } from "lucide-react";
 import React from "react";
 
 export type ContactBarProps = {
@@ -66,7 +67,7 @@ export function ContactBar({ data }: ContactBarProps) {
                 );
             })}
             <a
-                href="mailto:ola@hgod.in"
+                href="mailto:henrique@hgod.in"
                 className={tw(
                     "dark:text-blue-300",
                     "dark:hover:text-blue-500",
@@ -87,9 +88,14 @@ export function ContactBar({ data }: ContactBarProps) {
                     src="https://cdn.simpleicons.org/gmail/black"
                 />
                 <span className={tw("hidden", "print:block")}>
-                    {"ola@hgod.in"}
+                    {"henrique@hgod.in"}
                 </span>
             </a>
+
+            <span className={tw("hidden", "print:block")} aria-label="tel">
+                <Phone size={16} />
+                {"+55 11 99416 7130"}
+            </span>
         </aside>
     );
 }

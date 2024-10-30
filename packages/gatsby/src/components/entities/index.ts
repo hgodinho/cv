@@ -1,3 +1,4 @@
+export * from "./MemberOfView";
 export * from "./CredentialView";
 export * from "./CreativeWorkView";
 export * from "./EventView";

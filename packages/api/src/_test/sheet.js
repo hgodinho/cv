@@ -40,7 +40,7 @@ function test_Sheet() {
     });
 
     test("Sheet.getOffset", () => {
-        expect("number", sheet.getOffset("place")).toBe(13);
+        expect("number", sheet.getOffset("place")).toBe(14);
     });
 
     test("Sheet.getTotalRows", () => {

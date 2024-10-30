@@ -31,18 +31,21 @@ export function MeView({ me, connections, links, nodes }: MeViewProps) {
 
             <ContactBar data={connections.sameAs} />
 
-            <aside>
-                <SkillSet
-                    title={properties?.knowsAbout as string}
-                    data={connections.knowsAbout}
-                    links={links}
-                    nodes={nodes}
-                />
+            <aside
+                className={tw("print:grid", "print:grid-cols-2", "print:gap-4")}
+            >
                 <SkillSet
                     title={properties?.knowsLanguage as string}
                     data={connections.knowsLanguage}
                     links={links}
                     nodes={nodes}
+                />
+                <SkillSet
+                    title={properties?.knowsAbout as string}
+                    data={connections.knowsAbout}
+                    links={links}
+                    nodes={nodes}
+                    className={tw("print:-order-1")}
                 />
             </aside>
         </>
