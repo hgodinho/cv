@@ -29,7 +29,7 @@ export function Header() {
                 borderColor: alphaHex(colors[selected.type], 0.6),
             }}
         >
-            <div className={tw("flex", "flex-row", "justify-between", "gap-4")}>
+            <div className={tw("grid", "grid-cols-class-header", "gap-4")}>
                 {selected["type"] && (
                     <Field
                         label={{

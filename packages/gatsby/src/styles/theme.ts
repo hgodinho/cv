@@ -18,6 +18,8 @@ export const theme = {
             pdf: "32px 1fr 32px",
             "pdf-md": "32px 0.4fr 16px 0.6fr 32px",
             "pdf-lg": "32px 0.2fr 0.4fr 16px 0.6fr 0.2fr 32px",
+
+            "class-header": "0.7fr 0.3fr",
         },
         gridTemplateRows: {
             layout: "16px 32px var(--middle-height) 16px 32px 16px",

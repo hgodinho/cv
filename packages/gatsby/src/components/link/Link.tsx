@@ -22,6 +22,7 @@ export function Link({
         return {
             className: tw(
                 "inline-flex",
+                "items-center",
                 "gap-1",
                 "print:text-black",
                 "dark:text-blue-300",
@@ -33,6 +34,7 @@ export function Link({
                 "focus:decoration-dotted",
                 "focus:underline-offset-4",
                 "focus:font-bold",
+                "[overflow-wrap:anywhere]",
                 isActive ? tw("dark:text-blue-400", "font-bold") : "",
                 props.className
             ),
@@ -52,9 +54,7 @@ export function Link({
             style={style}
         >
             {children}
-            <ExternalLink
-                className={tw("self-center", "w-[12px]", "h-[12px]", iconClass)}
-            />
+            <ExternalLink className={tw("w-[12px]", "h-[12px]", iconClass)} />
         </a>
     );
 }

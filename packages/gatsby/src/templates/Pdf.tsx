@@ -132,6 +132,35 @@ export default function ({ data, pageContext }: PdfPage) {
                 </section>
             </>
         );
+    } else if (isPrint) {
+        return (
+            <section
+                className={tw(
+                    "col-start-2",
+                    "lg:col-start-3",
+                    "md:col-start-2",
+                    "col-span-1",
+                    "row-start-3",
+                    "flex",
+                    "flex-col",
+                    "w-full"
+                )}
+            >
+                <MeView
+                    me={me}
+                    connections={connections}
+                    locale={pageContext.locale}
+                    links={data.graph.links[pageContext.locale]}
+                    nodes={data.graph.nodes[pageContext.locale]}
+                />
+                <ConnectionsView
+                    connections={connections}
+                    nodes={data.graph.nodes[pageContext.locale]}
+                    links={data.graph.links[pageContext.locale]}
+                    locale={pageContext.locale}
+                />
+            </section>
+        );
     } else if (!isMobile || !isPrint) {
         return (
             <>
@@ -191,35 +220,6 @@ export default function ({ data, pageContext }: PdfPage) {
                     </Scroll>
                 </section>
             </>
-        );
-    } else if (isPrint) {
-        return (
-            <section
-                className={tw(
-                    "col-start-2",
-                    "lg:col-start-3",
-                    "md:col-start-2",
-                    "col-span-1",
-                    "row-start-4",
-                    "flex",
-                    "flex-col",
-                    "w-full"
-                )}
-            >
-                <MeView
-                    me={me}
-                    connections={connections}
-                    locale={pageContext.locale}
-                    links={data.graph.links[pageContext.locale]}
-                    nodes={data.graph.nodes[pageContext.locale]}
-                />
-                <ConnectionsView
-                    connections={connections}
-                    nodes={data.graph.nodes[pageContext.locale]}
-                    links={data.graph.links[pageContext.locale]}
-                    locale={pageContext.locale}
-                />
-            </section>
         );
     }
 }
