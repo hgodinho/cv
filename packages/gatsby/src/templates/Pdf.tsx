@@ -98,7 +98,41 @@ export default function ({ data, pageContext }: PdfPage) {
         return { me: parsedMe, pageContext, connections };
     }, [data]);
 
-    if (!isMobile || !isPrint) {
+    if (isMobile && !isPrint) {
+        return (
+            <>
+                <PrintButton />
+                <section
+                    className={tw(
+                        "col-start-2",
+                        "lg:col-start-3",
+                        "md:col-start-2",
+                        "col-span-1",
+                        "row-start-4",
+                        "flex",
+                        "flex-col",
+                        "w-full"
+                    )}
+                >
+                    <Scroll root={{ className: tw("flex", "w-full", "pr-6") }}>
+                        <MeView
+                            me={me}
+                            connections={connections}
+                            locale={pageContext.locale}
+                            links={data.graph.links[pageContext.locale]}
+                            nodes={data.graph.nodes[pageContext.locale]}
+                        />
+                        <ConnectionsView
+                            connections={connections}
+                            nodes={data.graph.nodes[pageContext.locale]}
+                            links={data.graph.links[pageContext.locale]}
+                            locale={pageContext.locale}
+                        />
+                    </Scroll>
+                </section>
+            </>
+        );
+    } else if (!isMobile || !isPrint) {
         return (
             <>
                 <PrintButton />
@@ -158,59 +192,34 @@ export default function ({ data, pageContext }: PdfPage) {
                 </section>
             </>
         );
-    } else {
+    } else if (isPrint) {
         return (
-            <>
-                <PrintButton />
-                <section
-                    className={tw(
-                        "col-start-2",
-                        "lg:col-start-3",
-                        "md:col-start-2",
-                        "col-span-1",
-                        "row-start-4",
-                        "flex",
-                        "flex-col",
-                        "w-full"
-                    )}
-                >
-                    {!isPrint ? (
-                        <Scroll
-                            root={{ className: tw("flex", "w-full", "pr-6") }}
-                        >
-                            <MeView
-                                me={me}
-                                connections={connections}
-                                locale={pageContext.locale}
-                                links={data.graph.links[pageContext.locale]}
-                                nodes={data.graph.nodes[pageContext.locale]}
-                            />
-                            <ConnectionsView
-                                connections={connections}
-                                nodes={data.graph.nodes[pageContext.locale]}
-                                links={data.graph.links[pageContext.locale]}
-                                locale={pageContext.locale}
-                            />
-                        </Scroll>
-                    ) : (
-                        <>
-                            <MeView
-                                me={me}
-                                connections={connections}
-                                locale={pageContext.locale}
-                                links={data.graph.links[pageContext.locale]}
-                                nodes={data.graph.nodes[pageContext.locale]}
-                            />
-                            <ConnectionsView
-                                connections={connections}
-                                nodes={data.graph.nodes[pageContext.locale]}
-                                links={data.graph.links[pageContext.locale]}
-                                locale={pageContext.locale}
-                            />
-                        </>
-                    )}
-                </section>
-            </>
+            <section
+                className={tw(
+                    "col-start-2",
+                    "lg:col-start-3",
+                    "md:col-start-2",
+                    "col-span-1",
+                    "row-start-4",
+                    "flex",
+                    "flex-col",
+                    "w-full"
+                )}
+            >
+                <MeView
+                    me={me}
+                    connections={connections}
+                    locale={pageContext.locale}
+                    links={data.graph.links[pageContext.locale]}
+                    nodes={data.graph.nodes[pageContext.locale]}
+                />
+                <ConnectionsView
+                    connections={connections}
+                    nodes={data.graph.nodes[pageContext.locale]}
+                    links={data.graph.links[pageContext.locale]}
+                    locale={pageContext.locale}
+                />
+            </section>
         );
     }
 }

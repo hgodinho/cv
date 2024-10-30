@@ -52,8 +52,6 @@ export function CredentialView({
         };
     }, [nodes, data]);
 
-    console.log({ issuedBy, department, departmentOfDepartment });
-
     return (
         <div className={tw(credentialViewVariants({ variant, className }))}>
             <p className={tw("font-bold")}>
