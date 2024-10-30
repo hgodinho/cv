@@ -86,9 +86,6 @@ export function useViewPortSize() {
         (trueForPrint: boolean) => {
             setWindowDimensions({
                 ...windowDimensions,
-                isDesktop: false,
-                isMobile: true,
-                isTablet: false,
                 isPrint: trueForPrint,
             });
         },
