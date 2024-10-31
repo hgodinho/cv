@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { graphql, PageProps } from "gatsby";
 import {
     Head as PrimitiveHead,
@@ -98,130 +98,110 @@ export default function ({ data, pageContext }: PdfPage) {
         return { me: parsedMe, pageContext, connections };
     }, [data]);
 
-    if (isMobile && !isPrint) {
-        return (
-            <>
-                <PrintButton />
-                <section
-                    className={tw(
-                        "col-start-2",
-                        "lg:col-start-3",
-                        "md:col-start-2",
-                        "col-span-1",
-                        "row-start-4",
-                        "flex",
-                        "flex-col",
-                        "w-full"
-                    )}
-                >
-                    <Scroll root={{ className: tw("flex", "w-full", "pr-6") }}>
-                        <MeView
-                            me={me}
-                            connections={connections}
-                            locale={pageContext.locale}
-                            links={data.graph.links[pageContext.locale]}
-                            nodes={data.graph.nodes[pageContext.locale]}
-                        />
-                        <ConnectionsView
-                            connections={connections}
-                            nodes={data.graph.nodes[pageContext.locale]}
-                            links={data.graph.links[pageContext.locale]}
-                            locale={pageContext.locale}
-                        />
-                    </Scroll>
-                </section>
-            </>
-        );
-    } else if (isPrint) {
-        return (
-            <section
+    return (
+        <>
+            <header
                 className={tw(
+                    "sticky",
+                    "top-0",
+                    "ml-6",
+                    "py-4",
+
                     "col-start-2",
-                    "lg:col-start-3",
-                    "md:col-start-2",
-                    "col-span-1",
-                    "row-start-3",
-                    "flex",
-                    "flex-col",
-                    "w-full"
+                    "row-start-2",
+                    "z-10",
+
+                    "bg-slate-50",
+
+                    // media query
+                    "lg:col-start-2",
+                    "lg:row-start-2",
+
+                    "md:ml-0",
+                    "md:p-0"
                 )}
             >
-                <MeView
-                    me={me}
-                    connections={connections}
-                    locale={pageContext.locale}
-                    links={data.graph.links[pageContext.locale]}
-                    nodes={data.graph.nodes[pageContext.locale]}
-                />
-                <ConnectionsView
-                    connections={connections}
-                    nodes={data.graph.nodes[pageContext.locale]}
-                    links={data.graph.links[pageContext.locale]}
-                    locale={pageContext.locale}
-                />
-            </section>
-        );
-    } else if (!isMobile || !isPrint) {
-        return (
-            <>
                 <PrintButton />
-                <section
-                    className={tw(
-                        "col-start-2",
-                        "md:col-start-2",
-                        "lg:col-start-3",
+            </header>
+            <section
+                className={tw(
+                    "w-auto",
 
-                        "row-start-4",
-                        "lg:row-start-3",
+                    "col-start-2",
+                    "row-start-4",
+                    "block",
+                    "px-6",
 
-                        "col-span-1",
-                        "flex",
-                        "flex-col",
-                        "w-full"
-                    )}
+                    // media-query
+                    "md:px-0",
+
+                    "md:grid",
+                    "md:grid-cols-subgrid",
+                    "md:grid-rows-subgrid",
+
+                    "md:col-start-2",
+                    "lg:col-start-3",
+
+                    "md:col-span-3",
+                    "lg:col-span-3",
+
+                    "lg:row-start-3"
+                )}
+            >
+                <Scroll
+                    root={{
+                        className: tw(
+                            "w-full",
+                            "pr-6",
+                            "col-start-1",
+                            "col-span-1",
+
+                            // media-query
+                            "print:block",
+                            "md:pt-0",
+                            "print:p-0"
+                        ),
+                    }}
                 >
-                    <Scroll root={{ className: tw("flex", "w-full", "pr-6") }}>
-                        <MeView
-                            me={me}
-                            connections={connections}
-                            locale={pageContext.locale}
-                            links={data.graph.links[pageContext.locale]}
-                            nodes={data.graph.nodes[pageContext.locale]}
-                        />
-                    </Scroll>
-                </section>
+                    <MeView
+                        me={me}
+                        connections={connections}
+                        locale={pageContext.locale}
+                        links={data.graph.links[pageContext.locale]}
+                        nodes={data.graph.nodes[pageContext.locale]}
+                    />
+                </Scroll>
+                <Scroll
+                    root={{
+                        className: tw(
+                            "flex",
+                            "w-full",
+                            "col-start-1",
+                            "col-span-1",
 
-                <section
-                    className={tw(
-                        "bg-slate-300",
-                        "col-start-2",
-                        "lg:col-start-5",
-                        "md:col-start-4",
+                            // media-query
+                            "md:bg-gray-300",
 
-                        "row-start-4",
-                        "lg:row-start-3",
+                            "md:px-6",
+                            "md:py-4",
+                            "md:col-start-4",
+                            "lg:col-start-3",
 
-                        "col-span-1",
-                        "flex",
-                        "w-full"
-                    )}
+                            "print:block",
+                            "print:p-0"
+                        ),
+                    }}
                 >
-                    <Scroll
-                        root={{
-                            className: tw("flex", "w-full", "ml-6", "pr-6"),
-                        }}
-                    >
-                        <ConnectionsView
-                            connections={connections}
-                            nodes={data.graph.nodes[pageContext.locale]}
-                            links={data.graph.links[pageContext.locale]}
-                            locale={pageContext.locale}
-                        />
-                    </Scroll>
-                </section>
-            </>
-        );
-    }
+                    <ConnectionsView
+                        connections={connections}
+                        nodes={data.graph.nodes[pageContext.locale]}
+                        links={data.graph.links[pageContext.locale]}
+                        locale={pageContext.locale}
+                    />
+                </Scroll>
+            </section>
+        </>
+    );
 }
 
 export const Head = ({ pageContext, data }: PdfPage) => {
