@@ -6,7 +6,7 @@ import { Link } from "#root/components";
 import { Credential } from "@hgod-in-cv/data/src/types";
 import { EntityViewProps } from "./types";
 
-const credentialViewVariants = cva([], {
+const credentialViewVariants = cva(["mb-2"], {
     variants: {
         variant: {
             default: [],

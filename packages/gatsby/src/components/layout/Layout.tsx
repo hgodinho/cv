@@ -3,7 +3,7 @@ import React from "react";
 import { tw } from "#root/lib";
 import { cva } from "class-variance-authority";
 
-const layoutVariant = cva(["layout", "grid"], {
+const layoutVariant = cva(["layout", "grid", "text-pretty"], {
     variants: {
         variant: {
             default: [
