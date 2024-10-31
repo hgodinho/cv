@@ -5,6 +5,7 @@ import { Plus, Minus, EyeOff } from "react-feather";
 
 import { tw } from "#root/lib";
 import { useTheme } from "#root/provider";
+import { buttonVariants } from "#root/components";
 
 export type CollapsibleProps = {
     className?: {
@@ -69,23 +70,12 @@ export function Collapsible({
         >
             <CollapsiblePrimitive.Trigger
                 className={tw(
-                    "trigger",
-                    "w-8",
-                    "h-8",
-                    // "p-2",
-                    "flex",
-                    "justify-center",
-                    "items-center",
-                    "focus:outline-none",
-                    "focus:ring-4",
-                    "focus:ring-inset",
-                    "text-black",
-                    "disabled:bg-black/40",
-                    "focus:ring-gray-500",
-                    "bg-gray-300",
-                    "hover:bg-gray-100",
-                    "focus:bg-gray-300",
-                    "disabled:cursor-not-allowed",
+                    buttonVariants({
+                        className: tw(
+                            "collapsible-trigger",
+                            className?.trigger
+                        ),
+                    }),
                     className?.trigger
                 )}
                 {...triggerProps}
