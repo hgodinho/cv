@@ -15,8 +15,12 @@ export function Skill({ label, value, bestRating }: SkillProps) {
                 "flex",
                 "items-center",
                 "place-content-between",
+                "mb-2",
                 "gap-2",
-                "mb-2"
+                "text-sm",
+                "print:text-xs",
+                "font-mono",
+                "font-bold"
             )}
         >
             {label}

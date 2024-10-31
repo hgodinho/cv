@@ -9,12 +9,12 @@ export type HeadingProps = {
 export const headingVariants = cva(["mb-4", "font-bold", "font-mono"], {
     variants: {
         level: {
-            1: ["text-4xl"],
-            2: ["text-3xl"],
-            3: ["text-2xl"],
-            4: ["text-xl"],
-            5: ["text-lg"],
-            6: ["text-base"],
+            1: ["text-3xl"],
+            2: ["text-2xl"],
+            3: ["text-xl"],
+            4: ["text-lg"],
+            5: ["text-base"],
+            6: ["text-base", "font-sans", "italic"],
         },
     },
 });
