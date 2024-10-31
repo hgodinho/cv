@@ -7,7 +7,7 @@ import { CreativeWork, Event } from "@hgod-in-cv/data/src/types";
 import { EntityViewProps } from "./types";
 import { useFilterContext } from "#root/provider";
 
-const eventViewVariants = cva([], {
+const eventViewVariants = cva(["mb-2"], {
     variants: {
         variant: {
             default: [],

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { Fragment } from "react";
 
 import { cva } from "class-variance-authority";
 import { tw } from "#root/lib";
@@ -7,7 +7,7 @@ import { CreativeWork } from "@hgod-in-cv/data/src/types";
 import { EntityViewProps } from "./types";
 import { useFilterContext } from "#root/provider";
 
-const creativeWorkViewVariants = cva([], {
+const creativeWorkViewVariants = cva(["mb-2"], {
     variants: {
         variant: {
             default: [],

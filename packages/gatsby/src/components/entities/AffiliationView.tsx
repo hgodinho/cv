@@ -6,7 +6,7 @@ import { Link } from "#root/components";
 import { Intangible } from "@hgod-in-cv/data/src/types";
 import { EntityViewProps } from "./types";
 
-const affiliationViewVariants = cva([], {
+const affiliationViewVariants = cva(["mb-2"], {
     variants: {
         variant: {
             default: [],

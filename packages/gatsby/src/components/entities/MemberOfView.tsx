@@ -6,7 +6,7 @@ import { Link } from "#root/components";
 import { Organization } from "@hgod-in-cv/data/src/types";
 import { EntityViewProps } from "./types";
 
-const memberOfViewVariants = cva([], {
+const memberOfViewVariants = cva(["mb-2"], {
     variants: {
         variant: {
             default: [],
