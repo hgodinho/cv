@@ -35,6 +35,34 @@ export function CreativeWorkView({
                 {classes?.[data.type]}
             </p>
             <Link href={data.id as string}>{data.name}</Link>
+            {typeof data.description !== "undefined" && (
+                <p>{data.description as React.ReactNode}</p>
+            )}
+            {typeof data.publication !== "undefined" && (
+                <p>
+                    {(data.publication as string[])?.map((pub, i) => (
+                        <Fragment key={`pub-${i}`}>{pub}</Fragment>
+                    ))}
+                </p>
+            )}
+            {typeof data.sameAs !== "undefined" && (
+                <ul className={tw("list-[square]", "list-inside")}>
+                    {(data.sameAs as string[])?.map((sameAs, i) => (
+                        <li key={`sameAs-${i}`} className={tw()}>
+                            <Link
+                                href={sameAs}
+                                className={tw(
+                                    "truncate",
+                                    "text-ellipsis",
+                                    "break-all"
+                                )}
+                            >
+                                {sameAs}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }
