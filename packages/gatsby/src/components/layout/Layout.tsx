@@ -3,7 +3,7 @@ import React from "react";
 import { tw } from "#root/lib";
 import { cva } from "class-variance-authority";
 
-const layoutVariant = cva(["layout", "grid", ,], {
+const layoutVariant = cva(["layout", "grid"], {
     variants: {
         variant: {
             default: [
@@ -21,8 +21,11 @@ const layoutVariant = cva(["layout", "grid", ,], {
             pdf: [
                 "pdf",
 
-                "grid-cols-pdf",
-                "grid-rows-pdf",
+                "flex",
+                "flex-col",
+
+                "md:grid",
+                "md:p-0",
 
                 "md:grid-cols-pdf-md",
                 "md:grid-rows-pdf-md",

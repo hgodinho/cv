@@ -32,7 +32,7 @@ export function MeView({ me, connections, links, nodes }: MeViewProps) {
             <ContactBar data={connections.sameAs} />
 
             <aside
-                className={tw("print:grid", "print:grid-cols-2", "print:gap-4")}
+                className={tw("print:grid", "print:grid-cols-2", "print:gap-6")}
             >
                 <SkillSet
                     title={properties?.knowsLanguage as string}

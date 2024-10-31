@@ -46,9 +46,9 @@ export function ConnectionsView({
 
     const { properties } = useFilterContext();
 
-    return allowedTypes.map(([key, sourceOrTarget, Component], i) => {
+    return allowedTypes.map(([key, sourceOrTarget, Component]) => {
         return (
-            <div key={key as string} className={tw("mb-6", i === 0 ? "mt-4" : "")}>
+            <div key={key as string} className={tw("mb-6")}>
                 <Heading level={2} className={tw()}>
                     {properties?.[key]}
                 </Heading>
