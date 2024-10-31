@@ -34,20 +34,19 @@ export function VariantSwitch({
     return (
         <div
             {...props}
-            className={tw(variantSwitchVariant({ variant, className }))}
+            className={tw(
+                variantSwitchVariant({
+                    variant,
+                    className,
+                })
+            )}
         >
             {variant === "default" ? (
-                <Link
-                    className={tw(buttonVariants(), "flex", "p-2", "w-max")}
-                    to={`/${locale}/print`}
-                >
+                <Link className={tw(buttonVariants())} to={`/${locale}/print`}>
                     <FileText className={tw("w-6", "h-6")} />
                 </Link>
             ) : (
-                <Link
-                    className={tw(buttonVariants(), "flex", "p-2", "w-max")}
-                    to={`/${locale}`}
-                >
+                <Link className={tw(buttonVariants())} to={`/${locale}`}>
                     <Waypoints className={tw("w-6", "h-6")} />
                 </Link>
             )}
