@@ -21,11 +21,8 @@ const layoutVariant = cva(["layout", "grid", "text-pretty"], {
             pdf: [
                 "pdf",
 
-                "flex",
-                "flex-col",
-
-                "md:grid",
-                "md:p-0",
+                "grid-cols-pdf",
+                "grid-rows-pdf",
 
                 "md:grid-cols-pdf-md",
                 "md:grid-rows-pdf-md",
