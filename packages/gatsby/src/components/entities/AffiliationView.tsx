@@ -6,7 +6,7 @@ import { Link } from "#root/components";
 import { Intangible } from "@hgod-in-cv/data/src/types";
 import { EntityViewProps } from "./types";
 
-const affiliationViewVariants = cva([], {
+const affiliationViewVariants = cva(["mb-2"], {
     variants: {
         variant: {
             default: [],
@@ -26,16 +26,15 @@ export function AffiliationView({
     locale,
 }: AffiliationViewProps) {
     const { affiliatedTo } = useMemo(() => {
-        const link = links.find((link) => {
-            return link.object === data.id;
+        const employee = links.find((link) => {
+            return link.predicate === "employee" && link.object === data.id;
         });
 
         const affiliatedTo = nodes.find((node) => {
-            return node.id === link?.subject;
+            return node.id === employee?.subject;
         });
 
         return {
-            link,
             affiliatedTo,
         };
     }, [nodes, links, data]);

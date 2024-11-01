@@ -6,11 +6,15 @@ import { tw } from "#root/lib";
 
 const buttonVariants = cva(
     [
+        "flex",
+        "p-2",
+        "w-max",
         "gap-2",
         "whitespace-nowrap",
+        "box-border",
         "text-sm",
         "font-medium",
-        "ring-offset-background",
+        "ring-offset-black",
         "transition-colors",
         "focus-visible:outline-none",
         "focus-visible:ring-2",
@@ -30,6 +34,9 @@ const buttonVariants = cva(
                     "disabled:bg-black/40",
                     "focus:ring-gray-500",
                     "bg-gray-300",
+                    "border",
+                    "border-gray-300",
+                    "hover:border-gray-900",
                     "hover:bg-gray-100",
                     "focus:bg-gray-300",
                 ],

@@ -8,9 +8,9 @@ import {
     SelectContent,
     SelectItem,
     SelectValue,
+    buttonVariants,
 } from "#root/components";
 import { Locales, LOCALES } from "@hgod-in-cv/data/src/types";
-import { cva } from "class-variance-authority";
 import { Variant } from "#root/types";
 
 export type L10NSelectProps = Variant;
@@ -21,48 +21,26 @@ interface TriggerProps {
     variant: "default" | "pdf";
 }
 
-const triggerVariants = cva(
-    [
-        "l10n-select-trigger",
-        "flex",
-        "z-10",
-        "w-8",
-        "h-8",
-        "disabled:cursor-not-allowed",
-        "rounded-none",
-        "ring-offset-black",
-        "bg-gray-300",
-        "hover:bg-gray-100",
-        "focus:bg-gray-300",
-
-        "disabled:cursor-not-allowed",
-        "disabled:opacity-50",
-        "[&>span]:line-clamp-1",
-
-        "items-center",
-        "justify-center",
-        "print:hidden",
-    ],
-    {
-        variants: {
-            variant: {
-                default: ["default"],
-                pdf: ["pdf"],
-            },
-        },
-        defaultVariants: {
-            variant: "default",
-        },
-    }
-);
-
 export const Trigger: React.FC<TriggerProps> = ({
     locale,
     variant,
     locales,
 }) => {
     return (
-        <PrimitiveTrigger className={tw(triggerVariants({ variant }))}>
+        <PrimitiveTrigger
+            className={tw(
+                buttonVariants({
+                    className: tw(
+                        "l10n-select-trigger",
+                        "w-8",
+                        "h-8",
+                        "items-center",
+                        "justify-center",
+                        "print:hidden"
+                    ),
+                })
+            )}
+        >
             <SelectValue className={tw("w-full", "h-full")}>
                 <span
                     className={tw("fi", `fi-${locales[locale].icon}`, "fis")}

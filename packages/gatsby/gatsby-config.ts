@@ -24,6 +24,12 @@ const config: GatsbyConfig = {
                 },
             },
         },
+        {
+            resolve: "gatsby-plugin-manifest",
+            options: {
+                icon: "static/icon@0.5x.png",
+            },
+        },
         "gatsby-plugin-postcss",
         {
             resolve: "gatsby-plugin-google-gtag",
@@ -50,14 +56,6 @@ const config: GatsbyConfig = {
                 apiId: process.env.API_ID,
                 apiToken: process.env.API_TOKEN,
             },
-        },
-        {
-            resolve: "gatsby-source-filesystem",
-            options: {
-                name: "assets",
-                path: "./src/assets/",
-            },
-            __key: "assets",
         },
         {
             resolve: "gatsby-source-filesystem",

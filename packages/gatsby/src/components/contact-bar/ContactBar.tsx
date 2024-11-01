@@ -1,7 +1,8 @@
 import { tw } from "#root/lib";
 import { UnionSchemaType } from "@hgod-in-cv/data/src/types";
-import { Phone } from "lucide-react";
+import { Link, Phone } from "lucide-react";
 import React from "react";
+import { linkVariants } from "#root/components";
 
 export type ContactBarProps = {
     data: {
@@ -29,16 +30,9 @@ export function ContactBar({ data }: ContactBarProps) {
                         key={sameAs.target._id}
                         href={(sameAs.target.identifier as string[])[0]}
                         className={tw(
-                            "dark:text-blue-300",
-                            "dark:hover:text-blue-500",
-                            "text-blue-800",
-                            "print:text-black",
-                            "hover:text-blue-700",
-                            "focus:outline-none",
-                            "focus:underline",
-                            "focus:decoration-dotted",
-                            "focus:underline-offset-4",
-                            "focus:font-bold"
+                            linkVariants({
+                                className: tw("print:flex", "print:gap-2"),
+                            })
                         )}
                         target={"_blank"}
                         rel={"noopener noreferrer"}
@@ -67,18 +61,20 @@ export function ContactBar({ data }: ContactBarProps) {
                 );
             })}
             <a
+                href="https://hgod.in/cv"
+                className={tw(
+                    linkVariants({ className: tw("print:flex", "print:gap-2") })
+                )}
+            >
+                <Link size={16} />
+                <span className={tw("hidden", "print:block")}>
+                    {"https://hgod.in/cv"}
+                </span>
+            </a>
+            <a
                 href="mailto:henrique@hgod.in"
                 className={tw(
-                    "dark:text-blue-300",
-                    "dark:hover:text-blue-500",
-                    "text-blue-800",
-                    "print:text-black",
-                    "hover:text-blue-700",
-                    "focus:outline-none",
-                    "focus:underline",
-                    "focus:decoration-dotted",
-                    "focus:underline-offset-4",
-                    "focus:font-bold"
+                    linkVariants({ className: tw("print:flex", "print:gap-2") })
                 )}
             >
                 <img
@@ -91,8 +87,10 @@ export function ContactBar({ data }: ContactBarProps) {
                     {"henrique@hgod.in"}
                 </span>
             </a>
-
-            <span className={tw("hidden", "print:block")} aria-label="tel">
+            <span
+                className={tw("hidden", "print:flex", "print:gap-2")}
+                aria-label="tel"
+            >
                 <Phone size={16} />
                 {"+55 11 99416 7130"}
             </span>
