@@ -2,6 +2,7 @@ import React from "react";
 
 import { tw } from "#root/lib";
 import { cva } from "class-variance-authority";
+import { Variant } from "#root/types";
 
 const layoutVariant = cva(["layout", "grid", "text-pretty"], {
     variants: {
@@ -18,20 +19,20 @@ const layoutVariant = cva(["layout", "grid", "text-pretty"], {
                 "lg:grid-cols-layout-lg",
                 "lg:grid-rows-layout-lg",
             ],
-            pdf: [
-                "pdf",
+            text: [
+                "text",
 
-                "grid-cols-pdf",
-                "grid-rows-pdf",
+                "grid-cols-text",
+                "grid-rows-text",
 
-                "md:grid-cols-pdf-md",
-                "md:grid-rows-pdf-md",
+                "md:grid-cols-text-md",
+                "md:grid-rows-text-md",
 
-                "lg:grid-cols-pdf-lg",
-                "lg:grid-rows-pdf-lg",
+                "lg:grid-cols-text-lg",
+                "lg:grid-rows-text-lg",
 
-                "print:grid-cols-pdf",
-                "print:grid-rows-pdf",
+                "print:grid-cols-text",
+                "print:grid-rows-text",
             ],
         },
         defaultVariants: {
@@ -46,9 +47,7 @@ export function Layout({
     variant,
     ...props
 }: React.PropsWithChildren<
-    React.HTMLAttributes<HTMLDivElement> & {
-        variant: "default" | "pdf";
-    }
+    React.HTMLAttributes<HTMLDivElement> & Variant
 >) {
     return (
         <article

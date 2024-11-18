@@ -15,11 +15,10 @@ import { Variant } from "#root/types";
 
 export type L10NSelectProps = Variant;
 
-interface TriggerProps {
+type TriggerProps = {
     locale: LOCALES;
     locales: Locales;
-    variant: "default" | "pdf";
-}
+} & Variant;
 
 export const Trigger: React.FC<TriggerProps> = ({
     locale,

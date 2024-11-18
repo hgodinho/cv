@@ -21,7 +21,7 @@ const wrapPageElement: GatsbyBrowser<
             />
             <Template
                 {...props}
-                variant={props.path.includes("print") ? "pdf" : "default"}
+                variant={props.path.includes("text") ? "text" : "default"}
                 element={element}
             />
         </>

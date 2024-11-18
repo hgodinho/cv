@@ -3,13 +3,13 @@ import React from "react";
 import { Seo } from "../seo";
 import { PageContext, UnionSchemaType } from "@hgod-in-cv/data/src/types";
 import { cva } from "class-variance-authority";
+import { Variant } from "#root/types";
 
 export type HeadProps = {
     title: string;
     pageContext: PageContext;
-    variant: "default" | "pdf";
     data?: UnionSchemaType;
-};
+} & Variant;
 
 const bodyVariant = cva(["font-sans"], {
     variants: {
@@ -20,7 +20,7 @@ const bodyVariant = cva(["font-sans"], {
                 "bg-zinc-950",
                 "text-zinc-50",
             ],
-            pdf: ["bg-zinc-50", "text-zinc-950"],
+            text: ["bg-zinc-50", "text-zinc-950"],
         },
         defaultVariants: {
             variant: "default",

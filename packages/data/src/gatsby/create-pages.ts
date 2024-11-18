@@ -171,8 +171,8 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
             context,
         });
         createPage({
-            path: `/${key}/print`,
-            component: path.resolve(`./src/templates/Pdf.tsx`),
+            path: `/${key}/text`,
+            component: path.resolve(`./src/templates/Text.tsx`),
             context,
         });
     });
@@ -183,7 +183,7 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
             if (node.path) {
                 createPage({
                     path: `/${locale}/${node.path}`,
-                    component: path.resolve(`./src/templates/${type}.tsx`),
+                    component: path.resolve(`./src/templates/nodes/${type}.tsx`),
                     context: {
                         site,
                         id: node.id,

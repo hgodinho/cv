@@ -16,9 +16,9 @@ import {
 import { tw } from "#root/lib";
 import { useTheme } from "#root/provider";
 
-export type PdfPage = PageProps<{ graph: Graph; me: Person }, PageContext>;
+export type TextPage = PageProps<{ graph: Graph; me: Person }, PageContext>;
 
-export default function ({ data, pageContext }: PdfPage) {
+export default function ({ data, pageContext }: TextPage) {
     const parseNode = useCallback((node: UnionSchemaType) => {
         return Object.entries(node).reduce((acc, [key, value]) => {
             if (value === null) {
@@ -224,7 +224,7 @@ export default function ({ data, pageContext }: PdfPage) {
     }
 }
 
-export const Head = ({ pageContext, data }: PdfPage) => {
+export const Head = ({ pageContext, data }: TextPage) => {
     return (
         <PrimitiveHead
             title={`${data.me.name}  @${pageContext.site.title}`}

@@ -1,3 +1,3 @@
 export type Variant = {
-    variant: "default" | "pdf";
+    variant: "default" | "text";
 }
