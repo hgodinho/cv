@@ -1,10 +1,15 @@
 import path from "path";
 import { GatsbyNode } from "gatsby";
+import fs from "fs";
 import { PageQueryResponse } from "../types";
 import { getType } from "../utils";
 
-export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
-    const { createPage } = gatsbyApi.actions;
+export const createPages: GatsbyNode["createPages"] = async (
+    gatsbyApi,
+    pluginOptions
+) => {
+    const { reporter, actions } = gatsbyApi;
+    const { createPage } = actions;
 
     const result = await gatsbyApi.graphql<PageQueryResponse>(`
     query Page {
@@ -156,22 +161,22 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
         },
     });
 
-    Object.keys(locales).forEach((key) => {
+    Object.keys(locales).forEach((locale) => {
         const context = {
             site,
-            locale: key,
+            locale: locale,
             locales,
             properties,
             classes,
             graph,
         };
         createPage({
-            path: `/${key}`,
+            path: `/${locale}`,
             component: path.resolve(`./src/templates/Home.tsx`),
             context,
         });
         createPage({
-            path: `/${key}/text`,
+            path: `/${locale}/text`,
             component: path.resolve(`./src/templates/Text.tsx`),
             context,
         });
@@ -183,7 +188,9 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
             if (node.path) {
                 createPage({
                     path: `/${locale}/${node.path}`,
-                    component: path.resolve(`./src/templates/nodes/${type}.tsx`),
+                    component: path.resolve(
+                        `./src/templates/nodes/${type}.tsx`
+                    ),
                     context: {
                         site,
                         id: node.id,
@@ -201,4 +208,37 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
             }
         }
     });
+
+    if (pluginOptions?.redirects) {
+        (
+            pluginOptions.redirects as { fromPath: string; toPath: string }[]
+        ).forEach((redirect) => {
+            // createRedirect(redirect);
+            const indexPath = path.join(
+                path.resolve(),
+                "public",
+                redirect.fromPath,
+                "index.html"
+            );
+
+            if (!fs.existsSync(indexPath.replace("index.html", ""))) {
+                fs.mkdirSync(indexPath.replace("index.html", ""), {
+                    recursive: true,
+                });
+            }
+
+            fs.writeFileSync(indexPath, redirectHtml({ to: redirect.toPath }));
+            reporter.info(
+                `[@hgod-in/data] Created redirect from ${redirect.fromPath} to ${redirect.toPath} file: ${indexPath}`
+            );
+        });
+    }
 };
+
+export function redirectHtml({ to }: { to: string }) {
+    return `<!DOCTYPE html>
+<meta charset="utf-8">
+<title>${to}</title>
+<meta http-equiv="refresh" content="0; URL=${to}">
+<link rel="canonical" href="${to}">`;
+}
