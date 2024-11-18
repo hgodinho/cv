@@ -1,5 +1,5 @@
 import path from "path";
-import { GatsbyNode } from "gatsby";
+import { GatsbyNode, withPrefix } from "gatsby";
 import fs from "fs";
 import { PageQueryResponse } from "../types";
 import { getType } from "../utils";
@@ -238,7 +238,7 @@ export const createPages: GatsbyNode["createPages"] = async (
 export function redirectHtml({ to }: { to: string }) {
     return `<!DOCTYPE html>
 <meta charset="utf-8">
-<title>${to}</title>
-<meta http-equiv="refresh" content="0; URL=${to}">
-<link rel="canonical" href="${to}">`;
+<title>${withPrefix(to)}</title>
+<meta http-equiv="refresh" content="0; URL=${withPrefix(to)}">
+<link rel="canonical" href="${withPrefix(to)}">`;
 }
