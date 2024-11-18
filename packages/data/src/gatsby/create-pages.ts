@@ -183,7 +183,7 @@ export const createPages: GatsbyNode["createPages"] = async (gatsbyApi) => {
             if (node.path) {
                 createPage({
                     path: `/${locale}/${node.path}`,
-                    component: path.resolve(`./src/templates/${type}.tsx`),
+                    component: path.resolve(`./src/templates/nodes/${type}.tsx`),
                     context: {
                         site,
                         id: node.id,
