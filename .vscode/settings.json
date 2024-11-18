@@ -1,11 +1,4 @@
 {
-    "files.exclude": {
-        "**/.git": false,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true
-    },
     "cSpell.words": [
         "aggregaterating",
         "artform",
@@ -39,13 +32,11 @@
         "xtext",
         "ytext"
     ],
-    "files.autoSave": "onWindowChange",
-    "editor.formatOnSave": true,
     "workbench.colorCustomizations": {
-        "activityBar.activeBackground": "#d0f3f9",
-        "activityBar.background": "#d0f3f9",
-        "activityBar.foreground": "#15202b",
-        "activityBar.inactiveForeground": "#15202b99",
+        "activityBar.activeBackground": "#15202b99",
+        "activityBar.background": "#15202b",
+        "activityBar.foreground": "#d0f3f9",
+        "activityBar.inactiveForeground": "#d0f3f999",
         "activityBarBadge.background": "#ed72db",
         "activityBarBadge.foreground": "#15202b",
         "commandCenter.border": "#15202b99",
@@ -59,6 +50,5 @@
         "titleBar.activeForeground": "#15202b",
         "titleBar.inactiveBackground": "#a2e8f499",
         "titleBar.inactiveForeground": "#15202b99"
-    },
-    "peacock.color": "#A2E8F4"
+    }
 }
