@@ -1,14 +1,14 @@
 import { FetchProps } from "../types";
 
-async function fetchData(
+async function fetchData<T = any>(
     { route, apiBase, apiId, apiToken }: FetchProps,
     pre?: () => void,
-    after?: (data: any) => void
-) {
+    after?: (data: T) => void
+): Promise<T> {
     const parseData = (response: any) => {
         switch (response.status) {
             case 200:
-                return response.data;
+                return response.data as T;
             default:
                 throw new Error(response.message);
         }
@@ -16,14 +16,17 @@ async function fetchData(
 
     try {
         if (pre) pre();
-        return await fetch(`${apiBase}/${apiId}/exec/cv/v1/${route ? route : ""}`, {
-            headers: {
-                Authorization: `Bearer ${apiToken}`,
-                "Content-Type": "text/plain; charset=utf-8",
-            },
-            method: "GET",
-            redirect: "follow",
-        })
+        return await fetch(
+            `${apiBase}/${apiId}/exec/cv/v1/${route ? route : ""}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${apiToken}`,
+                    "Content-Type": "text/plain; charset=utf-8",
+                },
+                method: "GET",
+                redirect: "follow",
+            }
+        )
             .then((response) => {
                 switch (response.status) {
                     case 200:
@@ -36,12 +39,13 @@ async function fetchData(
                         throw new Error(response.statusText);
                 }
             })
-            .then((data) => {
+            .then((response) => {
+                const data = parseData(response);
                 if (after) after(data);
-                return parseData(data);
+                return data;
             });
     } catch (error) {
-        throw error;
+        throw new Error(error);
     }
 }
 
