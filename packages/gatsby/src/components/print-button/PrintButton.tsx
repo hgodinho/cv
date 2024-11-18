@@ -13,7 +13,7 @@ export function PrintButton() {
 
     return (
         <Button
-            className={tw("print-button", "print:hidden")}
+            className={tw("print-button", "print:hidden", "col-start-2", "row-start-2")}
             onClick={() => handlePrint(true)}
         >
             <FileDown className={tw("w-6", "h-6")} />

@@ -36,7 +36,8 @@ export const Trigger: React.FC<TriggerProps> = ({
                         "h-8",
                         "items-center",
                         "justify-center",
-                        "print:hidden"
+                        "print:hidden",
+                        "z-10"
                     ),
                 })
             )}
