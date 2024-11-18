@@ -14,7 +14,7 @@ export type FetchProps = {
 };
 
 export type Locale = {
-    lang: string;
+    lang: LOCALES;
     name: string;
     icon: string;
     principal: boolean;

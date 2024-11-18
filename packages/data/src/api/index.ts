@@ -1,2 +1,3 @@
-export * from "./api"
-export * from "./getJsonLd"
+export * from "./api";
+export * from "./getters";
+export * from "./getJsonLd";

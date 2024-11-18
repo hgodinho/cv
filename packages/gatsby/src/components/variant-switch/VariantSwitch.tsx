@@ -12,7 +12,7 @@ export const variantSwitchVariant = cva(
         variants: {
             variant: {
                 default: ["default"],
-                pdf: ["pdf"],
+                text: ["text"],
             },
         },
         defaultVariants: {
@@ -42,7 +42,7 @@ export function VariantSwitch({
             )}
         >
             {variant === "default" ? (
-                <Link className={tw(buttonVariants())} to={`/${locale}/print`}>
+                <Link className={tw(buttonVariants())} to={`/${locale}/text`}>
                     <FileText className={tw("w-6", "h-6")} />
                 </Link>
             ) : (

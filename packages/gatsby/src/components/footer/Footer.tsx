@@ -19,7 +19,7 @@ export const footerVariants = cva(["flex", "justify-between"], {
 
                 "row-start-5",
             ],
-            pdf: [
+            text: [
                 "col-start-2",
                 "md:col-start-2",
                 "lg:col-start-2",

@@ -3,7 +3,6 @@ import { GatsbyNode, NodeInput, PluginOptions } from "gatsby";
 import { LinkObject, NodeObject } from "react-force-graph-3d";
 import { CACHE_KEYS, NODE_TYPES } from "../constants";
 import {
-    Base,
     JsonLD,
     Locale,
     Locales,
@@ -12,11 +11,30 @@ import {
     NodeType,
 } from "../types";
 
-import jsonld from "jsonld";
-import { fetchData, getJsonLD } from "../api";
+import {
+    getClasses,
+    getGraph,
+    getJsonLD,
+    getLocales,
+    getMeta,
+    getProperties,
+    processLinks,
+    processNodes,
+} from "../api";
 import { getType } from "../utils";
 
 let isFirstSource = true;
+
+export type Data = {
+    locales: Promise<Locale[]>;
+    graph: Record<LOCALES, JsonLD>;
+    properties: Record<LOCALES, string[]>;
+    classes: Record<LOCALES, string[]>;
+    nodes: Record<LOCALES, NodeObject[]>;
+    links: Record<LOCALES, LinkObject[]>;
+    endpoints: Record<LOCALES, [string, string][]>;
+    meta: Record<LOCALES, { endpoint: string; type: string; meta: any }[]>;
+};
 
 export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
     gatsbyApi,
@@ -91,225 +109,134 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
      * You don't need to print out every bit of detail your plugin is doing as otherwise it'll flood the user's terminal.
      */
     try {
-        const locales = (await fetchData(
-            {
-                route: "locales",
-                ...api,
+        const data = {
+            endpoints: {
+                en: [
+                    ["Person", "person"],
+                    ["Place", "place"],
+                    ["Intangible", "intangible"],
+                    ["Credential", "credential"],
+                    ["CreativeWork", "creative-work"],
+                    ["Event", "event"],
+                    ["Organization", "organization"],
+                ],
+                pt_br: [
+                    ["Person", "pessoa"],
+                    ["Place", "lugar"],
+                    ["Intangible", "intangivel"],
+                    ["Credential", "credencial"],
+                    ["CreativeWork", "trabalho-criativo"],
+                    ["Event", "evento"],
+                    ["Organization", "organizacao"],
+                ],
+                es: [
+                    ["Person", "persona"],
+                    ["Place", "lugar"],
+                    ["Intangible", "intangible"],
+                    ["Credential", "credencial"],
+                    ["CreativeWork", "trabajo-creativo"],
+                    ["Event", "evento"],
+                    ["Organization", "organizacion"],
+                ],
             },
-            () => {
-                reporter.info("[@hgod-in/data] Fetching locales");
-            },
-            (response) => {
-                reporter.success(
-                    `[@hgod-in/data] Found ${response.data.length
-                    } locales: ${response.data
-                        .map((l: any) => l.lang)
-                        .join(", ")}`
+        } as Data;
+
+        try {
+            const locales = getLocales(api, reporter);
+            data.locales = locales;
+        } catch (error) {
+            throw new Error(`Error fetching locales: ${error}`);
+        }
+
+        const locales = await data.locales;
+
+        try {
+            const graph = Object.fromEntries(
+                await Promise.all(
+                    locales.map(async (locale) => {
+                        const data = await getGraph(locale.lang, api, reporter);
+                        if (typeof data === "string") {
+                            throw new Error(data);
+                        }
+                        const ld = await getJsonLD(data);
+                        return [locale.lang, ld];
+                    })
+                )
+            ) as Record<LOCALES, JsonLD>;
+            data.graph = graph;
+        } catch (error) {
+            throw new Error(`Error fetching graph: ${error}`);
+        }
+
+        try {
+            const properties = Object.fromEntries(
+                await Promise.all(
+                    locales.map(async (locale) => {
+                        return [
+                            locale.lang,
+                            await getProperties(locale.lang, api, reporter),
+                        ];
+                    })
+                )
+            ) as Record<LOCALES, string[]>;
+            data.properties = properties;
+        } catch (error) {
+            throw new Error(`Error fetching properties: ${error}`);
+        }
+
+        try {
+            const classes = Object.fromEntries(
+                await Promise.all(
+                    locales.map(async (locale) => {
+                        return [
+                            locale.lang,
+                            await getClasses(locale.lang, api, reporter),
+                        ];
+                    })
+                )
+            ) as Record<LOCALES, string[]>;
+            data.classes = classes;
+        } catch (error) {
+            throw new Error(`Error fetching classes: ${error}`);
+        }
+
+        try {
+            const nodes = await processNodes(data.graph);
+            data.nodes = nodes;
+        } catch (error) {
+            throw new Error(`Error creating nodes: ${error}`);
+        }
+
+        try {
+            const links = await processLinks(data.graph, data.nodes);
+            data.links = links;
+        } catch (error) {
+            throw new Error(`Error creating links: ${error}`);
+        }
+
+        try {
+            const meta = {} as Record<
+                LOCALES,
+                { endpoint: string; type: string; meta: any }[]
+            >;
+            for (const [locale, localeEndpoints] of Object.entries(
+                data.endpoints
+            )) {
+                meta[locale] = await Promise.all(
+                    localeEndpoints.map(async ([type, endpoint]) => {
+                        const response = await getMeta(
+                            locale as LOCALES,
+                            endpoint,
+                            api,
+                            reporter
+                        );
+                        return { endpoint, type, meta: response };
+                    })
                 );
             }
-        )) as Locale[];
-
-        const graph = Object.fromEntries(
-            await Promise.all(
-                locales.map(async (locale) => {
-                    const data = (await fetchData(
-                        { route: `${locale.lang}/ld-graph`, ...api },
-                        () => {
-                            reporter.info(
-                                `[@hgod-in/data] Fetching graph for "${locale.name}"`
-                            );
-                        },
-                        () => {
-                            reporter.success(
-                                `[@hgod-in/data] Graph for "${locale.name}" fetched with success`
-                            );
-                        }
-                    )) as jsonld.JsonLdDocument;
-                    const ld = await getJsonLD(data);
-                    return [locale.lang, ld];
-                })
-            )
-        ) as Record<LOCALES, JsonLD>;
-
-        const properties = Object.fromEntries(
-            await Promise.all(
-                locales.map(async (locale) => {
-                    return [
-                        locale.lang,
-                        await fetchData(
-                            { route: `${locale.lang}/properties`, ...api },
-                            () => {
-                                reporter.info(
-                                    `[@hgod-in/data] Fetching properties for "${locale.name}"`
-                                );
-                            },
-                            (response) => {
-                                reporter.success(
-                                    `[@hgod-in/data] Found ${response.data.length} properties for "${locale.name}"`
-                                );
-                            }
-                        ),
-                    ];
-                })
-            )
-        ) as Record<LOCALES, string[]>;
-
-        const classes = Object.fromEntries(
-            await Promise.all(
-                locales.map(async (locale) => {
-                    return [
-                        locale.lang,
-                        await fetchData(
-                            { route: `${locale.lang}/classes`, ...api },
-                            () => {
-                                reporter.info(
-                                    `[@hgod-in/data] Fetching classes for "${locale.name}"`
-                                );
-                            },
-                            (response) => {
-                                reporter.success(
-                                    `[@hgod-in/data] Found ${response.data.length} classes for "${locale.name}"`
-                                );
-                            }
-                        ),
-                    ];
-                })
-            )
-        ) as Record<LOCALES, string[]>;
-
-        const nodes = Object.entries(graph).reduce((acc, [locale, ld]) => {
-            acc[locale] = (ld.compacted["@graph"] as NodeObject<Base>[]).map(
-                (node) => {
-                    return {
-                        _context: ld.compacted["@context"],
-                        "@type": node.type,
-                        ...Object.fromEntries(
-                            Object.entries(node).map(([key, value]) => {
-                                if (
-                                    [
-                                        "type",
-                                        "_id",
-                                        "id",
-                                        "path",
-                                        "name",
-                                    ].includes(key)
-                                ) {
-                                    return [key, value];
-                                }
-                                if (
-                                    [
-                                        "birthDate",
-                                        "endDate",
-                                        "startDate",
-                                        "dateCreated",
-                                        "dateModified",
-                                        "datePublished",
-                                        "auditDate",
-                                    ].includes(key)
-                                ) {
-                                    return [
-                                        key,
-                                        new Date(value).toLocaleDateString(
-                                            locale.replace("_", "-"),
-                                            { timeZone: "UTC" }
-                                        ),
-                                    ];
-                                }
-                                return [
-                                    key,
-                                    Array.isArray(value) ? value : [value],
-                                ];
-                            })
-                        ),
-                    };
-                }
-            );
-            return acc;
-        }, {} as Record<LOCALES, NodeObject[]>);
-
-        const links = Object.entries(graph).reduce((acc, [locale, ld]) => {
-            if (Array.isArray(ld.nquads)) {
-                acc[locale] = ld.nquads.reduce((acc, link) => {
-                    const foundSubject = nodes[locale].find(
-                        (n) => n["id"] === link.subject.value
-                    );
-                    const foundObject = nodes[locale].find(
-                        (n) => n["id"] === link.object.value
-                    );
-
-                    if (foundObject && foundSubject) {
-                        const linkNode = {
-                            subject: link.subject.value,
-                            object: link.object.value,
-                            predicate: link.predicate.value.replace(
-                                "http://schema.org/",
-                                ""
-                            ),
-                            value: 10,
-                            source: foundSubject,
-                            target: foundObject,
-                        };
-                        acc.push(linkNode);
-                    }
-
-                    return acc;
-                }, []);
-            }
-            return acc;
-        }, {} as Record<LOCALES, LinkObject[]>);
-
-        const endpoints = {
-            en: [
-                ["Person", "person"],
-                ["Place", "place"],
-                ["Intangible", "intangible"],
-                ["Credential", "credential"],
-                ["CreativeWork", "creative-work"],
-                ["Event", "event"],
-                ["Organization", "organization"],
-            ],
-            pt_br: [
-                ["Person", "pessoa"],
-                ["Place", "lugar"],
-                ["Intangible", "intangivel"],
-                ["Credential", "credencial"],
-                ["CreativeWork", "trabalho-criativo"],
-                ["Event", "evento"],
-                ["Organization", "organizacao"],
-            ],
-            es: [
-                ["Person", "persona"],
-                ["Place", "lugar"],
-                ["Intangible", "intangible"],
-                ["Credential", "credencial"],
-                ["CreativeWork", "trabajo-creativo"],
-                ["Event", "evento"],
-                ["Organization", "organizacion"],
-            ],
-        };
-
-        const meta = {};
-
-        for (const [locale, localeEndpoints] of Object.entries(endpoints)) {
-            meta[locale] = await Promise.all(
-                localeEndpoints.map(async ([type, endpoint]) => {
-                    const response = await fetchData(
-                        { route: `${locale}/${endpoint}/meta`, ...api },
-                        () => {
-                            reporter.info(
-                                `[@hgod-in/data] Fetching ${endpoint}/meta for "${locale}"`
-                            );
-                        },
-                        (response) => {
-                            reporter.success(
-                                `[@hgod-in/data] Found "${response.data.title}" at "${endpoint}/meta" for "${locale}"`
-                            );
-                        }
-                    );
-
-                    return { endpoint, type, meta: response };
-                })
-            );
+            data.meta = meta;
+        } catch (error) {
+            throw new Error(`Error fetching meta: ${error}`);
         }
 
         /**
@@ -329,86 +256,112 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
         sourcingTimer.setStatus(`Processing ${locales.length} locales`);
 
         /**
-         * Create nodes
+         * Create Locales nodes
          */
-        nodeBuilder({
-            gatsbyApi,
-            id: "Locales",
-            input: {
-                type: NODE_TYPES.Locales,
-                data: locales.reduce((acc, locale) => {
-                    acc[locale.lang] = locale;
-                    return acc;
-                }, {} as Locales),
-            },
-        });
-
-        sourcingTimer.setStatus(
-            `Processing ${nodes.en.length} nodes and ${links.en.length} links for ${locales.length} locales`
-        );
-
-        /**
-         * Create nodes
-         */
-        nodeBuilder({
-            gatsbyApi,
-            id: "Meta",
-            input: {
-                type: NODE_TYPES.Meta,
-                data: meta,
-            },
-        });
-
-        /**
-         * Create nodes
-         */
-        nodeBuilder({
-            gatsbyApi,
-            id: "Graph",
-            input: {
-                type: NODE_TYPES.Graph,
-                data: {
-                    nodes,
-                    links,
+        try {
+            nodeBuilder({
+                gatsbyApi,
+                id: "Locales",
+                input: {
+                    type: NODE_TYPES.Locales,
+                    data: locales.reduce((acc, locale) => {
+                        acc[locale.lang] = locale;
+                        return acc;
+                    }, {} as Locales),
                 },
-            },
-        });
+            });
+        } catch (error) {
+            throw new Error(`Error creating Locales nodes: ${error}`);
+        }
+
+        // sourcingTimer.setStatus(
+        //     `Processing ${nodes.en.length} nodes and ${links.en.length} links for ${locales.length} locales`
+        // );
+
+        /**
+         * Create Meta nodes
+         */
+        try {
+            nodeBuilder({
+                gatsbyApi,
+                id: "Meta",
+                input: {
+                    type: NODE_TYPES.Meta,
+                    data: data.meta,
+                },
+            });
+        } catch (error) {
+            throw new Error(`Error creating Meta nodes: ${error}`);
+        }
+
+        /**
+         * Create nodes
+         */
+        try {
+            nodeBuilder({
+                gatsbyApi,
+                id: "Graph",
+                input: {
+                    type: NODE_TYPES.Graph,
+                    data: {
+                        nodes: data.nodes,
+                        links: data.links,
+                    },
+                },
+            });
+        } catch (error) {
+            throw new Error(`Error creating Graph nodes: ${error}`);
+        }
 
         sourcingTimer.setStatus(
-            `Processing ${properties.en.length} properties`
+            `Processing ${data.properties.en.length} properties`
         );
-        nodeBuilder({
-            gatsbyApi,
-            id: "Properties",
-            input: {
-                type: NODE_TYPES.Properties,
-                data: properties,
-            },
-        });
 
-        sourcingTimer.setStatus(`Processing ${classes.en.length} classes`);
-        nodeBuilder({
-            gatsbyApi,
-            id: "Classes",
-            input: {
-                type: NODE_TYPES.Classes,
-                data: classes,
-            },
-        });
+        try {
+            nodeBuilder({
+                gatsbyApi,
+                id: "Properties",
+                input: {
+                    type: NODE_TYPES.Properties,
+                    data: data.properties,
+                },
+            });
+        } catch (error) {
+            throw new Error(`Error creating Properties nodes: ${error}`);
+        }
 
-        Object.entries(nodes).forEach(([locale, nodes]) => {
-            for (const node of nodes) {
-                let type = getType(node);
-                nodeBuilder({
-                    gatsbyApi,
-                    id: `${locale}/${node["path"]}`,
-                    input: {
-                        type: type as NodeType,
-                        data: { locale, ...node },
-                    },
-                });
-            }
-        });
+        sourcingTimer.setStatus(`Processing ${data.classes.en.length} classes`);
+
+        try {
+            nodeBuilder({
+                gatsbyApi,
+                id: "Classes",
+                input: {
+                    type: NODE_TYPES.Classes,
+                    data: data.classes,
+                },
+            });
+        } catch (error) {
+            throw new Error(`Error creating Classes nodes: ${error}`);
+        }
+
+        try {
+            Object.entries(data.nodes).forEach(([locale, nodes]) => {
+                for (const node of nodes) {
+                    let type = getType(node);
+                    nodeBuilder({
+                        gatsbyApi,
+                        id: `${locale}/${node["path"]}`,
+                        input: {
+                            type: type as NodeType,
+                            data: { locale, ...node },
+                        },
+                    });
+                }
+            });
+        } catch (error) {
+            throw new Error(`Error creating nodes: ${error}`);
+        }
 
         sourcingTimer.end();
     } catch (error) {
