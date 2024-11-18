@@ -1,0 +1,14 @@
+[
+    {
+        "fromPath": "/pt_br/print/",
+        "toPath": "/pt_br/text/"
+    },
+    {
+        "fromPath": "/en/print/",
+        "toPath": "/en/text/"
+    },
+    {
+        "fromPath": "/es/print/",
+        "toPath": "/es/text/"
+    }
+]

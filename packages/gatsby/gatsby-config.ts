@@ -1,6 +1,8 @@
 import type { GatsbyConfig } from "gatsby";
 import path from "path";
 
+import redirects from "./redirects.json";
+
 require("dotenv").config({});
 
 const config: GatsbyConfig = {
@@ -42,7 +44,7 @@ const config: GatsbyConfig = {
                     head: false,
                     respectDNT: true,
                 },
-            }
+            },
         },
         "gatsby-plugin-image",
         "gatsby-plugin-sitemap",
@@ -55,6 +57,7 @@ const config: GatsbyConfig = {
                 apiBase: process.env.API_BASE,
                 apiId: process.env.API_ID,
                 apiToken: process.env.API_TOKEN,
+                redirects,
             },
         },
         {
