@@ -10,7 +10,7 @@ const credentialViewVariants = cva(["mb-2"], {
     variants: {
         variant: {
             default: [],
-            pdf: [],
+            text: [],
         },
     },
 });

@@ -15,9 +15,9 @@ export const theme = {
             "layout-md": "16px 32px 256px 32px 1fr 32px 16px", //ok
             "layout-lg": "32px 32px 256px auto 384px 32px 32px", // ok
 
-            pdf: "32px 1fr 32px",
-            "pdf-md": "32px 0.4fr 16px 0.6fr 32px",
-            "pdf-lg": "32px 0.2fr 0.4fr 16px 0.6fr 0.2fr 32px",
+            text: "32px 1fr 32px",
+            "text-md": "32px 0.4fr 16px 0.6fr 32px",
+            "text-lg": "32px 0.2fr 0.4fr 16px 0.6fr 0.2fr 32px",
 
             "class-header": "0.7fr 0.3fr",
         },
@@ -26,9 +26,9 @@ export const theme = {
             "layout-md": "16px 32px var(--middle-height) 16px 32px 16px", //ok
             "layout-lg": "16px 32px var(--middle-height) 16px 32px 16px", // ok
 
-            pdf: "8px 32px 8px var(--middle-height) 8px 32px 8px",
-            "pdf-md": "16px 32px 16px var(--middle-height) 16px 32px 16px",
-            "pdf-lg": "16px 32px var(--middle-height) 32px 16px",
+            text: "8px 32px 8px var(--middle-height) 8px 32px 8px",
+            "text-md": "16px 32px 16px var(--middle-height) 16px 32px 16px",
+            "text-lg": "16px 32px var(--middle-height) 32px 16px",
         },
         animation: {
             "spin-slow": "spin 3s linear infinite",

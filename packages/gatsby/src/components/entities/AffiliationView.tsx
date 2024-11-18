@@ -10,7 +10,7 @@ const affiliationViewVariants = cva(["mb-2"], {
     variants: {
         variant: {
             default: [],
-            pdf: [],
+            text: [],
         },
     },
 });

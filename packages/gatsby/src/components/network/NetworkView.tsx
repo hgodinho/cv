@@ -3,10 +3,10 @@ import React from "react";
 import { tw, useNetwork } from "#root/lib";
 import { cva } from "class-variance-authority";
 import ForceGraph3d from "react-force-graph-3d";
+import type { Variant } from "#root/types";
 
 export type NetworkViewProps = {
-    variant: "default" | "pdf";
-};
+} & Variant;
 
 const networkVariant = cva(
     ["net-view", "z-10", "cursor-grab", "active:cursor-grabbing"],
@@ -15,7 +15,6 @@ const networkVariant = cva(
             variant: {
                 default: [
                     "default",
-                    // "bg-black",
                     "absolute",
                     "w-full",
                     "h-full",
@@ -52,8 +51,8 @@ export function NetworkView({ variant }: NetworkViewProps) {
                     <ForceGraph3d
                         ref={ref}
                         graphData={{
-                            nodes: filteredNodes,
-                            links: filteredLinks,
+                            nodes: filteredNodes || [],
+                            links: filteredLinks || []
                         }}
                         showNavInfo={false}
                         width={width - 2}

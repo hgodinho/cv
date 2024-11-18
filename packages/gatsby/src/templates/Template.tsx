@@ -18,14 +18,14 @@ import {
     OptionsView,
     Footer,
 } from "#root/components";
+import type { Variant } from "#root/types";
 
 export type ProviderProps = WrapPageElementBrowserArgs<
     Record<string, unknown>,
     PageContext
 >["props"] & {
-    variant: "default" | "pdf";
     element: React.ReactNode;
-};
+} & Variant;
 
 export function Template({ element, variant, ...props }: ProviderProps) {
     return (
