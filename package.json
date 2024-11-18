@@ -10,7 +10,8 @@
     "scripts": {
         "commit": "cz",
         "commit:no-verify": "pnpm commit --no-verify",
-        "build": "lerna run build --stream"
+        "build": "lerna run build --stream",
+        "test": "lerna run test --stream --no-sort"
     },
     "config": {
         "commitizen": {
