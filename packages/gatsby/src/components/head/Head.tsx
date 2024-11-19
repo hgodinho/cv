@@ -14,13 +14,9 @@ export type HeadProps = {
 const bodyVariant = cva(["font-sans", "bg-zinc-950", "text-zinc-50"], {
     variants: {
         variant: {
-            default: [
-                "default",
-                "dark",
-                "bg-zinc-950",
-                "text-zinc-50",
-            ],
-            text: ["bg-zinc-50", "text-zinc-950"],
+            default: ["default", "dark", "bg-black"],
+            text: ["text", "bg-zinc-50", "text-zinc-950"],
+            home: ["home", "dark"],
         },
         defaultVariants: {
             variant: "default",
