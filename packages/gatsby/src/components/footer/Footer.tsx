@@ -19,6 +19,16 @@ export const footerVariants = cva(["flex", "justify-between"], {
 
                 "row-start-5",
             ],
+            home: [
+                "col-start-2",
+                "md:col-start-2",
+                "lg:col-start-2",
+
+                "col-span-1",
+                "lg:col-span-5",
+
+                "row-start-6",
+            ],
             text: [
                 "col-start-2",
                 "md:col-start-2",
@@ -45,7 +55,7 @@ export function Footer({ variant, className, ...props }: FooterProps) {
             {...props}
         >
             <L10NSelect variant={variant} />
-            <VariantSwitch />
+            {(variant === "default" || variant === "text") && <VariantSwitch />}
         </footer>
     );
 }

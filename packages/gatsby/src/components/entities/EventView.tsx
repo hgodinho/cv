@@ -12,6 +12,7 @@ const eventViewVariants = cva(["mb-2"], {
         variant: {
             default: [],
             text: [],
+            home: null,
         },
     },
 });
