@@ -14,7 +14,9 @@ export function OptionsView() {
     const {
         sizes: { icon },
         state: {
-            viewPort: { isTablet, isDesktop },
+            viewPort: {
+                windowDimensions: { isTablet, isDesktop },
+            },
             collapsibles: { options },
             toggleCollapsible,
         },
