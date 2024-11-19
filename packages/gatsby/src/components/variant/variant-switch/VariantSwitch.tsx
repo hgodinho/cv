@@ -13,6 +13,7 @@ export const variantSwitchVariant = cva(
             variant: {
                 default: ["default"],
                 text: ["text"],
+                home: ["home"],
             },
         },
         defaultVariants: {

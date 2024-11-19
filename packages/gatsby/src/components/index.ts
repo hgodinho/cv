@@ -25,6 +25,6 @@ export * from "./connections";
 export * from "./entities";
 export * from "./button";
 export * from "./print-button";
-export * from "./variant-switch";
+export * from "./variant";
 
 export * from "./debug";
