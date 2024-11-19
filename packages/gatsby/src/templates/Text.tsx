@@ -193,7 +193,7 @@ export default function ({ data, pageContext }: TextPage) {
 
                 <section
                     className={tw(
-                        "bg-slate-300",
+                        "bg-zinc-300",
                         "col-start-2",
                         "lg:col-start-5",
                         "md:col-start-4",

@@ -11,7 +11,7 @@ export type HeadProps = {
     data?: UnionSchemaType;
 } & Variant;
 
-const bodyVariant = cva(["font-sans"], {
+const bodyVariant = cva(["font-sans", "bg-zinc-950", "text-zinc-50"], {
     variants: {
         variant: {
             default: [

@@ -74,11 +74,7 @@ export function Tree({ mode = "link" }: TreeProps) {
                 {...filterProps}
                 data={treeData}
                 aria-label="Árvore de dados"
-                className={tw(
-                    "*:outline-none",
-                    "focus:*:bg-gray-900",
-                    // "focus:*:font-bold"
-                )}
+                className={tw("*:outline-none", "focus:*:bg-zinc-900")}
                 defaultSelectedIds={initialSelectedIds}
                 expandOnKeyboardSelect={true}
                 nodeRenderer={(props) => {
@@ -88,7 +84,7 @@ export function Tree({ mode = "link" }: TreeProps) {
                     return (
                         <>
                             <Branch mode={mode} {...props} />
-                            {(props.isExpanded && metaEndpoint) && (
+                            {props.isExpanded && metaEndpoint && (
                                 <p className={tw("text-sm", "py-1", "pl-4")}>
                                     {metaEndpoint?.meta.description}
                                 </p>
@@ -141,8 +137,8 @@ export function Branch({
                 "focus:decoration-dotted",
                 "focus:underline-offset-4",
                 "focus:underline",
-                "focus:text-gray-200",
-                "focus:bg-gray-900"
+                "focus:text-zinc-200",
+                "focus:bg-zinc-900"
             )}
             style={{
                 marginLeft: 32 * (level - 1),
@@ -174,8 +170,8 @@ export function Branch({
                         isHalfSelected
                             ? "indeterminate"
                             : isSelected
-                                ? true
-                                : false
+                            ? true
+                            : false
                     }
                     onClick={(checked) => {
                         handleSelect(checked);

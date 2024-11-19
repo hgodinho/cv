@@ -69,7 +69,7 @@ export function Scrollbar({
                 "w-2.5",
                 "border-l",
                 "border-r",
-                "border-gray-500",
+                "border-zinc-500",
                 "border-t-transparent",
                 scrollbar?.className
             )}
@@ -80,7 +80,7 @@ export function Scrollbar({
                     "relative",
                     "flex-1",
                     "rounded-none",
-                    "bg-gray-600",
+                    "bg-zinc-600",
                     thumb?.className
                 )}
             />
