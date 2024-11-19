@@ -37,11 +37,11 @@ export function Switch({ label, ...props }: SwitchProps) {
                     "focus:outline-none",
                     "focus:ring-4",
                     "focus:ring-inset",
-                    "focus:ring-gray-600",
+                    "focus:ring-zinc-600",
                     "disabled:cursor-not-allowed",
-                    "disabled:bg-gray-400",
-                    "data-[state=checked]:bg-gray-50",
-                    "data-[state=unchecked]:bg-gray-400"
+                    "disabled:bg-zinc-400",
+                    "data-[state=checked]:bg-zinc-50",
+                    "data-[state=unchecked]:bg-zinc-400"
                 )}
                 {...props}
                 name={props.id}
