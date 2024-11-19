@@ -134,9 +134,21 @@ export const createPages: GatsbyNode["createPages"] = async (
         }
         site {
             siteMetadata {
-                description
                 siteUrl
-                title
+                locales {
+                    pt_br {
+                        description
+                        title
+                    }
+                    en {
+                        description
+                        title
+                    }
+                    es {
+                        description
+                        title
+                    }
+                }
             }
         }
     }`);
@@ -172,7 +184,7 @@ export const createPages: GatsbyNode["createPages"] = async (
         };
         createPage({
             path: `/${locale}`,
-            component: path.resolve(`./src/templates/Home.tsx`),
+            component: path.resolve(`./src/templates/Default.tsx`),
             context,
         });
         createPage({

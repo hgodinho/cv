@@ -3,6 +3,7 @@ import React from "react";
 import { PageProps, graphql } from "gatsby";
 import { Credential, PageContext } from "@hgod-in-cv/data/src/types";
 import { Head as PrimitiveHead } from "#root/components";
+import { useI18nContext } from "#root/provider";
 
 export type CredentialPage = PageProps<{ credential: Credential }, PageContext>;
 
@@ -81,9 +82,10 @@ export const query = graphql`
 `;
 
 export function Head({ data, pageContext }: CredentialPage) {
+    const { locale } = useI18nContext();
     return (
         <PrimitiveHead
-            title={`${data.credential.name} @${pageContext.site.title}`}
+            title={`${data.credential.name} @${pageContext.site.locales[locale].title}`}
             pageContext={pageContext}
             data={data.credential}
             variant="default"
