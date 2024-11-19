@@ -3,6 +3,7 @@ import React from "react";
 import { PageProps, graphql } from "gatsby";
 import { Event, PageContext } from "@hgod-in-cv/data/src/types";
 import { Head as PrimitiveHead } from "#root/components";
+import { useI18nContext } from "#root/provider";
 
 export type EventPage = PageProps<{ event: Event }, PageContext>;
 
@@ -43,9 +44,10 @@ export const query = graphql`
 `;
 
 export const Head = ({ pageContext, data }: EventPage) => {
+    const { locale } = useI18nContext();
     return (
         <PrimitiveHead
-            title={`${data.event.name} @${pageContext.site.title}`}
+            title={`${data.event.name} @${pageContext.site.locales[locale].title}`}
             pageContext={pageContext}
             data={data.event}
             variant="default"

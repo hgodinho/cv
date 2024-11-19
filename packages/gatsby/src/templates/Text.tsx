@@ -14,7 +14,7 @@ import {
     UnionSchemaType,
 } from "@hgod-in-cv/data/src/types";
 import { tw } from "#root/lib";
-import { useTheme } from "#root/provider";
+import { useI18nContext, useTheme } from "#root/provider";
 
 export type TextPage = PageProps<{ graph: Graph; me: Person }, PageContext>;
 
@@ -225,12 +225,13 @@ export default function ({ data, pageContext }: TextPage) {
 }
 
 export const Head = ({ pageContext, data }: TextPage) => {
+    const { locale } = useI18nContext();
     return (
         <PrimitiveHead
-            title={`${data.me.name}  @${pageContext.site.title}`}
+            title={`curriculum-vitae @${pageContext.site.locales[locale].title}`}
             pageContext={pageContext}
             data={data.me}
-            variant={"pdf"}
+            variant={"text"}
         />
     );
 };
