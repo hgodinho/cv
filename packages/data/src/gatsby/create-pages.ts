@@ -1,5 +1,5 @@
 import path from "path";
-import { GatsbyNode, withPrefix } from "gatsby";
+import { GatsbyNode } from "gatsby";
 import fs from "fs";
 import { PageQueryResponse } from "../types";
 import { getType } from "../utils";
@@ -213,7 +213,6 @@ export const createPages: GatsbyNode["createPages"] = async (
         (
             pluginOptions.redirects as { fromPath: string; toPath: string }[]
         ).forEach((redirect) => {
-            // createRedirect(redirect);
             const indexPath = path.join(
                 path.resolve(),
                 "public",
@@ -236,9 +235,10 @@ export const createPages: GatsbyNode["createPages"] = async (
 };
 
 export function redirectHtml({ to }: { to: string }) {
+    const path = `/cv${to}`;
     return `<!DOCTYPE html>
 <meta charset="utf-8">
-<title>${withPrefix(to)}</title>
-<meta http-equiv="refresh" content="0; URL=${withPrefix(to)}">
-<link rel="canonical" href="${withPrefix(to)}">`;
+<title>${path}</title>
+<meta http-equiv="refresh" content="0; URL=${path}">
+<link rel="canonical" href="${path}">`;
 }
