@@ -84,9 +84,15 @@ export function CVProvider({ children }: React.PropsWithChildren<{}>) {
     }, [context.data, links]);
 
     useEffect(() => {
-        if (context.path?.includes("print")) {
+        if (
+            context.path?.includes(
+                `/${context.pageContext?.site.textSlug ?? "text"}`
+            )
+        ) {
             context.setNavigating(true);
-            context.navigate(`/${locale}/print`);
+            context.navigate(
+                `/${locale}/${context.pageContext?.site.textSlug ?? "text"}`
+            );
         }
         if (state.selected && state.selected.locale !== locale) {
             const found = nodes?.find(
@@ -101,7 +107,14 @@ export function CVProvider({ children }: React.PropsWithChildren<{}>) {
                 }
             }
         }
-    }, [locale, nodes, state.selected, context.path, context.navigating]);
+    }, [
+        locale,
+        nodes,
+        state.selected,
+        context.path,
+        context.navigating,
+        context.pageContext?.site.textSlug,
+    ]);
 
     const cv: CVContextType = {
         ...defaultCVContext,

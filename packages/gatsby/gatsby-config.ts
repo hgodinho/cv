@@ -5,10 +5,13 @@ import redirects from "./redirects.json";
 
 require("dotenv").config({});
 
+const textSlug = "txt";
+
 const config: GatsbyConfig = {
     pathPrefix: "/cv",
     siteMetadata: {
         siteUrl: "https://hgod.in/cv",
+        textSlug,
         locales: {
             pt_br: {
                 title: "hgod.in/cv",
@@ -69,6 +72,7 @@ const config: GatsbyConfig = {
                 apiBase: process.env.API_BASE,
                 apiId: process.env.API_ID,
                 apiToken: process.env.API_TOKEN,
+                textSlug,
                 redirects,
             },
         },
