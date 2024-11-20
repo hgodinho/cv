@@ -21,7 +21,15 @@ const wrapPageElement: GatsbyBrowser<
             />
             <Template
                 {...props}
-                variant={props.path.includes("text") ? "text" : props.path === "/" ? "home" : "default"}
+                variant={
+                    props.path.includes(
+                        props.pageContext.site.textSlug ?? "text"
+                    )
+                        ? "text"
+                        : props.path === "/"
+                        ? "home"
+                        : "default"
+                }
                 element={element}
             />
         </>

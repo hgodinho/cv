@@ -1,6 +1,6 @@
 import { Heading } from "#root/components";
 import { tw } from "#root/lib";
-import { useI18nContext } from "#root/provider";
+import { useI18nContext, usePageContext } from "#root/provider";
 import { Link } from "gatsby";
 import { FileText, Waypoints, LucideProps } from "lucide-react";
 import React, { HTMLAttributes, useMemo } from "react";
@@ -75,6 +75,7 @@ export function ListItem({
 
 export function VariantSelector() {
     const { locale } = useI18nContext();
+    const { pageContext } = usePageContext();
 
     const { node, text, title } = useMemo(() => {
         const locales = {
@@ -132,7 +133,7 @@ export function VariantSelector() {
                     Icon={FileText}
                     title={text.title}
                     description={text.description}
-                    link={`/${locale}/text`}
+                    link={`/${locale}/${pageContext?.site.textSlug ?? "text"}`}
                 />
             </List>
         </>

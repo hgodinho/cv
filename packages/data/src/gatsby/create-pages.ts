@@ -135,6 +135,7 @@ export const createPages: GatsbyNode["createPages"] = async (
         site {
             siteMetadata {
                 siteUrl
+                textSlug
                 locales {
                     pt_br {
                         description
@@ -188,7 +189,7 @@ export const createPages: GatsbyNode["createPages"] = async (
             context,
         });
         createPage({
-            path: `/${locale}/text`,
+            path: `/${locale}/${pluginOptions.textSlug ?? "text"}`,
             component: path.resolve(`./src/templates/Text.tsx`),
             context,
         });
