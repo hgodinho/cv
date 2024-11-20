@@ -19,6 +19,14 @@ const layoutVariant = cva(["layout", "grid", "text-pretty"], {
                 "lg:grid-cols-layout-lg",
                 "lg:grid-rows-layout-lg",
             ],
+            home: [
+                "home",
+
+                "grid-cols-home",
+                "grid-rows-home",
+
+                "md:grid-cols-home-md",
+            ],
             text: [
                 "text",
 
@@ -46,9 +54,7 @@ export function Layout({
     className,
     variant,
     ...props
-}: React.PropsWithChildren<
-    React.HTMLAttributes<HTMLDivElement> & Variant
->) {
+}: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement> & Variant>) {
     return (
         <article
             {...props}

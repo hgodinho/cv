@@ -12,16 +12,23 @@ const buttonVariants = cva(
         "gap-2",
         "whitespace-nowrap",
         "box-border",
+        "border-inset",
+
         "text-sm",
         "font-medium",
-        "ring-offset-black",
+
+        "ring-offset-zinc-100",
         "transition-colors",
+
         "focus-visible:outline-none",
         "focus-visible:ring-2",
         "focus-visible:ring-ring",
         "focus-visible:ring-offset-2",
+
         "disabled:pointer-events-none",
+        "disabled:cursor-not-allowed",
         "disabled:opacity-50",
+
         "[&_svg]:pointer-events-none",
         "[&_svg]:size-4",
         "[&_svg]:shrink-0",
@@ -30,15 +37,24 @@ const buttonVariants = cva(
         variants: {
             variant: {
                 default: [
+                    "focus:ring-zinc-500",
+                    "disabled:bg-zinc-700",
+                    "disabled:text-zinc-300",
+
                     "text-black",
-                    "disabled:bg-black/40",
-                    "focus:ring-gray-500",
-                    "bg-gray-300",
+                    "bg-zinc-300",
+                    "dark:bg-zinc-400",
+
                     "border",
-                    "border-gray-300",
-                    "hover:border-gray-900",
-                    "hover:bg-gray-100",
-                    "focus:bg-gray-300",
+                    "border-2",
+                    "dark:border-0",
+                    "border-zinc-300",
+                    "hover:border-zinc-950",
+                    "hover:bg-transparent",
+                    "hover:border-zinc-500",
+                    "dark:hover:bg-zinc-200",
+
+                    "focus:bg-zinc-200",
                 ],
                 destructive:
                     "bg-destructive text-destructive-foreground hover:bg-destructive/90",
@@ -65,7 +81,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+        VariantProps<typeof buttonVariants> {
     asChild?: boolean;
 }
 

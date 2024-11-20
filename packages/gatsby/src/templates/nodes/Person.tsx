@@ -3,6 +3,7 @@ import React from "react";
 import { PageProps, graphql } from "gatsby";
 import { Person, PageContext } from "@hgod-in-cv/data/dist/types";
 import { Head as PrimitiveHead } from "#root/components";
+import { useI18nContext } from "#root/provider";
 
 export type PersonPage = PageProps<{ person: Person }, PageContext>;
 
@@ -50,9 +51,10 @@ export const query = graphql`
 `;
 
 export const Head = ({ pageContext, data }: PersonPage) => {
+    const { locale } = useI18nContext();
     return (
         <PrimitiveHead
-            title={`${data.person.name} @${pageContext.site.title}`}
+            title={`${data.person.name} @${pageContext.site.locales[locale].title}`}
             variant="default"
             pageContext={pageContext}
             data={data.person}

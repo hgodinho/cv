@@ -112,9 +112,9 @@ export type PageQueryResponse = {
     meta: Record<LOCALES, MetaEndpoint[]>;
     site: {
         siteMetadata: {
-            title: string;
             siteUrl: string;
-            description: string;
+            textSlug: string;
+            locales: Record<LOCALES, { title: string; description: string }>;
         };
     };
 };
@@ -130,9 +130,9 @@ export type PageContext = {
     locale: LOCALES;
     locales: Locales;
     site: {
-        title: string;
         siteUrl: string;
-        description: string;
+        textSlug: string;
+        locales: Record<LOCALES, { title: string; description: string }>;
     };
 };
 

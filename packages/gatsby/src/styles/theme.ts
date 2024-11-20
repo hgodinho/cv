@@ -11,6 +11,9 @@ export const theme = {
     },
     extend: {
         gridTemplateColumns: {
+            home: "32px 1fr 32px",
+            "home-md": "32px 0.2fr 0.6fr 0.2fr 32px",
+
             layout: "16px 32px 16px 1fr 16px 32px 16px",
             "layout-md": "16px 32px 256px 32px 1fr 32px 16px", //ok
             "layout-lg": "32px 32px 256px auto 384px 32px 32px", // ok
@@ -22,6 +25,8 @@ export const theme = {
             "class-header": "0.7fr 0.3fr",
         },
         gridTemplateRows: {
+            home: "8px 32px 8px var(--middle-height) 8px 32px 8px",
+
             layout: "16px 32px var(--middle-height) 16px 32px 16px",
             "layout-md": "16px 32px var(--middle-height) 16px 32px 16px", //ok
             "layout-lg": "16px 32px var(--middle-height) 16px 32px 16px", // ok

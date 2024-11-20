@@ -1,3 +1,3 @@
 export type Variant = {
-    variant: "default" | "text";
-}
+    variant: "default" | "home" | "text";
+};

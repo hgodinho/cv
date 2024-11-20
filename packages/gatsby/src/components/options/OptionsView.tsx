@@ -14,7 +14,9 @@ export function OptionsView() {
     const {
         sizes: { icon },
         state: {
-            viewPort: { isTablet, isDesktop },
+            viewPort: {
+                windowDimensions: { isTablet, isDesktop },
+            },
             collapsibles: { options },
             toggleCollapsible,
         },
@@ -104,14 +106,14 @@ export function Options(props: OptionsProps) {
 
     const toggleClass = tw(
         "p-2",
-        "data-[state=on]:bg-gray-800",
+        "data-[state=on]:bg-zinc-800",
         "data-[state=on]:font-bold",
-        "hover:bg-gray-900",
+        "hover:bg-zinc-900",
         "focus:outline-none",
         "focus:ring-4",
         "focus:ring-inset",
-        "focus:ring-gray-500",
-        "focus:focus:bg-gray-700"
+        "focus:ring-zinc-500",
+        "focus:focus:bg-zinc-700"
     );
 
     return (

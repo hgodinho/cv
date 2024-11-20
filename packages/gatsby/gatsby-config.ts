@@ -5,12 +5,27 @@ import redirects from "./redirects.json";
 
 require("dotenv").config({});
 
+const textSlug = "txt";
+
 const config: GatsbyConfig = {
     pathPrefix: "/cv",
     siteMetadata: {
-        title: "hgod.in/cv",
         siteUrl: "https://hgod.in/cv",
-        description: "Pasta de Henrique Godinho",
+        textSlug,
+        locales: {
+            pt_br: {
+                title: "hgod.in/cv",
+                description: "<i>curriculum-vitae</i> de Henrique Godinho",
+            },
+            en: {
+                title: "hgod.in/cv",
+                description: "Henrique Godinho's <i>curriculum-vitae</i>",
+            },
+            es: {
+                title: "hgod.in/cv",
+                description: "<i>curriculum-vitae</i> de Henrique Godinho",
+            },
+        },
     },
     // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
     // If you use VSCode you can also use the GraphQL plugin
@@ -57,6 +72,7 @@ const config: GatsbyConfig = {
                 apiBase: process.env.API_BASE,
                 apiId: process.env.API_ID,
                 apiToken: process.env.API_TOKEN,
+                textSlug,
                 redirects,
             },
         },

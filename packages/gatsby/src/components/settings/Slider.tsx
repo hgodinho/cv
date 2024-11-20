@@ -83,7 +83,7 @@ const SliderSettings = React.forwardRef<
                             "focus:outline-none",
                             "focus:ring-4",
                             "focus:ring-inset",
-                            "focus:ring-gray-600",
+                            "focus:ring-zinc-600",
                             "disabled:cursor-not-allowed",
                             "disabled:opacity-50"
                         )}
@@ -140,7 +140,7 @@ const SliderSettings = React.forwardRef<
                             "focus:outline-none",
                             "focus:ring-4",
                             "focus:ring-inset",
-                            "focus:ring-gray-600",
+                            "focus:ring-zinc-600",
                             "disabled:pointer-events-none",
                             "disabled:opacity-50"
                         )}
