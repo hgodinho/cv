@@ -56,6 +56,7 @@
     },
     "devDependencies": {
         "@hgod-in-cv/data": "workspace:^",
+        "@types/dotenv": "^8.2.3",
         "@types/jsonld": "^1.5.15",
         "@types/node": "^22.5.0",
         "@types/react": "^18.3.4",

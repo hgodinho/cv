@@ -3,7 +3,14 @@ import path from "path";
 
 import redirects from "./redirects.json";
 
-require("dotenv").config({});
+import dotenv from "dotenv";
+
+dotenv.config({
+    path: [
+        path.resolve(__dirname, ".env"),
+        path.resolve(__dirname, ".env.local"),
+    ],
+});
 
 const textSlug = "txt";
 
