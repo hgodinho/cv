@@ -1,0 +1,21 @@
+{
+    "name": "@hgod-in-cv/types",
+    "version": "0.1.0",
+    "description": "",
+    "type": "module",
+    "main": "dist/index.d.ts",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc -w"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "typescript": "^5.5.4"
+    },
+    "dependencies": {
+        "react-force-graph-3d": "^1.24.3"
+    }
+}
