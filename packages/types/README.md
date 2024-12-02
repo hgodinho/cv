@@ -1,0 +1,1 @@
+# `@hgod-in-cv/types`
