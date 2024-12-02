@@ -1,0 +1,25 @@
+{
+    "name": "@hgod-in-cv/sdk",
+    "version": "0.1.0",
+    "description": "sdk to access remote",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc -w",
+        "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@hgod-in-cv/types": "workspace:^",
+        "@types/jsonld": "^1.5.15",
+        "typescript": "^5.5.4"
+    },
+    "dependencies": {
+        "jest": "^29.7.0",
+        "jsonld": "^8.3.2",
+        "react-force-graph-3d": "^1.24.3"
+    }
+}
