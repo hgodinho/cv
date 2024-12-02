@@ -3,6 +3,7 @@ node_modules
 dist
 public
 .cache
+coverage
 
 # https://github.com/nrwl/nx/discussions/20813
 .nx 
@@ -13,3 +14,5 @@ public
 
 creds.json
 .clasprc.json
+
+/pdf
