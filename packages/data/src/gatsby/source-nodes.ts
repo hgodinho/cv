@@ -56,7 +56,7 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
      * @see https://www.gatsbyjs.com/docs/reference/config-files/node-api-helpers/#reporter
      */
     const sourcingTimer = reporter.activityTimer(
-        `[@hgod-in/data] Sourcing from API`
+        `[@hgod-in-cv/data] Sourcing from API`
     );
     sourcingTimer.start();
 
