@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "aggregaterating",
+        "arduino",
         "artform",
         "civicstructure",
         "collapsibles",
@@ -16,10 +17,12 @@
         "foaf",
         "fuén",
         "issn",
+        "jobtitle",
         "jsonld",
         "lvls",
         "mbti",
         "MBTI",
+        "mdast",
         "nquads",
         "organizationrole",
         "pessoa",
@@ -28,6 +31,7 @@
         "spritetext",
         "togglable",
         "treeview",
+        "unist",
         "vike",
         "visualartwork",
         "xtext",
