@@ -25,14 +25,14 @@ export async function retryFetch(
     } catch (error) {
         if (retries > 0) {
             reporter.warn(
-                `[@hgod-in/data] Fetch failed${
+                `[@hgod-in-cv/data] Fetch failed${
                     callbackName && ` for ${callbackName} callback`
                 }: ${error}, trying again, attempts left: ${retries}`
             );
             return retryFetch(callback, reporter, callbackName, retries - 1);
         }
         reporter.error(
-            `[@hgod-in/data] Fetch failed${
+            `[@hgod-in-cv/data] Fetch failed${
                 callbackName && ` for ${callbackName} callback`
             }: ${error}, no more retries left`
         );
@@ -49,11 +49,11 @@ export async function getLocales(apiConfig: FetchProps, reporter: Reporter) {
                     ...apiConfig,
                 },
                 () => {
-                    reporter.info("[@hgod-in/data] Fetching locales");
+                    reporter.info("[@hgod-in-cv/data] Fetching locales");
                 },
                 (response) => {
                     reporter.success(
-                        `[@hgod-in/data] Found ${
+                        `[@hgod-in-cv/data] Found ${
                             response.length
                         } locales: ${response
                             .map((l: any) => l.lang)
@@ -81,12 +81,12 @@ export async function getGraph(
                 },
                 () => {
                     reporter.info(
-                        `[@hgod-in/data] Fetching graph for ${locale}`
+                        `[@hgod-in-cv/data] Fetching graph for ${locale}`
                     );
                 },
                 () => {
                     reporter.success(
-                        `[@hgod-in/data] Graph for "${locale}" fetched with success`
+                        `[@hgod-in-cv/data] Graph for "${locale}" fetched with success`
                     );
                 }
             );
@@ -110,12 +110,12 @@ export async function getProperties(
                 },
                 () => {
                     reporter.info(
-                        `[@hgod-in/data] Fetching properties for ${locale}`
+                        `[@hgod-in-cv/data] Fetching properties for ${locale}`
                     );
                 },
                 () => {
                     reporter.success(
-                        `[@hgod-in/data] Properties for "${locale}" fetched with success`
+                        `[@hgod-in-cv/data] Properties for "${locale}" fetched with success`
                     );
                 }
             );
@@ -139,12 +139,12 @@ export async function getClasses(
                 },
                 () => {
                     reporter.info(
-                        `[@hgod-in/data] Fetching classes for ${locale}`
+                        `[@hgod-in-cv/data] Fetching classes for ${locale}`
                     );
                 },
                 () => {
                     reporter.success(
-                        `[@hgod-in/data] Classes for "${locale}" fetched with success`
+                        `[@hgod-in-cv/data] Classes for "${locale}" fetched with success`
                     );
                 }
             );
@@ -169,12 +169,12 @@ export async function getMeta(
                 },
                 () => {
                     reporter.info(
-                        `[@hgod-in/data] Fetching meta for ${endpoint} in ${locale}`
+                        `[@hgod-in-cv/data] Fetching meta for ${endpoint} in ${locale}`
                     );
                 },
                 (response) => {
                     reporter.success(
-                        `[@hgod-in/data] Found "${response.title}" at "${endpoint}/meta" for "${locale}"`
+                        `[@hgod-in-cv/data] Found "${response.title}" at "${endpoint}/meta" for "${locale}"`
                     );
                 }
             );

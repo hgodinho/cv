@@ -241,7 +241,7 @@ export const createPages: GatsbyNode["createPages"] = async (
 
             fs.writeFileSync(indexPath, redirectHtml({ to: redirect.toPath }));
             reporter.info(
-                `[@hgod-in/data] Created redirect from ${redirect.fromPath} to ${redirect.toPath} file: ${indexPath}`
+                `[@hgod-in-cv/data] Created redirect from ${redirect.fromPath} to ${redirect.toPath} file: ${indexPath}`
             );
         });
     }
