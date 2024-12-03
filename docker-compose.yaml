@@ -9,3 +9,13 @@ services:
             - .:/app
         ports:
             - "8000:8000"
+
+    pdf:
+        container_name: pdf
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: base
+        volumes:
+            - .:/app
+        working_dir: /app/pdf

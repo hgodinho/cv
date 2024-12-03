@@ -12,7 +12,10 @@
         "commit:no-verify": "pnpm commit --no-verify",
         "build": "lerna run build --stream",
         "dev": "lerna run dev --stream",
-        "test": "lerna run test --stream --no-sort"
+        "test": "lerna run test --stream --no-sort",
+        "setup:clean": "lerna clean -y",
+        "setup:install": "pnpm install -r --filter=!@hgod-in-cv/pdf --frozen-lockfile",
+        "getToken": "./bin/getToken.sh"
     },
     "config": {
         "commitizen": {
