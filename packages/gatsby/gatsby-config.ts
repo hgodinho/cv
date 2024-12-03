@@ -7,8 +7,8 @@ import dotenv from "dotenv";
 
 dotenv.config({
     path: [
-        path.resolve(__dirname, ".env"),
-        path.resolve(__dirname, ".env.local"),
+        path.resolve("../../", ".env"),
+        path.resolve("../../", ".env.local"),
     ],
 });
 
