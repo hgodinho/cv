@@ -55,9 +55,8 @@ function translateValues(e) {
     const enValue = enRange.getValue();
     const esValue = esRange.getValue();
 
-    if (pt_brValue !== editedValue) pt_brRange.setValue(editedValue);
-    if (enValue !== editedValue) enRange.setValue(editedValue);
-    if (esValue !== editedValue) esRange.setValue(editedValue);
+    if (!pt_brValue) pt_brRange.setValue(editedValue);
+    if (!esValue) esRange.setValue(editedValue);
 
     pt_brRange.setNote(
         `Original value: ${editedValue} | Last update: ${editedTime.toLocaleDateString(

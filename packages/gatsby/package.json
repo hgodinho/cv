@@ -10,7 +10,7 @@
         "build": "pnpm clean && pnpm gatsby build --prefix-paths",
         "clean": "gatsby clean",
         "dev": "gatsby develop -H 0.0.0.0",
-        "serve": "gatsby serve",
+        "serve": "gatsby serve -H 0.0.0.0 --prefix-paths",
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {

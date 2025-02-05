@@ -7,6 +7,7 @@ services:
             target: dev
         volumes:
             - .:/app
+            - /app/node_modules
         ports:
             - "8000:8000"
 
@@ -18,4 +19,6 @@ services:
             target: base
         volumes:
             - .:/app
+            - /app/node_modules
+            - /app/pdf/node_modules
         working_dir: /app/pdf

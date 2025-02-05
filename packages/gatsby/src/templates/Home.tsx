@@ -10,9 +10,9 @@ import {
 import { tw } from "#root/lib";
 import { useI18nContext } from "#root/provider";
 
-export type CreativeWorkPage = PageProps<{}, PageContext>;
+export type HomePage = PageProps<{}, PageContext>;
 
-export default function ({ data, pageContext }: CreativeWorkPage) {
+export default function ({ data, pageContext }: HomePage) {
     const { locale } = useI18nContext();
     const { site } = pageContext;
 
@@ -45,7 +45,7 @@ export default function ({ data, pageContext }: CreativeWorkPage) {
     );
 }
 
-export const Head = ({ pageContext, data }: CreativeWorkPage) => {
+export const Head = ({ pageContext, data }: HomePage) => {
     const { locale } = useI18nContext();
     return (
         <PrimitiveHead

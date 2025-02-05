@@ -1,11 +1,13 @@
 FROM node:20-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN corepack enable pnpm
+RUN corepack prepare pnpm@10.0.0 --activate
+
 RUN pnpm install -g @google/clasp
 COPY ./.clasprc.json /root/.clasprc.json
 COPY . /app
-VOLUME /app
+# VOLUME /app
 WORKDIR /app
 COPY package.json .
 COPY pnpm-lock.yaml .

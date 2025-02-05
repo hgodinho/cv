@@ -19,6 +19,14 @@ import { useI18nContext, useTheme } from "#root/provider";
 export type TextPage = PageProps<{ graph: Graph; me: Person }, PageContext>;
 
 export default function ({ data, pageContext }: TextPage) {
+    const {
+        state: {
+            viewPort: {
+                windowDimensions: { isMobile, isPrint },
+            },
+        },
+    } = useTheme();
+
     const parseNode = useCallback((node: UnionSchemaType) => {
         return Object.entries(node).reduce((acc, [key, value]) => {
             if (value === null) {
@@ -49,14 +57,6 @@ export default function ({ data, pageContext }: TextPage) {
         },
         [data.graph, pageContext.locale]
     );
-
-    const {
-        state: {
-            viewPort: {
-                windowDimensions: { isMobile, isPrint },
-            },
-        },
-    } = useTheme();
 
     const { me, connections } = useMemo(() => {
         const me = data.me;

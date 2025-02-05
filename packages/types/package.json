@@ -2,7 +2,6 @@
     "name": "@hgod-in-cv/types",
     "version": "0.1.0",
     "description": "",
-    "type": "module",
     "main": "dist/index.d.ts",
     "types": "dist/index.d.ts",
     "scripts": {
@@ -13,6 +12,7 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "@types/node": "^22.5.0",
         "typescript": "^5.5.4"
     },
     "dependencies": {

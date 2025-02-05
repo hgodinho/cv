@@ -14,7 +14,7 @@
         "dev": "lerna run dev --stream",
         "test": "lerna run test --stream --no-sort",
         "setup:clean": "lerna clean -y",
-        "setup:install": "pnpm install -r --filter=!@hgod-in-cv/pdf --frozen-lockfile",
+        "setup:install": "pnpm install -r --filter=!@hgod-in-cv/pdf",
         "getToken": "./bin/getToken.sh"
     },
     "config": {
